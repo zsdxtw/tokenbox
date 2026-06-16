@@ -1,0 +1,204 @@
+[
+  {
+    "id": "ai-chat",
+    "name": "AI对话",
+    "slug": "ai-chat",
+    "icon": "MessageSquare",
+    "description": "AI聊天机器人与大语言模型，智能对话助手",
+    "color": "#00D4FF",
+    "subcategories": [
+      { "id": "ai-chat-bot", "name": "AI聊天机器人", "slug": "ai-chat-bot" },
+      { "id": "ai-llm", "name": "大语言模型", "slug": "ai-llm" }
+    ]
+  },
+  {
+    "id": "ai-writing",
+    "name": "AI写作",
+    "slug": "ai-writing",
+    "icon": "PenTool",
+    "description": "AI文案生成、学术写作、内容改写工具",
+    "color": "#7C3AED",
+    "subcategories": [
+      { "id": "ai-copywriting", "name": "文案生成", "slug": "ai-copywriting" },
+      { "id": "ai-academic", "name": "学术写作", "slug": "ai-academic" },
+      { "id": "ai-rewrite", "name": "内容改写", "slug": "ai-rewrite" }
+    ]
+  },
+  {
+    "id": "ai-image",
+    "name": "AI图像",
+    "slug": "ai-image",
+    "icon": "Image",
+    "description": "AI绘画、图像编辑、AI修图工具",
+    "color": "#F59E0B",
+    "subcategories": [
+      { "id": "ai-painting", "name": "AI绘画", "slug": "ai-painting" },
+      { "id": "ai-image-edit", "name": "图像编辑", "slug": "ai-image-edit" },
+      { "id": "ai-photo-retouch", "name": "AI修图", "slug": "ai-photo-retouch" }
+    ]
+  },
+  {
+    "id": "ai-video",
+    "name": "AI视频",
+    "slug": "ai-video",
+    "icon": "Video",
+    "description": "AI视频生成、视频编辑、数字人工具",
+    "color": "#EF4444",
+    "subcategories": [
+      { "id": "ai-video-gen", "name": "视频生成", "slug": "ai-video-gen" },
+      { "id": "ai-video-edit", "name": "视频编辑", "slug": "ai-video-edit" },
+      { "id": "ai-digital-human", "name": "数字人", "slug": "ai-digital-human" }
+    ]
+  },
+  {
+    "id": "ai-audio",
+    "name": "AI音频",
+    "slug": "ai-audio",
+    "icon": "Music",
+    "description": "语音合成、AI音乐生成、语音克隆工具",
+    "color": "#10B981",
+    "subcategories": [
+      { "id": "ai-tts", "name": "语音合成", "slug": "ai-tts" },
+      { "id": "ai-music", "name": "音乐生成", "slug": "ai-music" },
+      { "id": "ai-voice-clone", "name": "语音克隆", "slug": "ai-voice-clone" }
+    ]
+  },
+  {
+    "id": "ai-code",
+    "name": "AI编程",
+    "slug": "ai-code",
+    "icon": "Code",
+    "description": "AI代码生成、代码辅助、低代码开发工具",
+    "color": "#06B6D4",
+    "subcategories": [
+      { "id": "ai-code-gen", "name": "代码生成", "slug": "ai-code-gen" },
+      { "id": "ai-code-assist", "name": "代码辅助", "slug": "ai-code-assist" },
+      { "id": "ai-lowcode", "name": "低代码", "slug": "ai-lowcode" }
+    ]
+  },
+  {
+    "id": "ai-office",
+    "name": "AI办公",
+    "slug": "ai-office",
+    "icon": "Briefcase",
+    "description": "AI PPT生成、文档处理、表格助手工具",
+    "color": "#8B5CF6",
+    "subcategories": [
+      { "id": "ai-ppt", "name": "PPT生成", "slug": "ai-ppt" },
+      { "id": "ai-doc", "name": "文档处理", "slug": "ai-doc" },
+      { "id": "ai-spreadsheet", "name": "表格助手", "slug": "ai-spreadsheet" }
+    ]
+  },
+  {
+    "id": "ai-design",
+    "name": "AI设计",
+    "slug": "ai-design",
+    "icon": "Palette",
+    "description": "AI UI设计、Logo设计、电商设计工具",
+    "color": "#EC4899",
+    "subcategories": [
+      { "id": "ai-ui-design", "name": "UI设计", "slug": "ai-ui-design" },
+      { "id": "ai-logo", "name": "Logo设计", "slug": "ai-logo" },
+      { "id": "ai-ecom-design", "name": "电商设计", "slug": "ai-ecom-design" }
+    ]
+  },
+  {
+    "id": "ai-search",
+    "name": "AI搜索",
+    "slug": "ai-search",
+    "icon": "Search",
+    "description": "AI搜索引擎、智能知识检索工具",
+    "color": "#14B8A6",
+    "subcategories": [
+      { "id": "ai-search-engine", "name": "AI搜索引擎", "slug": "ai-search-engine" },
+      { "id": "ai-knowledge", "name": "知识检索", "slug": "ai-knowledge" }
+    ]
+  },
+  {
+    "id": "ai-agent",
+    "name": "AI智能体",
+    "slug": "ai-agent",
+    "icon": "Bot",
+    "description": "AI Agent平台、自动化工作流工具",
+    "color": "#F97316",
+    "subcategories": [
+      { "id": "ai-agent-platform", "name": "AI Agent", "slug": "ai-agent-platform" },
+      { "id": "ai-workflow", "name": "自动化工作流", "slug": "ai-workflow" }
+    ]
+  },
+  {
+    "id": "ai-translate",
+    "name": "AI翻译",
+    "slug": "ai-translate",
+    "icon": "Languages",
+    "description": "AI多语言翻译、实时翻译工具",
+    "color": "#6366F1",
+    "subcategories": [
+      { "id": "ai-multi-translate", "name": "多语言翻译", "slug": "ai-multi-translate" },
+      { "id": "ai-realtime-translate", "name": "实时翻译", "slug": "ai-realtime-translate" }
+    ]
+  },
+  {
+    "id": "ai-education",
+    "name": "AI教育",
+    "slug": "ai-education",
+    "icon": "GraduationCap",
+    "description": "AI语言学习、知识问答、课程辅助工具",
+    "color": "#0EA5E9",
+    "subcategories": [
+      { "id": "ai-lang-learn", "name": "语言学习", "slug": "ai-lang-learn" },
+      { "id": "ai-qa", "name": "知识问答", "slug": "ai-qa" },
+      { "id": "ai-course", "name": "课程辅助", "slug": "ai-course" }
+    ]
+  },
+  {
+    "id": "ai-marketing",
+    "name": "AI营销",
+    "slug": "ai-marketing",
+    "icon": "Megaphone",
+    "description": "AI营销文案、SEO优化、社媒运营工具",
+    "color": "#D946EF",
+    "subcategories": [
+      { "id": "ai-marketing-copy", "name": "营销文案", "slug": "ai-marketing-copy" },
+      { "id": "ai-seo", "name": "SEO优化", "slug": "ai-seo" },
+      { "id": "ai-social", "name": "社媒运营", "slug": "ai-social" }
+    ]
+  },
+  {
+    "id": "ai-3d",
+    "name": "AI 3D",
+    "slug": "ai-3d",
+    "icon": "Box",
+    "description": "AI 3D生成、3D建模工具",
+    "color": "#84CC16",
+    "subcategories": [
+      { "id": "ai-3d-gen", "name": "3D生成", "slug": "ai-3d-gen" },
+      { "id": "ai-3d-model", "name": "3D建模", "slug": "ai-3d-model" }
+    ]
+  },
+  {
+    "id": "ai-data",
+    "name": "AI数据分析",
+    "slug": "ai-data",
+    "icon": "BarChart3",
+    "description": "AI数据可视化、商业智能分析工具",
+    "color": "#F43F5E",
+    "subcategories": [
+      { "id": "ai-data-viz", "name": "数据可视化", "slug": "ai-data-viz" },
+      { "id": "ai-bi", "name": "商业智能", "slug": "ai-bi" }
+    ]
+  },
+  {
+    "id": "ai-ecommerce",
+    "name": "AI电商",
+    "slug": "ai-ecommerce",
+    "icon": "ShoppingCart",
+    "description": "AI电商作图、商品描述、智能客服工具",
+    "color": "#FB923C",
+    "subcategories": [
+      { "id": "ai-ecom-image", "name": "电商作图", "slug": "ai-ecom-image" },
+      { "id": "ai-product-desc", "name": "商品描述", "slug": "ai-product-desc" },
+      { "id": "ai-customer-service", "name": "智能客服", "slug": "ai-customer-service" }
+    ]
+  }
+]
