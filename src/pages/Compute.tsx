@@ -15,13 +15,25 @@ import {
   CheckCircle2,
   Terminal,
   Server,
+  TrendingUp,
+  TrendingDown,
 } from "lucide-react";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
 import SectionHeader from "@/components/SectionHeader";
 import {
   computeListings,
   tokenListings,
   type ComputeProviderType,
 } from "@/data/platform";
+import { priceIndexSeries } from "@/data/priceIndex";
 import { cn } from "@/lib/utils";
 
 type ListingTab = "token" | "device";
@@ -463,6 +475,75 @@ export default function Compute() {
             </div>
           </div>
         )}
+      </section>
+
+      {/* Compute price index */}
+      <section className="container py-16">
+        <SectionHeader
+          eyebrow="PRICE INDEX"
+          title="算力价格指数"
+          description="基于平台实际成交数据加权计算，反映算力与设备市场供需变化与价格趋势。"
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {priceIndexSeries.map((series) => {
+            const isUp = series.changePercent >= 0;
+            return (
+              <div
+                key={series.id}
+                className="p-5 bg-white rounded-xl border border-ink-200 card-hover"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <div className="text-xs text-ink-500">{series.category}</div>
+                    <div className="text-sm font-medium text-ink-900 mt-0.5">{series.model}</div>
+                  </div>
+                  <div
+                    className={cn(
+                      "flex items-center gap-0.5 text-xs font-mono px-1.5 py-0.5 rounded",
+                      isUp ? "text-rose-600 bg-rose-50" : "text-emerald-600 bg-emerald-50"
+                    )}
+                  >
+                    {isUp ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {isUp ? "+" : ""}{series.changePercent}%
+                  </div>
+                </div>
+                <div className="font-mono text-xl font-bold text-ink-900">
+                  {series.currentPrice.toLocaleString()}
+                  <span className="text-xs text-ink-400 font-sans ml-1">{series.unit}</span>
+                </div>
+                <div className="mt-3 h-16">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={series.trend}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                      <XAxis
+                        dataKey="month"
+                        tick={{ fontSize: 9, fill: "#94a3b8" }}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis hide />
+                      <Tooltip
+                        contentStyle={{
+                          fontSize: "11px",
+                          borderRadius: "6px",
+                          border: "1px solid #e2e8f0",
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="price"
+                        stroke={isUp ? "#ef4444" : "#10b981"}
+                        strokeWidth={1.5}
+                        dot={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* How it works */}

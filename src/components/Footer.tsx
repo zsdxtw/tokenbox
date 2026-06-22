@@ -5,10 +5,19 @@ const footerLinks = [
   {
     title: "交易板块",
     links: [
-      { label: "一手设备交易", path: "/market" },
-      { label: "二手设备交易", path: "/market" },
+      { label: "设备交易", path: "/market" },
+      { label: "算力交易", path: "/compute" },
       { label: "招标采购", path: "/bidding" },
       { label: "集采拼单", path: "/bidding" },
+    ],
+  },
+  {
+    title: "解决方案",
+    links: [
+      { label: "智算集群建设", path: "/solutions" },
+      { label: "绿色供电方案", path: "/solutions" },
+      { label: "算力租赁运营", path: "/solutions" },
+      { label: "残值处置方案", path: "/solutions" },
     ],
   },
   {
@@ -21,20 +30,11 @@ const footerLinks = [
     ],
   },
   {
-    title: "增值服务",
+    title: "增值与资讯",
     links: [
       { label: "验机质检", path: "/services" },
-      { label: "物流安装", path: "/services" },
       { label: "数据清除", path: "/services" },
-      { label: "维修维保", path: "/services" },
-    ],
-  },
-  {
-    title: "数据与资讯",
-    links: [
-      { label: "价格指数", path: "/price-index" },
-      { label: "行业资讯", path: "/price-index" },
-      { label: "算力交易", path: "/compute" },
+      { label: "政策资讯", path: "/policy" },
       { label: "设备指纹", path: "/market" },
     ],
   },

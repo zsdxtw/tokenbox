@@ -5,12 +5,13 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "首页", path: "/" },
-  { label: "设备市场", path: "/market" },
+  { label: "设备交易", path: "/market" },
+  { label: "算力交易", path: "/compute" },
+  { label: "解决方案", path: "/solutions" },
   { label: "金融服务", path: "/finance" },
   { label: "增值服务", path: "/services" },
-  { label: "算力交易", path: "/compute" },
-  { label: "价格指数", path: "/price-index" },
   { label: "招标集采", path: "/bidding" },
+  { label: "政策资讯", path: "/policy" },
 ];
 
 export default function Navbar() {

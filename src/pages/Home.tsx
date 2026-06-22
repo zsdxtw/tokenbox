@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
-  TrendingUp,
-  TrendingDown,
   Package,
   RefreshCw,
   Landmark,
@@ -21,19 +19,11 @@ import {
   User,
   CheckCircle2,
 } from "lucide-react";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
 import SectionHeader from "@/components/SectionHeader";
 import EquipmentCard from "@/components/EquipmentCard";
 import { featuredEquipment } from "@/data/equipment";
-import { priceIndexSeries, newsArticles } from "@/data/priceIndex";
+import { solutionScenarios, solutionCases } from "@/data/solutions";
+import { policyArticles } from "@/data/policy";
 
 const coreStats = [
   { value: "2,600亿+", label: "2026 算力租赁市场规模", unit: "元" },
@@ -98,8 +88,9 @@ const categories = [
 ];
 
 export default function Home() {
-  const featuredPrice = priceIndexSeries.slice(0, 4);
-  const featuredNews = newsArticles.slice(0, 3);
+  const featuredSolutions = solutionScenarios.slice(0, 3);
+  const featuredCases = solutionCases.slice(0, 3);
+  const featuredPolicy = policyArticles.slice(0, 3);
 
   return (
     <div>
@@ -342,92 +333,90 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Price index preview */}
+      {/* Solutions entry */}
       <section className="container py-20">
         <SectionHeader
-          eyebrow="PRICE INDEX"
-          title="算力设备价格指数"
-          description="基于平台实际成交数据加权计算，反映市场供需变化与价格趋势。"
+          eyebrow="SOLUTIONS"
+          title="行业解决方案"
+          description="算力巢自营的综合解决方案，覆盖算力集群建设、绿色供电、算力运营、残值处置等场景。"
           action={
             <Link
-              to="/price-index"
+              to="/solutions"
               className="inline-flex items-center gap-1 text-sm font-medium text-cyan-600 hover:text-cyan-700"
             >
-              完整指数 <ArrowRight className="h-3.5 w-3.5" />
+              全部方案 <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           }
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {featuredPrice.map((series) => {
-            const isUp = series.changePercent >= 0;
-            return (
-              <div
-                key={series.id}
-                className="p-6 bg-white rounded-xl border border-ink-200 card-hover"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <div className="text-xs text-ink-500">{series.category}</div>
-                    <div className="font-serif text-lg font-bold text-ink-900 mt-1">
-                      {series.model}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-mono text-xl font-bold text-ink-900">
-                      {series.currentPrice.toLocaleString()}
-                    </div>
-                    <div
-                      className={`flex items-center justify-end gap-0.5 text-xs font-mono ${
-                        isUp ? "text-rose-500" : "text-emerald-500"
-                      }`}
-                    >
-                      {isUp ? (
-                        <TrendingUp className="h-3 w-3" />
-                      ) : (
-                        <TrendingDown className="h-3 w-3" />
-                      )}
-                      {isUp ? "+" : ""}
-                      {series.changePercent}%
-                    </div>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {featuredSolutions.map((scenario) => (
+            <Link
+              key={scenario.id}
+              to="/solutions"
+              className="group p-6 bg-white rounded-xl border border-ink-200 card-hover hover:border-cyan-300"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-2.5 rounded-lg bg-cyan-50 border border-cyan-200">
+                  <span className="font-mono text-sm font-bold text-cyan-600">
+                    {scenario.name.slice(0, 2)}
+                  </span>
                 </div>
-
-                <div className="h-32 -ml-2">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={series.trend}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                      <XAxis
-                        dataKey="month"
-                        tick={{ fontSize: 10, fill: "#94a3b8" }}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <YAxis hide />
-                      <Tooltip
-                        contentStyle={{
-                          fontSize: "12px",
-                          borderRadius: "8px",
-                          border: "1px solid #e2e8f0",
-                        }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="price"
-                        stroke={isUp ? "#ef4444" : "#10b981"}
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-
-                <div className="mt-2 text-[10px] text-ink-400 text-right">
-                  单位：{series.unit}
-                </div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-600">
+                  {scenario.category}
+                </span>
               </div>
-            );
-          })}
+              <h3 className="font-serif text-lg font-bold text-ink-900 mb-1 group-hover:text-cyan-600 transition-colors">
+                {scenario.name}
+              </h3>
+              <p className="text-xs text-cyan-600 font-medium mb-3">{scenario.tagline}</p>
+              <p className="text-sm text-ink-500 leading-relaxed line-clamp-2 mb-4">
+                {scenario.description}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {scenario.highlights.slice(0, 3).map((h) => (
+                  <span
+                    key={h}
+                    className="px-2 py-0.5 text-[10px] text-cyan-700 bg-cyan-50 rounded"
+                  >
+                    {h}
+                  </span>
+                ))}
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Featured cases */}
+        <div className="mt-8">
+          <h3 className="font-serif text-base font-bold text-ink-900 mb-4">落地案例</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {featuredCases.map((caseItem) => (
+              <Link
+                key={caseItem.id}
+                to="/solutions"
+                className="group p-5 bg-ink-50 rounded-xl hover:bg-white hover:border-cyan-300 border border-transparent transition-all"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 bg-cyan-50 rounded">
+                    {caseItem.scenario}
+                  </span>
+                  <span className="text-[10px] text-ink-400">{caseItem.completionDate}</span>
+                </div>
+                <h4 className="text-sm font-medium text-ink-900 leading-snug group-hover:text-cyan-600 transition-colors line-clamp-2">
+                  {caseItem.title}
+                </h4>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {caseItem.results.slice(0, 2).map((r) => (
+                    <div key={r.label} className="text-xs">
+                      <div className="font-mono font-bold text-ink-900">{r.value}</div>
+                      <div className="text-[10px] text-ink-500">{r.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -495,15 +484,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* News */}
+      {/* Policy news */}
       <section className="container py-20">
         <SectionHeader
-          eyebrow="INDUSTRY INSIGHTS"
-          title="行业资讯"
-          description="算力设备行业动态、政策解读、技术趋势与市场分析。"
+          eyebrow="POLICY & NEWS"
+          title="政策资讯"
+          description="聚焦人工智能、算力设备、智算中心领域的最新政府政策、行业规范与企业动态。"
           action={
             <Link
-              to="/price-index"
+              to="/policy"
               className="inline-flex items-center gap-1 text-sm font-medium text-cyan-600 hover:text-cyan-700"
             >
               全部资讯 <ArrowRight className="h-3.5 w-3.5" />
@@ -512,30 +501,35 @@ export default function Home() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {featuredNews.map((news) => (
+          {featuredPolicy.map((article) => (
             <Link
-              key={news.id}
-              to="/price-index"
+              key={article.id}
+              to="/policy"
               className="group block p-6 bg-white rounded-xl border border-ink-200 card-hover hover:border-cyan-300"
             >
               <div className="flex items-center gap-2 mb-3">
                 <span className="px-2 py-0.5 text-[10px] font-medium text-cyan-700 bg-cyan-50 rounded">
-                  {news.category}
+                  {article.category}
                 </span>
-                <span className="text-[10px] text-ink-400">{news.date}</span>
+                {article.isHot && (
+                  <span className="px-1.5 py-0.5 text-[10px] text-rose-600 bg-rose-50 rounded">
+                    热门
+                  </span>
+                )}
+                <span className="text-[10px] text-ink-400">{article.publishDate}</span>
               </div>
               <h3 className="font-serif text-base font-semibold text-ink-900 leading-snug group-hover:text-cyan-600 transition-colors line-clamp-2">
-                {news.title}
+                {article.title}
               </h3>
               <p className="mt-3 text-xs text-ink-500 leading-relaxed line-clamp-3">
-                {news.summary}
+                {article.summary}
               </p>
               <div className="mt-4 pt-4 border-t border-ink-100 flex items-center justify-between text-[10px] text-ink-400">
                 <span className="flex items-center gap-1">
                   <Newspaper className="h-3 w-3" />
-                  {news.source}
+                  {article.source}
                 </span>
-                <span>{news.readTime}阅读</span>
+                <span>{article.readTime}阅读</span>
               </div>
             </Link>
           ))}

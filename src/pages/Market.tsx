@@ -1,11 +1,17 @@
 import { useState, useMemo } from "react";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, TrendingUp, TrendingDown } from "lucide-react";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from "recharts";
 import EquipmentCard from "@/components/EquipmentCard";
 import {
   equipmentList,
   type EquipmentCategory,
   type Condition,
 } from "@/data/equipment";
+import { priceIndexSeries } from "@/data/priceIndex";
 import { cn } from "@/lib/utils";
 
 const categoryOptions: { value: EquipmentCategory | "all"; label: string }[] = [
@@ -186,9 +192,9 @@ export default function Market() {
           <div className="flex items-center gap-2 text-xs text-ink-500 mb-2">
             <span>首页</span>
             <span>/</span>
-            <span className="text-ink-900">设备交易市场</span>
+            <span className="text-ink-900">设备交易</span>
           </div>
-          <h1 className="font-serif text-3xl font-bold text-ink-900">设备交易市场</h1>
+          <h1 className="font-serif text-3xl font-bold text-ink-900">设备交易</h1>
           <p className="mt-2 text-sm text-ink-500">
             一手自营 + 二手认证设备，覆盖六大设备层级全品类交易
           </p>
@@ -252,6 +258,71 @@ export default function Market() {
           </div>
         </div>
       </div>
+
+      {/* Price index section */}
+      <section className="bg-white border-t border-ink-100">
+        <div className="container py-12">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="h-px w-6 bg-cyan-500" />
+                <span className="text-xs font-mono uppercase tracking-widest text-cyan-600">
+                  PRICE INDEX
+                </span>
+              </div>
+              <h2 className="font-serif text-2xl font-bold text-ink-900">设备价格指数</h2>
+              <p className="mt-1 text-xs text-ink-500">
+                基于平台实际成交数据加权计算，反映设备市场供需变化与价格趋势
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {priceIndexSeries.map((series) => {
+              const isUp = series.changePercent >= 0;
+              return (
+                <div
+                  key={series.id}
+                  className="p-5 bg-ink-50 rounded-xl hover:bg-white hover:border-cyan-300 border border-transparent transition-all"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <div className="text-xs text-ink-500">{series.category}</div>
+                      <div className="text-sm font-medium text-ink-900 mt-0.5">{series.model}</div>
+                    </div>
+                    <div
+                      className={cn(
+                        "flex items-center gap-0.5 text-xs font-mono px-1.5 py-0.5 rounded",
+                        isUp ? "text-rose-600 bg-rose-50" : "text-emerald-600 bg-emerald-50"
+                      )}
+                    >
+                      {isUp ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                      {isUp ? "+" : ""}{series.changePercent}%
+                    </div>
+                  </div>
+                  <div className="font-mono text-xl font-bold text-ink-900">
+                    {series.currentPrice.toLocaleString()}
+                    <span className="text-xs text-ink-400 font-sans ml-1">{series.unit}</span>
+                  </div>
+                  <div className="mt-3 h-12">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={series.trend}>
+                        <Line
+                          type="monotone"
+                          dataKey="price"
+                          stroke={isUp ? "#ef4444" : "#10b981"}
+                          strokeWidth={1.5}
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* Mobile filter drawer */}
       {showMobileFilter && (
