@@ -86,7 +86,7 @@ export default function Market() {
               className={cn(
                 "text-left px-3 py-1.5 text-sm rounded-md transition-colors",
                 category === opt.value
-                  ? "bg-cyan-50 text-cyan-700 font-medium"
+                  ? "bg-brand-50 text-brand-700 font-medium"
                   : "text-ink-600 hover:bg-ink-50"
               )}
             >
@@ -107,7 +107,7 @@ export default function Market() {
               className={cn(
                 "px-2.5 py-1 text-xs rounded-md border transition-colors",
                 condition === opt.value
-                  ? "border-cyan-300 bg-cyan-50 text-cyan-700"
+                  ? "border-brand-300 bg-brand-50 text-brand-700"
                   : "border-ink-200 text-ink-600 hover:border-ink-300"
               )}
             >
@@ -128,7 +128,7 @@ export default function Market() {
               className={cn(
                 "text-left px-3 py-1.5 text-sm rounded-md transition-colors",
                 brand === b
-                  ? "bg-cyan-50 text-cyan-700 font-medium"
+                  ? "bg-brand-50 text-brand-700 font-medium"
                   : "text-ink-600 hover:bg-ink-50"
               )}
             >
@@ -150,11 +150,11 @@ export default function Market() {
           step={100000}
           value={priceRange}
           onChange={(e) => setPriceRange(Number(e.target.value))}
-          className="w-full accent-cyan-500"
+          className="w-full accent-brand-500"
         />
         <div className="mt-2 flex justify-between text-xs text-ink-500">
           <span>不限</span>
-          <span className="font-mono text-cyan-600">
+          <span className="font-mono text-brand-600">
             {priceRange === 0 ? "不限" : `¥${priceRange.toLocaleString()}`}
           </span>
         </div>
@@ -167,7 +167,7 @@ export default function Market() {
             type="checkbox"
             checked={isNewOnly}
             onChange={(e) => setIsNewOnly(e.target.checked)}
-            className="rounded accent-cyan-500"
+            className="rounded accent-brand-500"
           />
           <span className="text-sm text-ink-700">仅看全新</span>
         </label>
@@ -176,7 +176,7 @@ export default function Market() {
             type="checkbox"
             checked={isSelfRun}
             onChange={(e) => setIsSelfRun(e.target.checked)}
-            className="rounded accent-cyan-500"
+            className="rounded accent-brand-500"
           />
           <span className="text-sm text-ink-700">平台自营</span>
         </label>
@@ -185,16 +185,17 @@ export default function Market() {
   );
 
   return (
-    <div className="bg-ink-50 min-h-screen">
+    <div className="bg-white min-h-screen">
       {/* Page header */}
-      <div className="bg-white border-b border-ink-100">
-        <div className="container py-8">
+      <div className="relative overflow-hidden bg-gradient-to-br from-brand-50 to-white border-b border-ink-100">
+        <div className="absolute inset-0 bg-grid opacity-40" />
+        <div className="container relative py-10">
           <div className="flex items-center gap-2 text-xs text-ink-500 mb-2">
             <span>首页</span>
             <span>/</span>
             <span className="text-ink-900">设备交易</span>
           </div>
-          <h1 className="font-serif text-3xl font-bold text-ink-900">设备交易</h1>
+          <h1 className="text-3xl font-bold text-ink-900">设备交易</h1>
           <p className="mt-2 text-sm text-ink-500">
             一手自营 + 二手认证设备，覆盖六大设备层级全品类交易
           </p>
@@ -233,7 +234,7 @@ export default function Market() {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="px-3 py-2 text-sm border border-ink-200 rounded-md bg-white focus:outline-none focus:border-cyan-400"
+                className="px-3 py-2 text-sm border border-ink-200 rounded-md bg-white focus:outline-none focus:border-brand-400"
               >
                 {sortOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -265,8 +266,8 @@ export default function Market() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="h-px w-6 bg-cyan-500" />
-                <span className="text-xs font-mono uppercase tracking-widest text-cyan-600">
+                <span className="h-px w-6 bg-brand-500" />
+                <span className="text-xs font-mono uppercase tracking-widest text-brand-600">
                   PRICE INDEX
                 </span>
               </div>
@@ -283,7 +284,7 @@ export default function Market() {
               return (
                 <div
                   key={series.id}
-                  className="p-5 bg-ink-50 rounded-xl hover:bg-white hover:border-cyan-300 border border-transparent transition-all"
+                  className="p-5 bg-ink-50 rounded-xl hover:bg-white hover:border-brand-300 border border-transparent transition-all"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
@@ -341,7 +342,7 @@ export default function Market() {
             {FilterPanel}
             <button
               onClick={() => setShowMobileFilter(false)}
-              className="mt-6 w-full py-2.5 bg-cyan-500 text-white rounded-md font-medium"
+              className="mt-6 w-full py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-md font-medium"
             >
               查看 {filtered.length} 件商品
             </button>

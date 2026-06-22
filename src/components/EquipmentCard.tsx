@@ -4,11 +4,11 @@ import type { Equipment } from "@/data/equipment";
 import { cn } from "@/lib/utils";
 
 const conditionStyles: Record<string, string> = {
-  new: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  new: "bg-brand-50 text-brand-700 border-brand-200",
   A: "bg-emerald-50 text-emerald-700 border-emerald-200",
   B: "bg-amber-50 text-amber-700 border-amber-200",
   C: "bg-rose-50 text-rose-700 border-rose-200",
-  certified: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  certified: "bg-brand-50 text-brand-700 border-brand-200",
   preferred: "bg-emerald-50 text-emerald-700 border-emerald-200",
   standard: "bg-amber-50 text-amber-700 border-amber-200",
   economy: "bg-rose-50 text-rose-700 border-rose-200",
@@ -22,14 +22,14 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
   return (
     <Link
       to={`/equipment/${equipment.id}`}
-      className="group block bg-white rounded-xl border border-ink-200 overflow-hidden card-hover hover:border-cyan-300"
+      className="group block bg-white rounded-xl border border-ink-200 overflow-hidden card-hover hover:border-brand-300"
     >
       {/* Image area */}
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-ink-50 to-ink-100 overflow-hidden">
+      <div className="relative aspect-[4/3] bg-gradient-to-br from-brand-50 to-ink-50 overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-60" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <div className="font-mono text-3xl font-bold text-ink-300 tracking-tightest">
+            <div className="font-mono text-3xl font-bold text-brand-300 tracking-tightest">
               {equipment.brand.slice(0, 3).toUpperCase()}
             </div>
             <div className="mt-1 text-[10px] text-ink-400 tracking-widest">
@@ -49,7 +49,7 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
             {equipment.conditionLabel}
           </span>
           {equipment.isSelfRun && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-ink-900 text-white">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-gradient-to-r from-brand-500 to-brand-600 text-white">
               平台自营
             </span>
           )}
@@ -62,7 +62,7 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
         )}
 
         {equipment.stock === 0 && (
-          <div className="absolute inset-0 bg-ink-900/60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center">
             <span className="px-3 py-1 text-xs font-medium text-white bg-amber-500 rounded">
               预售锁单
             </span>
@@ -72,7 +72,7 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
 
       {/* Body */}
       <div className="p-4">
-        <h3 className="text-sm font-medium text-ink-900 line-clamp-2 group-hover:text-cyan-600 transition-colors min-h-[2.5rem]">
+        <h3 className="text-sm font-medium text-ink-900 line-clamp-2 group-hover:text-brand-600 transition-colors min-h-[2.5rem]">
           {equipment.name}
         </h3>
 
@@ -103,7 +103,7 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
           <div>
             <div className="flex items-baseline gap-1">
               <span className="text-xs text-ink-500">¥</span>
-              <span className="font-mono text-xl font-bold text-ink-900">
+              <span className="font-mono text-xl font-bold text-brand-600">
                 {equipment.price.toLocaleString()}
               </span>
               <span className="text-xs text-ink-500">/{equipment.unit}</span>

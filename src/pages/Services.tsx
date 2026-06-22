@@ -71,23 +71,23 @@ const dataClearingLevels = [
 
 export default function Services() {
   return (
-    <div className="bg-ink-50 min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-ink-900 text-white">
-        <div className="absolute inset-0 bg-grid-dark" />
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] glow-cyan opacity-40" />
+    <div className="bg-white min-h-screen">
+      {/* Hero - 清新浅色背景 */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-rose-50 to-white border-b border-ink-100">
+        <div className="absolute inset-0 bg-grid opacity-40" />
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] glow-rose opacity-50" />
         <div className="container relative py-16">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-3">
-              <span className="h-px w-6 bg-rose-400" />
-              <span className="text-xs font-mono uppercase tracking-widest text-rose-400">
+              <span className="h-px w-6 bg-rose-500" />
+              <span className="text-xs font-mono uppercase tracking-widest text-rose-600">
                 VALUE-ADDED SERVICES
               </span>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-ink-900">
               增值服务板块
             </h1>
-            <p className="mt-4 text-base text-ink-300 leading-relaxed">
+            <p className="mt-4 text-base text-ink-500 leading-relaxed">
               围绕设备交易的专业服务闭环。验机质检、物流安装、残值评估、数据清除、维修维保、
               全生命周期管理，构建交易壁垒。
             </p>
@@ -120,7 +120,7 @@ export default function Services() {
                       {Icon && <Icon className="h-6 w-6 text-rose-600" />}
                     </div>
                     <div>
-                      <h3 className="font-serif text-xl font-bold text-ink-900">{service.name}</h3>
+                      <h3 className="text-xl font-bold text-ink-900">{service.name}</h3>
                       <p className="text-xs text-rose-600 font-medium">{service.tagline}</p>
                     </div>
                   </div>
@@ -130,7 +130,7 @@ export default function Services() {
                     {service.billing}
                   </div>
                   {service.standard && (
-                    <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-50 rounded-md text-xs text-cyan-700">
+                    <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-50 rounded-md text-xs text-brand-700">
                       <FileCheck className="h-3 w-3" />
                       符合 {service.standard} 标准
                     </div>
@@ -166,7 +166,7 @@ export default function Services() {
       </section>
 
       {/* Inspection standards */}
-      <section className="bg-white border-y border-ink-100">
+      <section className="bg-ink-50/50 border-y border-ink-100">
         <div className="container py-20">
           <SectionHeader
             eyebrow="INSPECTION STANDARDS"
@@ -176,10 +176,10 @@ export default function Services() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {inspectionStandards.map((std) => (
-              <div key={std.category} className="p-6 bg-ink-50 rounded-xl">
+              <div key={std.category} className="p-6 bg-white rounded-xl border border-ink-200 shadow-soft">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-serif text-lg font-bold text-ink-900">{std.category}</h3>
-                  <ShieldCheck className="h-5 w-5 text-cyan-500" />
+                  <h3 className="text-lg font-bold text-ink-900">{std.category}</h3>
+                  <ShieldCheck className="h-5 w-5 text-brand-500" />
                 </div>
 
                 <div className="space-y-2 mb-4">
@@ -221,10 +221,10 @@ export default function Services() {
               key={idx}
               className="p-6 bg-white rounded-xl border border-ink-200 card-hover relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 right-0 h-1 bg-cyan-500" />
-              <div className="font-mono text-xs text-cyan-600 mb-2">LEVEL {idx + 1}</div>
-              <h3 className="font-serif text-lg font-bold text-ink-900 mb-2">{level.level}</h3>
-              <div className="text-sm font-medium text-cyan-700 mb-3">{level.method}</div>
+              <div className="absolute top-0 left-0 right-0 h-1 bg-brand-500" />
+              <div className="font-mono text-xs text-brand-600 mb-2">LEVEL {idx + 1}</div>
+              <h3 className="text-lg font-bold text-ink-900 mb-2">{level.level}</h3>
+              <div className="text-sm font-medium text-brand-700 mb-3">{level.method}</div>
               <p className="text-xs text-ink-500 leading-relaxed mb-4">{level.desc}</p>
               <div className="pt-4 border-t border-ink-100">
                 <div className="text-xs text-ink-400">参考价格</div>
@@ -234,9 +234,9 @@ export default function Services() {
           ))}
         </div>
 
-        <div className="mt-6 p-5 bg-cyan-50 border border-cyan-100 rounded-xl flex items-start gap-3">
-          <FileCheck className="h-5 w-5 text-cyan-600 shrink-0 mt-0.5" />
-          <div className="text-xs text-cyan-800 leading-relaxed">
+        <div className="mt-6 p-5 bg-brand-50 border border-brand-100 rounded-xl flex items-start gap-3">
+          <FileCheck className="h-5 w-5 text-brand-600 shrink-0 mt-0.5" />
+          <div className="text-xs text-brand-800 leading-relaxed">
             每次数据清除生成认证报告，包含设备序列号、清除方法、操作时间、操作人员、验证结果。
             对接持有危险废物经营许可证的电子废弃物处置企业，资源回收利用率达 95% 以上。
           </div>
@@ -244,7 +244,7 @@ export default function Services() {
       </section>
 
       {/* Lifecycle management */}
-      <section className="bg-ink-900 text-white">
+      <section className="bg-gradient-to-br from-ink-900 to-ink-800 text-white">
         <div className="container py-20">
           <SectionHeader
             eyebrow="LIFECYCLE MANAGEMENT"
@@ -275,21 +275,21 @@ export default function Services() {
             ].map((stage, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-xl border border-ink-700 hover:border-cyan-400/50 transition-colors"
+                className="p-6 rounded-xl border border-ink-700 hover:border-brand-400/50 transition-colors"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-xs text-cyan-400">{stage.phase}</span>
+                  <span className="font-mono text-xs text-brand-400">{stage.phase}</span>
                   <span className="px-2 py-0.5 text-[10px] bg-ink-800 text-ink-300 rounded">
                     {stage.action}
                   </span>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-white mb-2">{stage.scenario}</h3>
+                <h3 className="text-xl font-bold text-white mb-2">{stage.scenario}</h3>
                 <p className="text-xs text-ink-400 leading-relaxed">{stage.desc}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 p-5 bg-ink-800 rounded-xl flex items-start gap-3">
+          <div className="mt-8 p-5 bg-ink-800/50 rounded-xl border border-ink-700 flex items-start gap-3">
             <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
             <div className="text-xs text-ink-300 leading-relaxed">
               参考超大规模云服务商将服务器使用寿命从 3-4 年延长到 6 年的实践，

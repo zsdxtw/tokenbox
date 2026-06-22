@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 const categoryStyles: Record<string, string> = {
   政府政策: "bg-rose-50 text-rose-700 border-rose-200",
   行业规范: "bg-amber-50 text-amber-700 border-amber-200",
-  企业动态: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  企业动态: "bg-brand-50 text-brand-700 border-brand-200",
   技术标准: "bg-emerald-50 text-emerald-700 border-emerald-200",
   市场分析: "bg-ink-100 text-ink-700 border-ink-200",
 };
@@ -34,23 +34,23 @@ export default function PolicyNews() {
   const selected = policyArticles.find((a) => a.id === selectedArticle);
 
   return (
-    <div className="bg-ink-50 min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-ink-900 text-white">
-        <div className="absolute inset-0 bg-grid-dark" />
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] glow-cyan opacity-40" />
+    <div className="bg-white min-h-screen">
+      {/* Hero - 清新浅色背景 */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-50 to-white border-b border-ink-100">
+        <div className="absolute inset-0 bg-grid opacity-40" />
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] glow-brand opacity-50" />
         <div className="container relative py-16">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-3">
-              <span className="h-px w-6 bg-cyan-400" />
-              <span className="text-xs font-mono uppercase tracking-widest text-cyan-400">
+              <span className="h-px w-6 bg-brand-500" />
+              <span className="text-xs font-mono uppercase tracking-widest text-brand-600">
                 POLICY & NEWS
               </span>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-ink-900">
               政策资讯
             </h1>
-            <p className="mt-4 text-base text-ink-300 leading-relaxed">
+            <p className="mt-4 text-base text-ink-500 leading-relaxed">
               聚焦人工智能、算力设备、智算中心领域的最新政府政策、行业规范、企业动态、
               技术标准与市场分析，为算力产业链决策提供信息支持。
             </p>
@@ -92,8 +92,8 @@ export default function PolicyNews() {
           <aside className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
               {/* Categories */}
-              <div className="bg-white rounded-xl border border-ink-200 p-5">
-                <h3 className="font-serif text-base font-bold text-ink-900 mb-4">资讯分类</h3>
+              <div className="bg-white rounded-xl border border-ink-200 p-5 shadow-soft">
+                <h3 className="text-base font-bold text-ink-900 mb-4">资讯分类</h3>
                 <div className="flex flex-col gap-1.5">
                   {policyCategories.map((cat) => (
                     <button
@@ -102,7 +102,7 @@ export default function PolicyNews() {
                       className={cn(
                         "text-left px-3 py-2 text-sm rounded-md transition-colors flex items-center justify-between",
                         activeCategory === cat.value
-                          ? "bg-cyan-50 text-cyan-700 font-medium"
+                          ? "bg-brand-50 text-brand-700 font-medium"
                           : "text-ink-600 hover:bg-ink-50"
                       )}
                     >
@@ -118,8 +118,8 @@ export default function PolicyNews() {
               </div>
 
               {/* Stats */}
-              <div className="bg-ink-900 text-white rounded-xl p-5">
-                <h3 className="font-serif text-sm font-bold mb-4">资讯概览</h3>
+              <div className="bg-gradient-to-br from-ink-900 to-ink-800 text-white rounded-xl p-5">
+                <h3 className="text-sm font-bold mb-4">资讯概览</h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between pb-3 border-b border-ink-700">
                     <span className="text-xs text-ink-400">资讯总数</span>
@@ -127,7 +127,7 @@ export default function PolicyNews() {
                   </div>
                   <div className="flex items-center justify-between pb-3 border-b border-ink-700">
                     <span className="text-xs text-ink-400">本月更新</span>
-                    <span className="font-mono text-lg font-bold text-cyan-400">
+                    <span className="font-mono text-lg font-bold text-brand-400">
                       {policyArticles.filter((a) => a.publishDate.startsWith("2026-03")).length}
                     </span>
                   </div>
@@ -155,7 +155,7 @@ export default function PolicyNews() {
                 <article
                   key={article.id}
                   onClick={() => setSelectedArticle(article.id)}
-                  className="group cursor-pointer p-6 bg-white rounded-xl border border-ink-200 card-hover hover:border-cyan-300"
+                  className="group cursor-pointer p-6 bg-white rounded-xl border border-ink-200 card-hover hover:border-brand-300 shadow-soft"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span
@@ -178,7 +178,7 @@ export default function PolicyNews() {
                     </span>
                   </div>
 
-                  <h3 className="font-serif text-lg font-bold text-ink-900 leading-snug group-hover:text-cyan-600 transition-colors">
+                  <h3 className="text-lg font-bold text-ink-900 leading-snug group-hover:text-brand-600 transition-colors">
                     {article.title}
                   </h3>
                   <p className="mt-2 text-sm text-ink-500 leading-relaxed line-clamp-2">
@@ -196,7 +196,7 @@ export default function PolicyNews() {
                         {article.readTime}
                       </span>
                     </div>
-                    <span className="flex items-center gap-1 text-xs font-medium text-cyan-600 group-hover:text-cyan-700">
+                    <span className="flex items-center gap-1 text-xs font-medium text-brand-600 group-hover:text-brand-700">
                       阅读全文
                       <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
                     </span>
@@ -260,7 +260,7 @@ export default function PolicyNews() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <h2 className="mt-3 font-serif text-xl font-bold text-ink-900 leading-snug">
+              <h2 className="mt-3 text-xl font-bold text-ink-900 leading-snug">
                 {selected.title}
               </h2>
               <div className="mt-3 flex items-center gap-3 text-xs text-ink-500">
@@ -281,7 +281,7 @@ export default function PolicyNews() {
 
             {/* Body */}
             <div className="p-6 overflow-y-auto">
-              <div className="p-4 bg-cyan-50/50 rounded-lg mb-4">
+              <div className="p-4 bg-brand-50/50 rounded-lg mb-4">
                 <p className="text-sm text-ink-700 leading-relaxed font-medium">
                   {selected.summary}
                 </p>
@@ -296,7 +296,7 @@ export default function PolicyNews() {
                   {selected.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 text-xs text-cyan-700 bg-cyan-50 rounded"
+                      className="px-2 py-0.5 text-xs text-brand-700 bg-brand-50 rounded"
                     >
                       #{tag}
                     </span>
@@ -313,7 +313,7 @@ export default function PolicyNews() {
               </span>
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="px-4 py-1.5 text-xs font-medium text-white bg-ink-900 hover:bg-cyan-500 hover:text-ink-900 rounded-md transition-colors"
+                className="px-4 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow rounded-md transition-all"
               >
                 关闭
               </button>

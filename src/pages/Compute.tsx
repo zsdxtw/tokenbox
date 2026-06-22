@@ -51,7 +51,7 @@ function ProviderBadge({ type }: { type: ComputeProviderType }) {
       className={cn(
         "inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium rounded border",
         isCenter
-          ? "bg-cyan-50 text-cyan-700 border-cyan-200"
+          ? "bg-brand-50 text-brand-700 border-brand-200"
           : "bg-amber-50 text-amber-700 border-amber-200"
       )}
     >
@@ -82,7 +82,7 @@ function ProviderFilterTabs({
           className={cn(
             "px-3 py-1.5 text-xs rounded-md border transition-colors",
             value === opt.value
-              ? "border-cyan-300 bg-cyan-50 text-cyan-700 font-medium"
+              ? "border-brand-300 bg-brand-50 text-brand-700 font-medium"
               : "border-ink-200 text-ink-600 hover:border-ink-300"
           )}
         >
@@ -105,36 +105,36 @@ export default function Compute() {
   );
 
   return (
-    <div className="bg-ink-50 min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-ink-900 text-white">
-        <div className="absolute inset-0 bg-grid-dark" />
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] glow-cyan opacity-40" />
+    <div className="bg-white min-h-screen">
+      {/* Hero - 清新浅色背景 */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-50 to-white border-b border-ink-100">
+        <div className="absolute inset-0 bg-grid opacity-40" />
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] glow-brand opacity-50" />
         <div className="container relative py-16">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-3">
-              <span className="h-px w-6 bg-cyan-400" />
-              <span className="text-xs font-mono uppercase tracking-widest text-cyan-400">
+              <span className="h-px w-6 bg-brand-500" />
+              <span className="text-xs font-mono uppercase tracking-widest text-brand-600">
                 COMPUTE TRADING
               </span>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-ink-900">
               算力交易市场
             </h1>
-            <p className="mt-4 text-base text-ink-300 leading-relaxed">
+            <p className="mt-4 text-base text-ink-500 leading-relaxed">
               2024 年全球算力租赁市场规模突破 121 亿美元，预计 2028 年达 177 亿美元。
               算力巢提供两类算力交易模式：Token 型直接交付大模型 API，按用量计费；
               设备租赁型按卡/小时计费，下单时可指定安装模型并交付 API。
               支持大型智算中心与个体闲散算力入驻。
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-ink-900 font-medium rounded-md transition-colors">
+              <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow text-white font-medium rounded-lg transition-all">
                 <Plus className="h-4 w-4" />
                 发布算力
               </button>
               <Link
                 to="/market"
-                className="inline-flex items-center gap-2 px-5 py-2.5 border border-ink-600 hover:border-cyan-400 text-white font-medium rounded-md transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 border border-ink-200 hover:border-brand-300 hover:text-brand-600 text-ink-700 font-medium rounded-lg transition-colors bg-white"
               >
                 浏览设备市场
               </Link>
@@ -153,8 +153,8 @@ export default function Compute() {
               { value: "15-20%", label: "平台抽成比例" },
               { value: "45%", label: "2025 绿色算力占比" },
             ].map((stat) => (
-              <div key={stat.label}>
-                <div className="font-mono text-2xl font-bold text-ink-900">{stat.value}</div>
+              <div key={stat.label} className="p-5 bg-white rounded-xl border border-ink-200 shadow-soft">
+                <div className="font-mono text-2xl font-bold text-gradient-brand">{stat.value}</div>
                 <div className="mt-1 text-xs text-ink-500">{stat.label}</div>
               </div>
             ))}
@@ -171,26 +171,26 @@ export default function Compute() {
             className={cn(
               "group text-left p-6 bg-white rounded-xl border-2 transition-all",
               activeTab === "token"
-                ? "border-cyan-400 shadow-md"
-                : "border-ink-200 hover:border-cyan-300"
+                ? "border-brand-400 shadow-card"
+                : "border-ink-200 hover:border-brand-300"
             )}
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="p-3 rounded-lg bg-cyan-50 border border-cyan-200">
-                <Code2 className="h-6 w-6 text-cyan-600" />
+              <div className="p-3 rounded-lg bg-brand-50 border border-brand-200">
+                <Code2 className="h-6 w-6 text-brand-600" />
               </div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-600">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-brand-600">
                 TYPE A · TOKEN
               </span>
             </div>
-            <h3 className="font-serif text-xl font-bold text-ink-900 mb-2">Token 型算力交易</h3>
+            <h3 className="text-xl font-bold text-ink-900 mb-2">Token 型算力交易</h3>
             <p className="text-sm text-ink-500 leading-relaxed mb-4">
               直接输出大模型 Token，标明算力设备情况与已安装模型版本，按 Token 用量计费。
               用户租用后直接获得 API 接口，开箱即用。
             </p>
             <div className="flex flex-wrap gap-1.5">
               {["按 Token 计费", "API 直交付", "已安装模型", "兼容 OpenAI"].map((t) => (
-                <span key={t} className="px-2 py-0.5 text-[10px] text-cyan-700 bg-cyan-50 rounded">
+                <span key={t} className="px-2 py-0.5 text-[10px] text-brand-700 bg-brand-50 rounded">
                   {t}
                 </span>
               ))}
@@ -203,8 +203,8 @@ export default function Compute() {
             className={cn(
               "group text-left p-6 bg-white rounded-xl border-2 transition-all",
               activeTab === "device"
-                ? "border-cyan-400 shadow-md"
-                : "border-ink-200 hover:border-cyan-300"
+                ? "border-brand-400 shadow-card"
+                : "border-ink-200 hover:border-brand-300"
             )}
           >
             <div className="flex items-start justify-between mb-4">
@@ -215,7 +215,7 @@ export default function Compute() {
                 TYPE B · DEVICE
               </span>
             </div>
-            <h3 className="font-serif text-xl font-bold text-ink-900 mb-2">设备租赁型算力交易</h3>
+            <h3 className="text-xl font-bold text-ink-900 mb-2">设备租赁型算力交易</h3>
             <p className="text-sm text-ink-500 leading-relaxed mb-4">
               直接租赁算力设备空间，按卡/小时计费。下单时可提醒出租方安装指定模型并交付 API 接口，
               灵活度更高。
@@ -241,7 +241,7 @@ export default function Compute() {
               className={cn(
                 "flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors",
                 activeTab === "token"
-                  ? "border-cyan-500 text-cyan-600"
+                  ? "border-brand-500 text-brand-600"
                   : "border-transparent text-ink-500 hover:text-ink-900"
               )}
             >
@@ -253,7 +253,7 @@ export default function Compute() {
               className={cn(
                 "flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors",
                 activeTab === "device"
-                  ? "border-cyan-500 text-cyan-600"
+                  ? "border-brand-500 text-brand-600"
                   : "border-transparent text-ink-500 hover:text-ink-900"
               )}
             >
@@ -276,17 +276,17 @@ export default function Compute() {
               {filteredTokens.map((listing) => (
                 <div
                   key={listing.id}
-                  className="p-6 bg-white rounded-xl border border-ink-200 card-hover hover:border-cyan-300"
+                  className="p-6 bg-white rounded-xl border border-ink-200 card-hover hover:border-brand-300"
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-lg bg-gradient-to-br from-cyan-400 to-cyan-600">
-                        <Terminal className="h-5 w-5 text-ink-900" />
+                      <div className="p-2.5 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600">
+                        <Terminal className="h-5 w-5 text-white" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="font-serif text-lg font-bold text-ink-900">
+                          <h3 className="text-lg font-bold text-ink-900">
                             {listing.modelName}
                           </h3>
                           <span className="px-1.5 py-0.5 text-[10px] font-mono text-ink-500 bg-ink-50 rounded">
@@ -332,8 +332,8 @@ export default function Compute() {
                   <div className="mb-4">
                     <div className="text-[10px] text-ink-500 mb-1">API 端点</div>
                     <div className="flex items-center gap-2 p-2 bg-ink-900 rounded-md">
-                      <Code2 className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-                      <code className="text-xs text-cyan-300 font-mono truncate">
+                      <Code2 className="h-3.5 w-3.5 text-brand-400 shrink-0" />
+                      <code className="text-xs text-brand-300 font-mono truncate">
                         {listing.apiEndpoint}
                       </code>
                     </div>
@@ -344,7 +344,7 @@ export default function Compute() {
                     {listing.features.map((f) => (
                       <span
                         key={f}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] text-cyan-700 bg-cyan-50 rounded"
+                        className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] text-brand-700 bg-brand-50 rounded"
                       >
                         <CheckCircle2 className="h-2.5 w-2.5" />
                         {f}
@@ -356,7 +356,7 @@ export default function Compute() {
                   <div className="pt-4 border-t border-ink-100 flex items-center justify-between">
                     <div>
                       <div className="flex items-baseline gap-1">
-                        <span className="font-mono text-2xl font-bold text-ink-900">
+                        <span className="font-mono text-2xl font-bold text-brand-600">
                           ¥{listing.pricePerMillionTokens}
                         </span>
                         <span className="text-xs text-ink-500">/{listing.unit.replace("元/", "")}</span>
@@ -366,7 +366,7 @@ export default function Compute() {
                         {listing.rating} · {listing.provider}
                       </div>
                     </div>
-                    <button className="px-4 py-2 text-sm font-medium text-white bg-ink-900 hover:bg-cyan-500 hover:text-ink-900 rounded-md transition-colors">
+                    <button className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow rounded-md transition-all">
                       获取 API
                     </button>
                   </div>
@@ -399,7 +399,7 @@ export default function Compute() {
               {filteredDevices.map((listing) => (
                 <div
                   key={listing.id}
-                  className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-6 py-4 border-b border-ink-100 last:border-0 hover:bg-cyan-50/30 transition-colors"
+                  className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-6 py-4 border-b border-ink-100 last:border-0 hover:bg-brand-50/30 transition-colors"
                 >
                   {/* GPU model */}
                   <div className="md:col-span-3 flex items-center gap-3">
@@ -448,7 +448,7 @@ export default function Compute() {
 
                   {/* Price */}
                   <div className="md:col-span-2 md:text-right">
-                    <div className="font-mono text-lg font-bold text-ink-900">
+                    <div className="font-mono text-lg font-bold text-brand-600">
                       ¥{listing.pricePerHour}
                     </div>
                     <div className="text-xs text-ink-500">{listing.unit}</div>
@@ -456,7 +456,7 @@ export default function Compute() {
 
                   {/* Action */}
                   <div className="md:col-span-1 md:text-right flex items-center md:justify-end gap-2">
-                    <button className="px-3 py-1.5 text-xs font-medium text-white bg-ink-900 hover:bg-cyan-500 hover:text-ink-900 rounded-md transition-colors">
+                    <button className="px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow rounded-md transition-all">
                       租用
                     </button>
                   </div>
@@ -478,76 +478,78 @@ export default function Compute() {
       </section>
 
       {/* Compute price index */}
-      <section className="container py-16">
-        <SectionHeader
-          eyebrow="PRICE INDEX"
-          title="算力价格指数"
-          description="基于平台实际成交数据加权计算，反映算力与设备市场供需变化与价格趋势。"
-        />
+      <section className="bg-ink-50/50 border-y border-ink-100">
+        <div className="container py-16">
+          <SectionHeader
+            eyebrow="PRICE INDEX"
+            title="算力价格指数"
+            description="基于平台实际成交数据加权计算，反映算力与设备市场供需变化与价格趋势。"
+          />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {priceIndexSeries.map((series) => {
-            const isUp = series.changePercent >= 0;
-            return (
-              <div
-                key={series.id}
-                className="p-5 bg-white rounded-xl border border-ink-200 card-hover"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="text-xs text-ink-500">{series.category}</div>
-                    <div className="text-sm font-medium text-ink-900 mt-0.5">{series.model}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {priceIndexSeries.map((series) => {
+              const isUp = series.changePercent >= 0;
+              return (
+                <div
+                  key={series.id}
+                  className="p-5 bg-white rounded-xl border border-ink-200 card-hover"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <div className="text-xs text-ink-500">{series.category}</div>
+                      <div className="text-sm font-medium text-ink-900 mt-0.5">{series.model}</div>
+                    </div>
+                    <div
+                      className={cn(
+                        "flex items-center gap-0.5 text-xs font-mono px-1.5 py-0.5 rounded",
+                        isUp ? "text-rose-600 bg-rose-50" : "text-emerald-600 bg-emerald-50"
+                      )}
+                    >
+                      {isUp ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                      {isUp ? "+" : ""}{series.changePercent}%
+                    </div>
                   </div>
-                  <div
-                    className={cn(
-                      "flex items-center gap-0.5 text-xs font-mono px-1.5 py-0.5 rounded",
-                      isUp ? "text-rose-600 bg-rose-50" : "text-emerald-600 bg-emerald-50"
-                    )}
-                  >
-                    {isUp ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                    {isUp ? "+" : ""}{series.changePercent}%
+                  <div className="font-mono text-xl font-bold text-ink-900">
+                    {series.currentPrice.toLocaleString()}
+                    <span className="text-xs text-ink-400 font-sans ml-1">{series.unit}</span>
+                  </div>
+                  <div className="mt-3 h-16">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={series.trend}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                        <XAxis
+                          dataKey="month"
+                          tick={{ fontSize: 9, fill: "#94a3b8" }}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+                        <YAxis hide />
+                        <Tooltip
+                          contentStyle={{
+                            fontSize: "11px",
+                            borderRadius: "6px",
+                            border: "1px solid #e2e8f0",
+                          }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="price"
+                          stroke={isUp ? "#ef4444" : "#10b981"}
+                          strokeWidth={1.5}
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
-                <div className="font-mono text-xl font-bold text-ink-900">
-                  {series.currentPrice.toLocaleString()}
-                  <span className="text-xs text-ink-400 font-sans ml-1">{series.unit}</span>
-                </div>
-                <div className="mt-3 h-16">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={series.trend}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                      <XAxis
-                        dataKey="month"
-                        tick={{ fontSize: 9, fill: "#94a3b8" }}
-                        tickLine={false}
-                        axisLine={false}
-                      />
-                      <YAxis hide />
-                      <Tooltip
-                        contentStyle={{
-                          fontSize: "11px",
-                          borderRadius: "6px",
-                          border: "1px solid #e2e8f0",
-                        }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="price"
-                        stroke={isUp ? "#ef4444" : "#10b981"}
-                        strokeWidth={1.5}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="bg-white border-y border-ink-100">
+      <section className="bg-white border-b border-ink-100">
         <div className="container py-16">
           <SectionHeader
             eyebrow="HOW IT WORKS"
@@ -557,10 +559,10 @@ export default function Compute() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Token flow */}
-            <div className="p-6 bg-cyan-50/50 rounded-xl border border-cyan-100">
+            <div className="p-6 bg-brand-50/50 rounded-xl border border-brand-100">
               <div className="flex items-center gap-2 mb-5">
-                <Code2 className="h-5 w-5 text-cyan-600" />
-                <h3 className="font-serif text-base font-bold text-ink-900">Token 型流程</h3>
+                <Code2 className="h-5 w-5 text-brand-600" />
+                <h3 className="text-base font-bold text-ink-900">Token 型流程</h3>
               </div>
               <div className="space-y-3">
                 {[
@@ -570,7 +572,7 @@ export default function Compute() {
                   { step: "04", title: "结算分成", desc: "平台自动计量，收入按 15-20% 抽成" },
                 ].map((item) => (
                   <div key={item.step} className="flex items-start gap-3">
-                    <div className="h-7 w-7 rounded-full bg-cyan-500 text-white flex items-center justify-center text-xs font-mono font-bold shrink-0">
+                    <div className="h-7 w-7 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-bold shrink-0">
                       {item.step}
                     </div>
                     <div>
@@ -586,7 +588,7 @@ export default function Compute() {
             <div className="p-6 bg-amber-50/50 rounded-xl border border-amber-100">
               <div className="flex items-center gap-2 mb-5">
                 <Server className="h-5 w-5 text-amber-600" />
-                <h3 className="font-serif text-base font-bold text-ink-900">设备租赁型流程</h3>
+                <h3 className="text-base font-bold text-ink-900">设备租赁型流程</h3>
               </div>
               <div className="space-y-3">
                 {[
@@ -620,14 +622,14 @@ export default function Compute() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div className="p-6 bg-white rounded-xl border border-ink-200">
+          <div className="p-6 bg-white rounded-xl border border-ink-200 card-hover">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-lg bg-cyan-50 border border-cyan-200">
-                <Building2 className="h-6 w-6 text-cyan-600" />
+              <div className="p-3 rounded-lg bg-brand-50 border border-brand-200">
+                <Building2 className="h-6 w-6 text-brand-600" />
               </div>
               <div>
-                <h3 className="font-serif text-lg font-bold text-ink-900">大型智算中心</h3>
-                <p className="text-xs text-cyan-600">规模化的专业算力供给方</p>
+                <h3 className="text-lg font-bold text-ink-900">大型智算中心</h3>
+                <p className="text-xs text-brand-600">规模化的专业算力供给方</p>
               </div>
             </div>
             <ul className="space-y-2 text-sm text-ink-600">
@@ -639,20 +641,20 @@ export default function Compute() {
                 "提供 SLA 服务质量保障",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-cyan-500 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-brand-500 shrink-0 mt-0.5" />
                   {item}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="p-6 bg-white rounded-xl border border-ink-200">
+          <div className="p-6 bg-white rounded-xl border border-ink-200 card-hover">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 rounded-lg bg-amber-50 border border-amber-200">
                 <User className="h-6 w-6 text-amber-600" />
               </div>
               <div>
-                <h3 className="font-serif text-lg font-bold text-ink-900">个体闲散算力</h3>
+                <h3 className="text-lg font-bold text-ink-900">个体闲散算力</h3>
                 <p className="text-xs text-amber-600">个人与小型工作室的闲置算力</p>
               </div>
             </div>
@@ -676,18 +678,18 @@ export default function Compute() {
 
       {/* CTA */}
       <section className="container pb-16">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-500 to-cyan-600 p-10 md:p-14">
-          <div className="absolute inset-0 bg-grid-dark opacity-30" />
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 p-10 md:p-14">
+          <div className="absolute inset-0 bg-grid opacity-20" />
           <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
-              <h2 className="font-serif text-2xl md:text-3xl font-bold text-ink-900 tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
                 有闲置算力？立即上架变现
               </h2>
-              <p className="mt-2 text-sm text-ink-800">
+              <p className="mt-2 text-sm text-brand-100">
                 无论大型智算中心还是个人闲置 GPU，均可上架出租，平台调度自动结算。
               </p>
             </div>
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-ink-900 hover:bg-ink-800 text-white font-medium rounded-md transition-colors shrink-0">
+            <button className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-ink-50 text-brand-600 font-medium rounded-lg transition-colors shrink-0">
               <Plus className="h-4 w-4" />
               发布算力
               <ArrowRight className="h-4 w-4" />

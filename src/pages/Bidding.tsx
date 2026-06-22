@@ -13,7 +13,7 @@ import { biddingProjects, groupBuyProjects } from "@/data/platform";
 import { cn } from "@/lib/utils";
 
 const statusStyles: Record<string, string> = {
-  bidding: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  bidding: "bg-brand-50 text-brand-700 border-brand-200",
   evaluating: "bg-amber-50 text-amber-700 border-amber-200",
   awarded: "bg-emerald-50 text-emerald-700 border-emerald-200",
 };
@@ -22,32 +22,32 @@ export default function Bidding() {
   const [activeTab, setActiveTab] = useState<"bidding" | "groupBuy">("bidding");
 
   return (
-    <div className="bg-ink-50 min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-ink-900 text-white">
-        <div className="absolute inset-0 bg-grid-dark" />
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] glow-cyan opacity-40" />
+    <div className="bg-white min-h-screen">
+      {/* Hero - 清新浅色背景 */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-50 to-white border-b border-ink-100">
+        <div className="absolute inset-0 bg-grid opacity-40" />
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] glow-brand opacity-50" />
         <div className="container relative py-16">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-3">
-              <span className="h-px w-6 bg-cyan-400" />
-              <span className="text-xs font-mono uppercase tracking-widest text-cyan-400">
+              <span className="h-px w-6 bg-brand-500" />
+              <span className="text-xs font-mono uppercase tracking-widest text-brand-600">
                 BIDDING & GROUP BUY
               </span>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-ink-900">
               招标采购与集采拼单
             </h1>
-            <p className="mt-4 text-base text-ink-300 leading-relaxed">
+            <p className="mt-4 text-base text-ink-500 leading-relaxed">
               买方发布采购需求，多个卖家竞价报价；或聚合同品类采购需求，向品牌商争取批量折扣。
               支持招标采购、集采拼单、在线议价等多种交易模式。
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-ink-900 font-medium rounded-md transition-colors">
+              <button className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow text-white font-medium rounded-lg transition-all">
                 <Plus className="h-4 w-4" />
                 发布采购需求
               </button>
-              <button className="inline-flex items-center gap-2 px-5 py-2.5 border border-ink-600 hover:border-cyan-400 text-white font-medium rounded-md transition-colors">
+              <button className="inline-flex items-center gap-2 px-5 py-2.5 border border-ink-200 hover:border-brand-300 hover:text-brand-600 text-ink-700 font-medium rounded-lg transition-colors bg-white">
                 发起集采拼单
               </button>
             </div>
@@ -63,7 +63,7 @@ export default function Bidding() {
             className={cn(
               "flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors",
               activeTab === "bidding"
-                ? "border-cyan-500 text-cyan-600"
+                ? "border-brand-500 text-brand-600"
                 : "border-transparent text-ink-500 hover:text-ink-900"
             )}
           >
@@ -75,7 +75,7 @@ export default function Bidding() {
             className={cn(
               "flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors",
               activeTab === "groupBuy"
-                ? "border-cyan-500 text-cyan-600"
+                ? "border-brand-500 text-brand-600"
                 : "border-transparent text-ink-500 hover:text-ink-900"
             )}
           >
@@ -97,7 +97,7 @@ export default function Bidding() {
               {biddingProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="bg-white rounded-xl border border-ink-200 p-6 card-hover hover:border-cyan-300"
+                  className="bg-white rounded-xl border border-ink-200 p-6 card-hover hover:border-brand-300 shadow-soft"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                     <div className="flex-1">
@@ -112,7 +112,7 @@ export default function Bidding() {
                         </span>
                         <span className="text-xs text-ink-500">{project.publishDate} 发布</span>
                       </div>
-                      <h3 className="font-serif text-lg font-bold text-ink-900">{project.title}</h3>
+                      <h3 className="text-lg font-bold text-ink-900">{project.title}</h3>
                       <p className="mt-2 text-sm text-ink-500 leading-relaxed">{project.description}</p>
 
                       <div className="mt-4 flex flex-wrap gap-1.5">
@@ -144,7 +144,7 @@ export default function Bidding() {
                       <div className="p-3 bg-ink-50 rounded-lg">
                         <div className="text-[10px] text-ink-500">参与竞价</div>
                         <div className="flex items-center gap-1 text-sm font-medium text-ink-900 mt-0.5">
-                          <Users className="h-3 w-3 text-cyan-500" />
+                          <Users className="h-3 w-3 text-brand-500" />
                           {project.bidderCount} 家卖家
                         </div>
                       </div>
@@ -155,11 +155,11 @@ export default function Bidding() {
                     <span className="text-xs text-ink-500">采购方：{project.buyer}</span>
                     <div className="flex gap-2">
                       {project.status === "bidding" && (
-                        <button className="px-4 py-1.5 text-xs font-medium text-white bg-ink-900 hover:bg-cyan-500 hover:text-ink-900 rounded-md transition-colors">
+                        <button className="px-4 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow rounded-md transition-all">
                           参与竞价
                         </button>
                       )}
-                      <button className="px-4 py-1.5 text-xs font-medium text-ink-700 border border-ink-200 hover:border-cyan-300 rounded-md transition-colors">
+                      <button className="px-4 py-1.5 text-xs font-medium text-ink-700 border border-ink-200 hover:border-brand-300 rounded-md transition-colors">
                         查看详情
                       </button>
                     </div>
@@ -169,9 +169,9 @@ export default function Bidding() {
             </div>
 
             {/* Rules */}
-            <div className="mt-8 p-5 bg-cyan-50 border border-cyan-100 rounded-xl">
-              <h3 className="text-sm font-semibold text-cyan-900 mb-3">招标采购业务规则</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-cyan-800">
+            <div className="mt-8 p-5 bg-brand-50 border border-brand-100 rounded-xl">
+              <h3 className="text-sm font-semibold text-brand-900 mb-3">招标采购业务规则</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-brand-800">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5" />
                   <span>招标单最低金额 5 万元</span>
@@ -204,11 +204,11 @@ export default function Bidding() {
                 return (
                   <div
                     key={project.id}
-                    className="bg-white rounded-xl border border-ink-200 p-6 card-hover hover:border-cyan-300"
+                    className="bg-white rounded-xl border border-ink-200 p-6 card-hover hover:border-brand-300 shadow-soft"
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="font-serif text-base font-bold text-ink-900">{project.title}</h3>
+                        <h3 className="text-base font-bold text-ink-900">{project.title}</h3>
                         <div className="mt-1 text-xs text-ink-500 font-mono">{project.targetModel}</div>
                       </div>
                       <span className="px-2 py-1 text-xs font-mono font-bold text-emerald-700 bg-emerald-50 rounded">
@@ -218,7 +218,7 @@ export default function Bidding() {
 
                     {/* Price */}
                     <div className="flex items-baseline gap-2 mb-4">
-                      <span className="font-mono text-2xl font-bold text-ink-900">
+                      <span className="font-mono text-2xl font-bold text-brand-600">
                         ¥{project.unitPrice.toLocaleString()}
                       </span>
                       <span className="text-xs text-ink-400 line-through">
@@ -232,11 +232,11 @@ export default function Bidding() {
                         <span className="text-ink-500">
                           已参团 <span className="font-mono font-semibold text-ink-900">{project.currentQuantity}</span> / {project.targetQuantity}
                         </span>
-                        <span className="font-mono text-cyan-600">{progress}%</span>
+                        <span className="font-mono text-brand-600">{progress}%</span>
                       </div>
                       <div className="h-2 bg-ink-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-cyan-400 to-cyan-500 rounded-full transition-all"
+                          className="h-full bg-gradient-to-r from-brand-400 to-brand-500 rounded-full transition-all"
                           style={{ width: `${progress}%` }}
                         />
                       </div>
@@ -278,7 +278,7 @@ export default function Bidding() {
                           截止 {project.deadline}
                         </span>
                       </div>
-                      <button className="px-3 py-1.5 text-xs font-medium text-white bg-ink-900 hover:bg-cyan-500 hover:text-ink-900 rounded-md transition-colors">
+                      <button className="px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow rounded-md transition-all">
                         加入拼单
                       </button>
                     </div>
@@ -288,9 +288,9 @@ export default function Bidding() {
             </div>
 
             {/* Rules */}
-            <div className="mt-8 p-5 bg-cyan-50 border border-cyan-100 rounded-xl">
-              <h3 className="text-sm font-semibold text-cyan-900 mb-3">集采拼单业务规则</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-cyan-800">
+            <div className="mt-8 p-5 bg-brand-50 border border-brand-100 rounded-xl">
+              <h3 className="text-sm font-semibold text-brand-900 mb-3">集采拼单业务规则</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-brand-800">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5" />
                   <span>拼单成功后不可取消</span>
@@ -310,7 +310,7 @@ export default function Bidding() {
       </section>
 
       {/* Process */}
-      <section className="bg-white border-y border-ink-100">
+      <section className="bg-ink-50/50 border-y border-ink-100">
         <div className="container py-16">
           <SectionHeader
             eyebrow="PROCESS"
@@ -328,12 +328,12 @@ export default function Bidding() {
             ].map((item) => (
               <div key={item.step} className="relative">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="h-10 w-10 rounded-full bg-cyan-50 border border-cyan-200 flex items-center justify-center">
-                    <item.icon className="h-4 w-4 text-cyan-600" />
+                  <div className="h-10 w-10 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center">
+                    <item.icon className="h-4 w-4 text-brand-600" />
                   </div>
                   <div className="font-mono text-xs text-ink-400">{item.step}</div>
                 </div>
-                <h4 className="font-serif text-sm font-bold text-ink-900">{item.title}</h4>
+                <h4 className="text-sm font-bold text-ink-900">{item.title}</h4>
                 <p className="mt-1 text-xs text-ink-500 leading-relaxed">{item.desc}</p>
               </div>
             ))}

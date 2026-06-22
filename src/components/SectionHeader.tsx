@@ -31,14 +31,14 @@ export default function SectionHeader({
               align === "center" && "justify-center"
             )}
           >
-            <span className="h-px w-6 bg-cyan-500" />
-            <span className="text-xs font-mono uppercase tracking-widest text-cyan-600">
+            <span className="h-px w-6 bg-brand-500" />
+            <span className="text-xs font-mono uppercase tracking-widest text-brand-600">
               {eyebrow}
             </span>
-            <span className="h-px w-6 bg-cyan-500" />
+            {align === "center" && <span className="h-px w-6 bg-brand-500" />}
           </div>
         )}
-        <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink-900 tracking-tight">
+        <h2 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-tight">
           {title}
         </h2>
         {description && (

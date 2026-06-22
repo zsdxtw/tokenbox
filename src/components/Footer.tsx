@@ -42,34 +42,34 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-ink-900 text-ink-300">
+    <footer className="bg-ink-50 border-t border-ink-100">
       <div className="container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="relative h-9 w-9 rounded-lg bg-ink-800 border border-cyan-400/40 flex items-center justify-center">
-                <Cpu className="h-4 w-4 text-cyan-400" />
+              <div className="relative h-9 w-9 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
+                <Cpu className="h-4 w-4 text-white" />
               </div>
               <div className="flex flex-col leading-none">
-                <span className="font-serif text-lg font-bold text-white">算力巢</span>
-                <span className="text-[10px] text-ink-500 tracking-widest">COMPUTE NEST</span>
+                <span className="text-lg font-bold text-ink-900">算力巢</span>
+                <span className="text-[10px] text-ink-400 tracking-widest">COMPUTE NEST</span>
               </div>
             </div>
-            <p className="text-sm text-ink-400 leading-relaxed max-w-xs">
+            <p className="text-sm text-ink-500 leading-relaxed max-w-xs">
               全国性算力设备 B2B 交易平台，覆盖六大设备层级全品类交易，提供从设备采购到资产处置的全生命周期交易服务。
             </p>
-            <div className="mt-5 space-y-2 text-xs text-ink-400">
+            <div className="mt-5 space-y-2 text-xs text-ink-500">
               <div className="flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5" />
+                <Phone className="h-3.5 w-3.5 text-brand-500" />
                 <span>400-888-2026</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="h-3.5 w-3.5" />
+                <Mail className="h-3.5 w-3.5 text-brand-500" />
                 <span>service@compute-nest.cn</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5" />
+                <MapPin className="h-3.5 w-3.5 text-brand-500" />
                 <span>北京市经济技术开发区·亦城财富中心</span>
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function Footer() {
           {/* Links */}
           {footerLinks.map((group) => (
             <div key={group.title}>
-              <h4 className="font-serif text-sm font-semibold text-white mb-4">
+              <h4 className="text-sm font-semibold text-ink-900 mb-4">
                 {group.title}
               </h4>
               <ul className="space-y-2.5">
@@ -86,7 +86,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       to={link.path}
-                      className="text-xs text-ink-400 hover:text-cyan-400 transition-colors"
+                      className="text-xs text-ink-500 hover:text-brand-600 transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -97,11 +97,11 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 pt-6 border-t border-ink-800 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-ink-500">
+        <div className="mt-12 pt-6 border-t border-ink-200 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-ink-400">
             © 2026 算力巢 COMPUTE NEST · 全国性算力设备 B2B 交易平台
           </p>
-          <div className="flex items-center gap-4 text-xs text-ink-500">
+          <div className="flex items-center gap-4 text-xs text-ink-400">
             <span>京 ICP 备 2026000000 号</span>
             <span>京公网安备 11000002000000 号</span>
             <span>合规处置资质</span>

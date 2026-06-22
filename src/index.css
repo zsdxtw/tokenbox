@@ -7,7 +7,7 @@
   line-height: 1.6;
   font-weight: 400;
   color: #0f172a;
-  background-color: #f8fafc;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,6 +26,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: #ffffff;
 }
 
 /* 数字与等宽场景 */
@@ -39,7 +40,7 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f8fafc;
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
@@ -49,29 +50,54 @@ body {
   background: #94a3b8;
 }
 
-/* 网格背景纹理 */
+/* 网格背景纹理 - 浅色 */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
 .bg-grid-dark {
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
-/* 渐变光晕 */
-.glow-cyan {
-  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.25) 0%, transparent 70%);
+/* 点阵背景 */
+.bg-dots {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-/* 文字渐变 */
+/* 渐变光晕 - 品牌色 */
+.glow-cyan {
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+}
+
+.glow-brand {
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+}
+
+.glow-amber {
+  background: radial-gradient(circle at center, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+}
+
+.glow-rose {
+  background: radial-gradient(circle at center, rgba(244, 63, 94, 0.15) 0%, transparent 70%);
+}
+
+/* 文字渐变 - 品牌色 */
 .text-gradient-cyan {
-  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 50%, #0891b2 100%);
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 50%, #4338CA 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, #818CF8 0%, #6366F1 50%, #4F46E5 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -106,11 +132,29 @@ body {
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-/* 卡片悬停 */
+/* 卡片悬停 - 柔和 */
 .card-hover {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(15, 23, 42, 0.1);
+}
+
+/* 渐变边框卡片 */
+.gradient-border {
+  position: relative;
+  background: white;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(99, 102, 241, 0));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }

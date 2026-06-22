@@ -22,11 +22,11 @@ import { getEquipmentById } from "@/data/equipment";
 import { cn } from "@/lib/utils";
 
 const conditionStyles: Record<string, string> = {
-  new: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  new: "bg-brand-50 text-brand-700 border-brand-200",
   A: "bg-emerald-50 text-emerald-700 border-emerald-200",
   B: "bg-amber-50 text-amber-700 border-amber-200",
   C: "bg-rose-50 text-rose-700 border-rose-200",
-  certified: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  certified: "bg-brand-50 text-brand-700 border-brand-200",
   preferred: "bg-emerald-50 text-emerald-700 border-emerald-200",
   standard: "bg-amber-50 text-amber-700 border-amber-200",
   economy: "bg-rose-50 text-rose-700 border-rose-200",
@@ -56,7 +56,7 @@ export default function EquipmentDetail() {
     return (
       <div className="container py-20 text-center">
         <p className="text-ink-500">设备不存在或已下架</p>
-        <Link to="/market" className="mt-4 inline-block text-cyan-600">
+        <Link to="/market" className="mt-4 inline-block text-brand-600">
           返回设备市场
         </Link>
       </div>
@@ -83,14 +83,14 @@ export default function EquipmentDetail() {
   ];
 
   return (
-    <div className="bg-ink-50 min-h-screen">
+    <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-ink-100">
         <div className="container py-4">
           <div className="flex items-center gap-2 text-xs text-ink-500">
-            <Link to="/" className="hover:text-cyan-600">首页</Link>
+            <Link to="/" className="hover:text-brand-600">首页</Link>
             <ChevronRight className="h-3 w-3" />
-            <Link to="/market" className="hover:text-cyan-600">设备市场</Link>
+            <Link to="/market" className="hover:text-brand-600">设备市场</Link>
             <ChevronRight className="h-3 w-3" />
             <span className="text-ink-900 truncate">{equipment.name}</span>
           </div>
@@ -102,12 +102,12 @@ export default function EquipmentDetail() {
           {/* Left: image + tabs */}
           <div className="lg:col-span-8 space-y-6">
             {/* Image gallery */}
-            <div className="bg-white rounded-xl border border-ink-200 overflow-hidden">
-              <div className="relative aspect-[16/10] bg-gradient-to-br from-ink-50 to-ink-100">
+            <div className="bg-white rounded-xl border border-ink-200 overflow-hidden shadow-soft">
+              <div className="relative aspect-[16/10] bg-gradient-to-br from-brand-50 to-ink-50">
                 <div className="absolute inset-0 bg-grid opacity-60" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="font-mono text-6xl font-bold text-ink-300 tracking-tightest">
+                    <div className="font-mono text-6xl font-bold text-brand-300 tracking-tightest">
                       {equipment.brand.slice(0, 3).toUpperCase()}
                     </div>
                     <div className="mt-2 text-xs text-ink-400 tracking-widest">
@@ -125,7 +125,7 @@ export default function EquipmentDetail() {
                     {equipment.conditionLabel}
                   </span>
                   {equipment.isSelfRun && (
-                    <span className="px-2.5 py-1 text-xs font-medium rounded bg-ink-900 text-white">
+                    <span className="px-2.5 py-1 text-xs font-medium rounded bg-gradient-to-r from-brand-500 to-brand-600 text-white">
                       平台自营
                     </span>
                   )}
@@ -139,7 +139,7 @@ export default function EquipmentDetail() {
             </div>
 
             {/* Tabs */}
-            <div className="bg-white rounded-xl border border-ink-200">
+            <div className="bg-white rounded-xl border border-ink-200 shadow-soft">
               <div className="flex border-b border-ink-100 overflow-x-auto">
                 {tabs.map((tab) => (
                   <button
@@ -148,7 +148,7 @@ export default function EquipmentDetail() {
                     className={cn(
                       "flex items-center gap-1.5 px-5 py-3.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap",
                       activeTab === tab.id
-                        ? "border-cyan-500 text-cyan-600"
+                        ? "border-brand-500 text-brand-600"
                         : "border-transparent text-ink-500 hover:text-ink-900"
                     )}
                   >
@@ -162,7 +162,7 @@ export default function EquipmentDetail() {
                 {/* Specs tab */}
                 {activeTab === "specs" && (
                   <div>
-                    <h3 className="font-serif text-lg font-bold text-ink-900 mb-4">详细规格</h3>
+                    <h3 className="text-lg font-bold text-ink-900 mb-4">详细规格</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
                       {equipment.specs.map((spec) => (
                         <div
@@ -186,7 +186,7 @@ export default function EquipmentDetail() {
                   <div>
                     <div className="flex items-center justify-between mb-5">
                       <div>
-                        <h3 className="font-serif text-lg font-bold text-ink-900">平台质检报告</h3>
+                        <h3 className="text-lg font-bold text-ink-900">平台质检报告</h3>
                         <div className="mt-1 flex items-center gap-3 text-xs text-ink-500">
                           <span>报告编号：<span className="font-mono text-ink-700">{equipment.inspectionReportNo}</span></span>
                           <span>检测日期：{equipment.inspectionDate}</span>
@@ -216,9 +216,9 @@ export default function EquipmentDetail() {
                       })}
                     </div>
 
-                    <div className="mt-5 p-4 bg-cyan-50 border border-cyan-100 rounded-lg flex items-start gap-3">
-                      <ShieldCheck className="h-5 w-5 text-cyan-600 shrink-0 mt-0.5" />
-                      <div className="text-xs text-cyan-800 leading-relaxed">
+                    <div className="mt-5 p-4 bg-brand-50 border border-brand-100 rounded-lg flex items-start gap-3">
+                      <ShieldCheck className="h-5 w-5 text-brand-600 shrink-0 mt-0.5" />
+                      <div className="text-xs text-brand-800 leading-relaxed">
                         本设备已通过算力巢平台标准化质检流程，质检报告不可篡改。
                         享受平台 90 天质保与残值担保服务。如设备与报告描述不符，平台先行赔付。
                       </div>
@@ -229,7 +229,7 @@ export default function EquipmentDetail() {
                 {/* Finance tab */}
                 {activeTab === "finance" && (
                   <div>
-                    <h3 className="font-serif text-lg font-bold text-ink-900 mb-5">金融方案试算</h3>
+                    <h3 className="text-lg font-bold text-ink-900 mb-5">金融方案试算</h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Calculator */}
@@ -243,11 +243,11 @@ export default function EquipmentDetail() {
                             step={5}
                             value={downPayment}
                             onChange={(e) => setDownPayment(Number(e.target.value))}
-                            className="w-full accent-cyan-500"
+                            className="w-full accent-brand-500"
                           />
                           <div className="flex justify-between text-xs text-ink-500 mt-1">
                             <span>0%</span>
-                            <span className="font-mono font-bold text-cyan-600">{downPayment}%</span>
+                            <span className="font-mono font-bold text-brand-600">{downPayment}%</span>
                             <span>50%</span>
                           </div>
                         </div>
@@ -261,7 +261,7 @@ export default function EquipmentDetail() {
                                 className={cn(
                                   "py-2 text-sm rounded-md border transition-colors",
                                   financeTerm === t
-                                    ? "border-cyan-300 bg-cyan-50 text-cyan-700 font-medium"
+                                    ? "border-brand-300 bg-brand-50 text-brand-700 font-medium"
                                     : "border-ink-200 text-ink-600 hover:border-ink-300"
                                 )}
                               >
@@ -273,7 +273,7 @@ export default function EquipmentDetail() {
                       </div>
 
                       {/* Result */}
-                      <div className="p-5 bg-ink-900 text-white rounded-lg">
+                      <div className="p-5 bg-gradient-to-br from-ink-900 to-ink-800 text-white rounded-lg">
                         <div className="text-xs text-ink-400 mb-1">融资金额</div>
                         <div className="font-mono text-2xl font-bold mb-4">
                           ¥{loanAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
@@ -281,7 +281,7 @@ export default function EquipmentDetail() {
                         <div className="grid grid-cols-2 gap-4 pb-4 border-b border-ink-700">
                           <div>
                             <div className="text-xs text-ink-400">月供</div>
-                            <div className="font-mono text-lg font-bold text-cyan-400">
+                            <div className="font-mono text-lg font-bold text-brand-400">
                               ¥{monthlyPay.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </div>
                           </div>
@@ -310,7 +310,7 @@ export default function EquipmentDetail() {
                         <Link
                           key={p.name}
                           to="/finance"
-                          className="flex items-center gap-3 p-3 border border-ink-200 rounded-lg hover:border-cyan-300 hover:bg-cyan-50/50 transition-colors"
+                          className="flex items-center gap-3 p-3 border border-ink-200 rounded-lg hover:border-brand-300 hover:bg-brand-50/50 transition-colors"
                         >
                           <div className="p-2 bg-amber-50 rounded-md">
                             <p.icon className="h-4 w-4 text-amber-600" />
@@ -330,19 +330,19 @@ export default function EquipmentDetail() {
                 {activeTab === "fingerprint" && equipment.fingerprint && (
                   <div>
                     <div className="flex items-center gap-2 mb-5">
-                      <Fingerprint className="h-5 w-5 text-cyan-600" />
-                      <h3 className="font-serif text-lg font-bold text-ink-900">设备指纹档案</h3>
+                      <Fingerprint className="h-5 w-5 text-brand-600" />
+                      <h3 className="text-lg font-bold text-ink-900">设备指纹档案</h3>
                     </div>
 
                     <div className="p-5 bg-gradient-to-br from-ink-900 to-ink-800 text-white rounded-lg mb-5">
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="text-xs text-ink-400">设备序列号</div>
-                          <div className="font-mono text-xl font-bold text-cyan-400 mt-1">
+                          <div className="font-mono text-xl font-bold text-brand-400 mt-1">
                             {equipment.fingerprint.serial}
                           </div>
                         </div>
-                        <Fingerprint className="h-12 w-12 text-cyan-400/30" />
+                        <Fingerprint className="h-12 w-12 text-brand-400/30" />
                       </div>
                     </div>
 
@@ -361,23 +361,23 @@ export default function EquipmentDetail() {
                       ))}
                     </div>
 
-                    <div className="mt-5 p-4 bg-cyan-50 border border-cyan-100 rounded-lg">
-                      <h4 className="text-xs font-semibold text-cyan-900 mb-2">设备全生命周期记录</h4>
-                      <div className="space-y-2 text-xs text-cyan-800">
+                    <div className="mt-5 p-4 bg-brand-50 border border-brand-100 rounded-lg">
+                      <h4 className="text-xs font-semibold text-brand-900 mb-2">设备全生命周期记录</h4>
+                      <div className="space-y-2 text-xs text-brand-800">
                         <div className="flex items-center gap-2">
-                          <div className="h-1.5 w-1.5 rounded-full bg-cyan-500" />
+                          <div className="h-1.5 w-1.5 rounded-full bg-brand-500" />
                           <span>2025-04 · 设备出厂，原厂保修开始</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="h-1.5 w-1.5 rounded-full bg-cyan-500" />
+                          <div className="h-1.5 w-1.5 rounded-full bg-brand-500" />
                           <span>2025-05 · 首位机主部署于智算中心</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="h-1.5 w-1.5 rounded-full bg-cyan-500" />
+                          <div className="h-1.5 w-1.5 rounded-full bg-brand-500" />
                           <span>2026-01 · 例行维护，更换散热硅脂</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="h-1.5 w-1.5 rounded-full bg-cyan-500" />
+                          <div className="h-1.5 w-1.5 rounded-full bg-brand-500" />
                           <span>2026-03 · 平台质检认证，上架销售</span>
                         </div>
                       </div>
@@ -392,8 +392,8 @@ export default function EquipmentDetail() {
           <div className="lg:col-span-4">
             <div className="sticky top-24 space-y-4">
               {/* Price card */}
-              <div className="bg-white rounded-xl border border-ink-200 p-6">
-                <h1 className="font-serif text-xl font-bold text-ink-900 leading-snug">
+              <div className="bg-white rounded-xl border border-ink-200 p-6 shadow-soft">
+                <h1 className="text-xl font-bold text-ink-900 leading-snug">
                   {equipment.name}
                 </h1>
 
@@ -408,7 +408,7 @@ export default function EquipmentDetail() {
                 <div className="mt-5 p-4 bg-ink-50 rounded-lg">
                   <div className="flex items-baseline gap-2">
                     <span className="text-sm text-ink-500">¥</span>
-                    <span className="font-mono text-3xl font-bold text-ink-900">
+                    <span className="font-mono text-3xl font-bold text-brand-600">
                       {equipment.price.toLocaleString()}
                     </span>
                     <span className="text-sm text-ink-500">/{equipment.unit}</span>
@@ -436,17 +436,17 @@ export default function EquipmentDetail() {
                 </div>
 
                 <div className="mt-5 space-y-2">
-                  <button className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-ink-900 font-medium rounded-md transition-colors">
+                  <button className="w-full py-3 bg-gradient-to-r from-brand-500 to-brand-600 hover:shadow-glow text-white font-medium rounded-lg transition-all">
                     立即采购
                   </button>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => navigate("/finance")}
-                      className="py-2.5 border border-ink-200 hover:border-cyan-300 text-sm text-ink-700 rounded-md transition-colors"
+                      className="py-2.5 border border-ink-200 hover:border-brand-300 text-sm text-ink-700 rounded-md transition-colors"
                     >
                       融资租赁
                     </button>
-                    <button className="py-2.5 border border-ink-200 hover:border-cyan-300 text-sm text-ink-700 rounded-md transition-colors flex items-center justify-center gap-1">
+                    <button className="py-2.5 border border-ink-200 hover:border-brand-300 text-sm text-ink-700 rounded-md transition-colors flex items-center justify-center gap-1">
                       <MessageSquare className="h-3.5 w-3.5" />
                       在线议价
                     </button>
@@ -457,17 +457,17 @@ export default function EquipmentDetail() {
               {/* Seller card */}
               <Link
                 to={`/store/${equipment.sellerId}`}
-                className="block bg-white rounded-xl border border-ink-200 p-5 hover:border-cyan-300 transition-colors"
+                className="block bg-white rounded-xl border border-ink-200 p-5 hover:border-brand-300 transition-colors shadow-soft"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-lg bg-ink-900 flex items-center justify-center text-white font-serif font-bold">
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-white font-bold">
                     {equipment.sellerName.slice(0, 2)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
                       <span className="font-medium text-ink-900 truncate">{equipment.sellerName}</span>
                       {equipment.isSelfRun && (
-                        <span className="px-1.5 py-0.5 text-[9px] bg-cyan-50 text-cyan-700 rounded">自营</span>
+                        <span className="px-1.5 py-0.5 text-[9px] bg-brand-50 text-brand-700 rounded">自营</span>
                       )}
                     </div>
                     <div className="flex items-center gap-0.5 mt-0.5">
@@ -498,7 +498,7 @@ export default function EquipmentDetail() {
               </Link>
 
               {/* Trust */}
-              <div className="bg-white rounded-xl border border-ink-200 p-5">
+              <div className="bg-white rounded-xl border border-ink-200 p-5 shadow-soft">
                 <h3 className="text-xs font-semibold text-ink-900 uppercase tracking-wider mb-3">
                   交易保障
                 </h3>
@@ -510,7 +510,7 @@ export default function EquipmentDetail() {
                     { icon: Repeat, text: "7 天无理由（一手设备）" },
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-2 text-xs text-ink-600">
-                      <item.icon className="h-3.5 w-3.5 text-cyan-500" />
+                      <item.icon className="h-3.5 w-3.5 text-brand-500" />
                       {item.text}
                     </div>
                   ))}

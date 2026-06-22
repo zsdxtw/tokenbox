@@ -35,34 +35,34 @@ export default function Finance() {
   const residualValue = price * 0.35;
 
   return (
-    <div className="bg-ink-50 min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-ink-900 text-white">
-        <div className="absolute inset-0 bg-grid-dark" />
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] glow-cyan opacity-40" />
+    <div className="bg-white min-h-screen">
+      {/* Hero - 清新浅色背景 */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-amber-50 to-white border-b border-ink-100">
+        <div className="absolute inset-0 bg-grid opacity-40" />
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] glow-amber opacity-50" />
         <div className="container relative py-16">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-3">
-              <span className="h-px w-6 bg-amber-400" />
-              <span className="text-xs font-mono uppercase tracking-widest text-amber-400">
+              <span className="h-px w-6 bg-amber-500" />
+              <span className="text-xs font-mono uppercase tracking-widest text-amber-600">
                 FINANCIAL SERVICES
               </span>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-ink-900">
               金融服务板块
             </h1>
-            <p className="mt-4 text-base text-ink-300 leading-relaxed">
+            <p className="mt-4 text-base text-ink-500 leading-relaxed">
               连接金融机构与设备买卖方的金融产品超市。算力设备单价高（8 卡 H100 整机 200-400 万元），
               金融服务是降低采购门槛、放大交易规模的关键杠杆。
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <div className="px-4 py-2 bg-ink-800 border border-ink-700 rounded-md text-sm">
-                <span className="text-ink-400">租赁物范围：</span>
-                <span className="text-cyan-400">算力中心设备已纳入鼓励发展</span>
+              <div className="px-4 py-2 bg-white border border-ink-200 rounded-lg text-sm shadow-soft">
+                <span className="text-ink-500">租赁物范围：</span>
+                <span className="text-brand-600">算力中心设备已纳入鼓励发展</span>
               </div>
-              <div className="px-4 py-2 bg-ink-800 border border-ink-700 rounded-md text-sm">
-                <span className="text-ink-400">参考案例：</span>
-                <span className="text-amber-400">兴业金租 5 亿元 GPU 融资租赁</span>
+              <div className="px-4 py-2 bg-white border border-ink-200 rounded-lg text-sm shadow-soft">
+                <span className="text-ink-500">参考案例：</span>
+                <span className="text-amber-600">兴业金租 5 亿元 GPU 融资租赁</span>
               </div>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function Finance() {
                   </span>
                 </div>
 
-                <h3 className="font-serif text-xl font-bold text-ink-900">{product.name}</h3>
+                <h3 className="text-xl font-bold text-ink-900">{product.name}</h3>
                 <p className="mt-1 text-xs text-amber-600 font-medium">{product.tagline}</p>
                 <p className="mt-3 text-sm text-ink-500 leading-relaxed flex-1">
                   {product.description}
@@ -136,7 +136,7 @@ export default function Finance() {
       </section>
 
       {/* Calculator */}
-      <section className="bg-white border-y border-ink-100">
+      <section className="bg-ink-50/50 border-y border-ink-100">
         <div className="container py-20">
           <SectionHeader
             eyebrow="CALCULATOR"
@@ -146,7 +146,7 @@ export default function Finance() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Inputs */}
-            <div className="p-6 bg-ink-50 rounded-xl space-y-6">
+            <div className="p-6 bg-white rounded-xl border border-ink-200 shadow-soft space-y-6">
               <div>
                 <label className="text-sm font-medium text-ink-700 mb-3 block">设备价格</label>
                 <div className="flex items-center gap-3">
@@ -211,10 +211,10 @@ export default function Finance() {
             </div>
 
             {/* Results */}
-            <div className="p-6 bg-ink-900 text-white rounded-xl">
+            <div className="p-6 bg-gradient-to-br from-ink-900 to-ink-800 text-white rounded-xl">
               <div className="flex items-center gap-2 mb-5">
                 <Calculator className="h-5 w-5 text-amber-400" />
-                <h3 className="font-serif text-lg font-bold">融资租赁方案</h3>
+                <h3 className="text-lg font-bold">融资租赁方案</h3>
               </div>
 
               <div className="space-y-4">
@@ -226,13 +226,13 @@ export default function Finance() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 bg-ink-800 rounded-lg">
+                  <div className="p-3 bg-ink-800/50 rounded-lg border border-ink-700">
                     <div className="text-xs text-ink-400">月租金</div>
                     <div className="font-mono text-xl font-bold text-white mt-1">
                       ¥{monthlyPay.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </div>
                   </div>
-                  <div className="p-3 bg-ink-800 rounded-lg">
+                  <div className="p-3 bg-ink-800/50 rounded-lg border border-ink-700">
                     <div className="text-xs text-ink-400">首付金额</div>
                     <div className="font-mono text-xl font-bold text-white mt-1">
                       ¥{(price * (downPayment / 100)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
@@ -241,15 +241,15 @@ export default function Finance() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 bg-ink-800 rounded-lg">
+                  <div className="p-3 bg-ink-800/50 rounded-lg border border-ink-700">
                     <div className="text-xs text-ink-400">总还款额</div>
                     <div className="font-mono text-lg font-bold text-white mt-1">
                       ¥{totalPay.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </div>
                   </div>
-                  <div className="p-3 bg-ink-800 rounded-lg">
+                  <div className="p-3 bg-ink-800/50 rounded-lg border border-ink-700">
                     <div className="text-xs text-ink-400">3 年后残值担保</div>
-                    <div className="font-mono text-lg font-bold text-cyan-400 mt-1">
+                    <div className="font-mono text-lg font-bold text-brand-400 mt-1">
                       ¥{residualValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </div>
                   </div>
@@ -260,7 +260,7 @@ export default function Finance() {
                   平台提供残值担保，承诺 3 年后残值不低于原价 35%。
                 </div>
 
-                <button className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-ink-900 font-medium rounded-md transition-colors">
+                <button className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-ink-900 font-medium rounded-lg transition-colors">
                   申请融资租赁
                 </button>
               </div>
@@ -279,13 +279,13 @@ export default function Finance() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {financePartners.map((group) => (
-            <div key={group.type} className="p-6 bg-white rounded-xl border border-ink-200">
-              <h3 className="font-serif text-base font-bold text-ink-900 mb-4">{group.type}</h3>
+            <div key={group.type} className="p-6 bg-white rounded-xl border border-ink-200 shadow-soft">
+              <h3 className="text-base font-bold text-ink-900 mb-4">{group.type}</h3>
               <div className="grid grid-cols-2 gap-3">
                 {group.names.map((name) => (
                   <div
                     key={name}
-                    className="flex items-center justify-center h-16 px-3 bg-ink-50 rounded-lg hover:bg-cyan-50 transition-colors"
+                    className="flex items-center justify-center h-16 px-3 bg-ink-50 rounded-lg hover:bg-brand-50 transition-colors"
                   >
                     <span className="text-sm font-medium text-ink-700 text-center">{name}</span>
                   </div>
@@ -297,7 +297,7 @@ export default function Finance() {
       </section>
 
       {/* Process */}
-      <section className="bg-white border-t border-ink-100">
+      <section className="bg-ink-50/50 border-t border-ink-100">
         <div className="container py-20">
           <SectionHeader
             eyebrow="PROCESS"
@@ -316,10 +316,10 @@ export default function Finance() {
                 { step: "05", title: "期满处置", desc: "留购/续租/退还平台回收" },
               ].map((item) => (
                 <div key={item.step} className="relative">
-                  <div className="hidden md:flex h-12 w-12 rounded-full bg-white border-2 border-amber-300 items-center justify-center font-mono font-bold text-amber-600 mb-4">
+                  <div className="hidden md:flex h-12 w-12 rounded-full bg-white border-2 border-amber-300 items-center justify-center font-mono font-bold text-amber-600 mb-4 shadow-soft">
                     {item.step}
                   </div>
-                  <h4 className="font-serif text-sm font-bold text-ink-900">{item.title}</h4>
+                  <h4 className="text-sm font-bold text-ink-900">{item.title}</h4>
                   <p className="mt-1 text-xs text-ink-500 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
