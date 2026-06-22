@@ -1,4 +1,7 @@
-// 算力共享、招标集采、增值服务、卖家数据
+// 算力交易、招标集采、增值服务、卖家数据
+
+// 算力提供商类型：大型智算中心 / 个体闲散算力
+export type ComputeProviderType = "center" | "individual";
 
 export interface ComputeListing {
   id: string;
@@ -11,8 +14,32 @@ export interface ComputeListing {
   unit: string;
   interconnect: string;
   provider: string;
+  providerType: ComputeProviderType;
   rating: number;
   greenEnergy: boolean;
+  // 是否支持下单时指定安装模型并交付 API
+  supportCustomModel: boolean;
+}
+
+// Token 型算力交易：直接输出大模型 Token，按用量计费并交付 API 接口
+export interface TokenListing {
+  id: string;
+  modelName: string;
+  modelVersion: string;
+  modelSize: string;
+  contextWindow: string;
+  gpuModel: string;
+  gpuCount: number;
+  region: string;
+  pricePerMillionTokens: number;
+  unit: string;
+  provider: string;
+  providerType: ComputeProviderType;
+  rating: number;
+  greenEnergy: boolean;
+  apiEndpoint: string;
+  throughput: string;
+  features: string[];
 }
 
 export const computeListings: ComputeListing[] = [
@@ -27,8 +54,10 @@ export const computeListings: ComputeListing[] = [
     unit: "元/卡/小时",
     interconnect: "400G NDR IB",
     provider: "北方智算中心",
+    providerType: "center",
     rating: 4.9,
     greenEnergy: true,
+    supportCustomModel: true,
   },
   {
     id: "cp-002",
@@ -41,8 +70,10 @@ export const computeListings: ComputeListing[] = [
     unit: "元/卡/小时",
     interconnect: "200G HDR IB",
     provider: "华东算力调度中心",
+    providerType: "center",
     rating: 4.7,
     greenEnergy: true,
+    supportCustomModel: true,
   },
   {
     id: "cp-003",
@@ -55,8 +86,10 @@ export const computeListings: ComputeListing[] = [
     unit: "元/卡/小时",
     interconnect: "100GbE",
     provider: "西湖智算",
+    providerType: "center",
     rating: 4.6,
     greenEnergy: false,
+    supportCustomModel: true,
   },
   {
     id: "cp-004",
@@ -69,8 +102,10 @@ export const computeListings: ComputeListing[] = [
     unit: "元/卡/小时",
     interconnect: "100GbE",
     provider: "西部算力枢纽",
+    providerType: "center",
     rating: 4.5,
     greenEnergy: true,
+    supportCustomModel: true,
   },
   {
     id: "cp-005",
@@ -83,8 +118,10 @@ export const computeListings: ComputeListing[] = [
     unit: "元/卡/小时",
     interconnect: "200G HDR IB",
     provider: "贵安数据中心",
+    providerType: "center",
     rating: 4.4,
     greenEnergy: true,
+    supportCustomModel: false,
   },
   {
     id: "cp-006",
@@ -97,8 +134,160 @@ export const computeListings: ComputeListing[] = [
     unit: "元/卡/小时",
     interconnect: "200G RoCE",
     provider: "南方智算",
+    providerType: "center",
     rating: 4.8,
     greenEnergy: false,
+    supportCustomModel: true,
+  },
+  {
+    id: "cp-007",
+    gpuModel: "RTX 4090 24GB",
+    gpuCount: 2,
+    vram: "48GB",
+    region: "南京·江宁",
+    availableHours: "夜间 20:00-08:00",
+    pricePerHour: 2.8,
+    unit: "元/卡/小时",
+    interconnect: "10GbE",
+    provider: "张工（个人工作室）",
+    providerType: "individual",
+    rating: 4.3,
+    greenEnergy: false,
+    supportCustomModel: true,
+  },
+  {
+    id: "cp-008",
+    gpuModel: "RTX 3090 24GB",
+    gpuCount: 4,
+    vram: "96GB",
+    region: "武汉·光谷",
+    availableHours: "周末全天",
+    pricePerHour: 1.9,
+    unit: "元/卡/小时",
+    interconnect: "10GbE",
+    provider: "李同学（高校实验室）",
+    providerType: "individual",
+    rating: 4.2,
+    greenEnergy: false,
+    supportCustomModel: true,
+  },
+];
+
+// Token 型算力交易列表
+export const tokenListings: TokenListing[] = [
+  {
+    id: "tk-001",
+    modelName: "DeepSeek-V3",
+    modelVersion: "v3-0324",
+    modelSize: "671B (MoE)",
+    contextWindow: "128K",
+    gpuModel: "H100 SXM5 80GB × 8",
+    gpuCount: 8,
+    region: "北京·亦庄",
+    pricePerMillionTokens: 4.0,
+    unit: "元/百万 Tokens",
+    provider: "北方智算中心",
+    providerType: "center",
+    rating: 4.9,
+    greenEnergy: true,
+    apiEndpoint: "https://api.compute-nest.cn/v1/north/deepseek-v3",
+    throughput: "180 tokens/s",
+    features: ["兼容 OpenAI 接口", "Function Calling", "JSON 输出", "流式响应"],
+  },
+  {
+    id: "tk-002",
+    modelName: "Qwen2.5-72B",
+    modelVersion: "qwen2.5-72b-instruct",
+    modelSize: "72B",
+    contextWindow: "128K",
+    gpuModel: "A100 SXM4 80GB × 8",
+    gpuCount: 8,
+    region: "上海·临港",
+    pricePerMillionTokens: 2.8,
+    unit: "元/百万 Tokens",
+    provider: "华东算力调度中心",
+    providerType: "center",
+    rating: 4.7,
+    greenEnergy: true,
+    apiEndpoint: "https://api.compute-nest.cn/v1/east/qwen-72b",
+    throughput: "150 tokens/s",
+    features: ["兼容 OpenAI 接口", "多语言", "代码生成", "流式响应"],
+  },
+  {
+    id: "tk-003",
+    modelName: "Llama 3.1-70B",
+    modelVersion: "llama-3.1-70b-instruct",
+    modelSize: "70B",
+    contextWindow: "128K",
+    gpuModel: "L40S 48GB × 8",
+    gpuCount: 8,
+    region: "杭州·余杭",
+    pricePerMillionTokens: 3.2,
+    unit: "元/百万 Tokens",
+    provider: "西湖智算",
+    providerType: "center",
+    rating: 4.6,
+    greenEnergy: false,
+    apiEndpoint: "https://api.compute-nest.cn/v1/westlake/llama-70b",
+    throughput: "140 tokens/s",
+    features: ["兼容 OpenAI 接口", "开源模型", "可微调", "流式响应"],
+  },
+  {
+    id: "tk-004",
+    modelName: "GLM-4-9B",
+    modelVersion: "glm-4-9b-chat",
+    modelSize: "9B",
+    contextWindow: "128K",
+    gpuModel: "RTX 4090 24GB × 2",
+    gpuCount: 2,
+    region: "南京·江宁",
+    pricePerMillionTokens: 0.8,
+    unit: "元/百万 Tokens",
+    provider: "张工（个人工作室）",
+    providerType: "individual",
+    rating: 4.3,
+    greenEnergy: false,
+    apiEndpoint: "https://api.compute-nest.cn/v1/indie/zhang-glm4",
+    throughput: "95 tokens/s",
+    features: ["兼容 OpenAI 接口", "中文优化", "夜间可用", "流式响应"],
+  },
+  {
+    id: "tk-005",
+    modelName: "Qwen2.5-7B",
+    modelVersion: "qwen2.5-7b-instruct",
+    modelSize: "7B",
+    contextWindow: "128K",
+    gpuModel: "RTX 3090 24GB × 4",
+    gpuCount: 4,
+    region: "武汉·光谷",
+    pricePerMillionTokens: 0.6,
+    unit: "元/百万 Tokens",
+    provider: "李同学（高校实验室）",
+    providerType: "individual",
+    rating: 4.2,
+    greenEnergy: false,
+    apiEndpoint: "https://api.compute-nest.cn/v1/indie/li-qwen7b",
+    throughput: "110 tokens/s",
+    features: ["兼容 OpenAI 接口", "周末可用", "学生优惠", "流式响应"],
+  },
+  {
+    id: "tk-006",
+    modelName: "DeepSeek-R1",
+    modelVersion: "r1-0528",
+    modelSize: "671B (MoE)",
+    contextWindow: "128K",
+    gpuModel: "H20 96GB × 8",
+    gpuCount: 8,
+    region: "深圳·南山",
+    pricePerMillionTokens: 6.0,
+    unit: "元/百万 Tokens",
+    provider: "南方智算",
+    providerType: "center",
+    rating: 4.8,
+    greenEnergy: false,
+    apiEndpoint: "https://api.compute-nest.cn/v1/south/deepseek-r1",
+    throughput: "120 tokens/s",
+    features: ["兼容 OpenAI 接口", "推理增强", "思维链输出", "流式响应"],
   },
 ];
 

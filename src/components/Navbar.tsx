@@ -8,7 +8,7 @@ const navItems = [
   { label: "设备市场", path: "/market" },
   { label: "金融服务", path: "/finance" },
   { label: "增值服务", path: "/services" },
-  { label: "算力共享", path: "/compute" },
+  { label: "算力交易", path: "/compute" },
   { label: "价格指数", path: "/price-index" },
   { label: "招标集采", path: "/bidding" },
 ];

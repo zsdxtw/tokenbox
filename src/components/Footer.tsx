@@ -34,7 +34,7 @@ const footerLinks = [
     links: [
       { label: "价格指数", path: "/price-index" },
       { label: "行业资讯", path: "/price-index" },
-      { label: "算力共享", path: "/compute" },
+      { label: "算力交易", path: "/compute" },
       { label: "设备指纹", path: "/market" },
     ],
   },

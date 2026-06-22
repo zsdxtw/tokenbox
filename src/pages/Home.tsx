@@ -16,6 +16,10 @@ import {
   Snowflake,
   Database,
   Newspaper,
+  Code2,
+  Building2,
+  User,
+  CheckCircle2,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -249,6 +253,92 @@ export default function Home() {
               <EquipmentCard key={eq.id} equipment={eq} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Compute trading entry */}
+      <section className="container py-20">
+        <SectionHeader
+          eyebrow="COMPUTE TRADING"
+          title="算力交易市场"
+          description="两类算力交易模式：Token 型直接交付大模型 API，设备租赁型按卡/小时计费。支持智算中心与个体闲散算力入驻。"
+          action={
+            <Link
+              to="/compute"
+              className="inline-flex items-center gap-1 text-sm font-medium text-cyan-600 hover:text-cyan-700"
+            >
+              进入算力交易 <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          }
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Token type */}
+          <Link
+            to="/compute"
+            className="group relative p-7 bg-white rounded-xl border border-ink-200 card-hover hover:border-cyan-300 overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-cyan-500" />
+            <div className="flex items-start justify-between mb-5">
+              <div className="p-3 rounded-lg bg-cyan-50 border border-cyan-200">
+                <Code2 className="h-6 w-6 text-cyan-600" />
+              </div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-600">
+                TYPE A · TOKEN
+              </span>
+            </div>
+            <h3 className="font-serif text-xl font-bold text-ink-900 mb-2">Token 型算力交易</h3>
+            <p className="text-sm text-ink-500 leading-relaxed mb-4">
+              直接输出大模型 Token，标明算力设备情况与已安装模型版本，按 Token 用量计费。
+              用户租用后直接获得 API 接口，开箱即用。
+            </p>
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {["按 Token 计费", "API 直交付", "已安装模型", "兼容 OpenAI"].map((t) => (
+                <span key={t} className="px-2 py-0.5 text-[10px] text-cyan-700 bg-cyan-50 rounded">
+                  {t}
+                </span>
+              ))}
+            </div>
+            <div className="flex items-center gap-2 text-xs text-ink-500">
+              <Building2 className="h-3.5 w-3.5" />
+              <span>智算中心</span>
+              <span className="text-ink-300">·</span>
+              <User className="h-3.5 w-3.5" />
+              <span>个体算力</span>
+            </div>
+          </Link>
+
+          {/* Device rental type */}
+          <Link
+            to="/compute"
+            className="group relative p-7 bg-white rounded-xl border border-ink-200 card-hover hover:border-cyan-300 overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500" />
+            <div className="flex items-start justify-between mb-5">
+              <div className="p-3 rounded-lg bg-amber-50 border border-amber-200">
+                <Server className="h-6 w-6 text-amber-600" />
+              </div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-amber-600">
+                TYPE B · DEVICE
+              </span>
+            </div>
+            <h3 className="font-serif text-xl font-bold text-ink-900 mb-2">设备租赁型算力交易</h3>
+            <p className="text-sm text-ink-500 leading-relaxed mb-4">
+              直接租赁算力设备空间，按卡/小时计费。下单时可提醒出租方安装指定模型并交付 API 接口，
+              灵活度更高。
+            </p>
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {["按卡/小时计费", "可指定模型", "独占资源", "支持定制"].map((t) => (
+                <span key={t} className="px-2 py-0.5 text-[10px] text-amber-700 bg-amber-50 rounded">
+                  {t}
+                </span>
+              ))}
+            </div>
+            <div className="flex items-center gap-2 text-xs text-ink-500">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+              <span>支持下单时指定安装模型</span>
+            </div>
+          </Link>
         </div>
       </section>
 
