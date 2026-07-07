@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA · 个人AI账户包 · App设计</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@300;400;500;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ========== 设计系统 ========== */
+  :root{
+    --ink: #0b0b0e;
+    --ink-2: #14141a;
+    --ink-3: #1c1c24;
+    --line: #2a2a33;
+    --line-soft: #1f1f27;
+    --cream: #f3ece0;
+    --cream-2: #e8dfd0;
+    --paper: #faf6ee;
+    --lime: #d4ff3e;
+    --lime-deep: #a8d922;
+    --coral: #ff5c39;
+    --amber: #ffb547;
+    --violet: #8b7eff;
+    --mint: #6ff0c4;
+    --muted: #6b6b78;
+    --muted-2: #9a9aa8;
+
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Manrope', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+
+    --phone-w: 340px;
+    --phone-h: 720px;
+    --radius: 28px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+  html,body{background:var(--ink);color:var(--cream);font-family:var(--sans);overflow-x:hidden;}
+
+  /* 背景氛围 */
+  body::before{
+    content:"";position:fixed;inset:0;
+    background:
+      radial-gradient(900px 600px at 12% 8%, rgba(212,255,62,.06), transparent 60%),
+      radial-gradient(800px 700px at 88% 92%, rgba(255,92,57,.05), transparent 60%),
+      radial-gradient(1200px 800px at 50% 50%, rgba(139,126,255,.03), transparent 70%);
+    pointer-events:none;z-index:0;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity:.5;pointer-events:none;z-index:0;mix-blend-mode:overlay;
+  }
+
+  .stage{position:relative;z-index:1;padding:60px 40px 100px;}
+
+  /* ========== 顶部标题 ========== */
+  .masthead{
+    max-width:1500px;margin:0 auto 70px;
+    display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:end;
+    padding-bottom:40px;border-bottom:1px solid var(--line);
+  }
+  .masthead .brand-row{display:flex;align-items:center;gap:18px;margin-bottom:30px;}
+  .logo-mark{
+    width:56px;height:56px;border-radius:18px;
+    background:linear-gradient(135deg,var(--lime),var(--lime-deep));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 30px rgba(212,255,62,.25), inset 0 -2px 6px rgba(0,0,0,.2);
+    position:relative;
+  }
+  .logo-mark svg{width:32px;height:32px;}
+  .brand-name{
+    font-family:var(--serif);font-weight:600;font-size:34px;letter-spacing:-.02em;
+    font-style:italic;
+  }
+  .brand-name sup{font-size:11px;color:var(--lime);font-family:var(--mono);font-style:normal;vertical-align:super;margin-left:6px;letter-spacing:.1em;}
+  .masthead h1{
+    font-family:var(--serif);font-weight:300;font-size:74px;line-height:.95;letter-spacing:-.04em;
+    color:var(--paper);
+  }
+  .masthead h1 em{font-style:italic;font-weight:500;color:var(--lime);}
+  .masthead h1 .stroke{
+    -webkit-text-stroke:1px var(--cream);color:transparent;font-weight:600;
+  }
+  .masthead .meta{display:flex;flex-direction:column;gap:14px;}
+  .tagline{
+    font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream-2);
+    line-height:1.4;
+  }
+  .tagline::before{content:"— ";color:var(--coral);}
+  .meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px;}
+  .meta-card{
+    border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:rgba(255,255,255,.02);
+  }
+  .meta-card .k{font-family:var(--mono);font-size:10px;color:var(--muted-2);letter-spacing:.15em;text-transform:uppercase;}
+  .meta-card .v{font-family:var(--serif);font-size:18px;color:var(--paper);margin-top:4px;font-weight:500;}
+  .meta-card .v .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lime);margin-right:6px;vertical-align:middle;box-shadow:0 0 10px var(--lime);}
+
+  /* ========== 屏幕导航 ========== */
+  .screen-nav{
+    max-width:1500px;margin:0 auto 50px;
+    display:flex;flex-wrap:wrap;gap:8px;
+  }
+  .screen-nav a{
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted-2);text-decoration:none;padding:8px 14px;border:1px solid var(--line);border-radius:99px;
+    transition:all .3s;
+  }
+  .screen-nav a:hover{color:var(--ink);background:var(--lime);border-color:var(--lime);}
+  .screen-nav a .num{color:var(--coral);margin-right:6px;}
+
+  /* ========== 手机展示网格 ========== */
+  .gallery{
+    max-width:1500px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(var(--phone-w),1fr));
+    gap:50px 40px;justify-items:center;
+  }
+  .phone-wrap{position:relative;width:var(--phone-w);}
+  .phone-label{
+    display:flex;align-items:baseline;gap:12px;margin-bottom:18px;padding:0 6px;
+  }
+  .phone-label .idx{
+    font-family:var(--mono);font-size:11px;color:var(--lime);letter-spacing:.2em;
+  }
+  .phone-label .name{
+    font-family:var(--serif);font-style:italic;font-size:20px;color:var(--paper);font-weight:500;
+  }
+  .phone-label .desc{
+    font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+    margin-left:auto;
+  }
+
+  /* 手机外壳 */
+  .phone{
+    width:var(--phone-w);height:var(--phone-h);
+    background:var(--ink-2);border-radius:42px;
+    border:1px solid var(--line);
+    box-shadow:
+      0 50px 80px -30px rgba(0,0,0,.7),
+      0 0 0 8px #050507,
+      0 0 0 9px #1a1a22,
+      inset 0 1px 0 rgba(255,255,255,.04);
+    position:relative;overflow:hidden;
+  }
+  .phone::before{
+    content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    width:110px;height:28px;background:#000;border-radius:99px;z-index:50;
+  }
+  .phone::after{
+    content:"";position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+    width:120px;height:4px;background:var(--cream);opacity:.4;border-radius:99px;z-index:50;
+  }
+
+  /* 屏幕内容 */
+  .screen{
+    position:absolute;inset:0;border-radius:42px;overflow:hidden;
+    display:flex;flex-direction:column;
+    background:var(--ink);
+  }
+  .statusbar{
+    height:48px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 28px 0 28px;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--cream);
+    padding-top:14px;flex-shrink:0;
+  }
+  .statusbar .right{display:flex;gap:6px;align-items:center;}
+  .statusbar .right svg{width:14px;height:14px;}
+
+  .scr-body{flex:1;overflow:hidden;display:flex;flex-direction:column;padding:0 18px;}
+  .scr-scroll{flex:1;overflow-y:auto;overflow-x:hidden;}
+  .scr-scroll::-webkit-scrollbar{display:none;}
+
+  /* 底部导航 */
+  .tabbar{
+    height:74px;flex-shrink:0;display:flex;justify-content:space-around;align-items:flex-start;
+    padding-top:10px;border-top:1px solid var(--line-soft);
+    background:linear-gradient(180deg,rgba(11,11,14,0),var(--ink) 40%);
+    backdrop-filter:blur(20px);
+  }
+  .tab{
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--muted);
+    text-transform:uppercase;cursor:pointer;position:relative;
+  }
+  .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;}
+  .tab.active{color:var(--lime);}
+  .tab.active::before{
+    content:"";position:absolute;top:-10px;width:24px;height:2px;background:var(--lime);border-radius:99px;
+    box-shadow:0 0 10px var(--lime);
+  }
+
+  /* ========== 通用组件 ========== */
+  .scr-header{
+    display:flex;align-items:center;justify-content:space-between;padding:6px 4px 18px;
+  }
+  .scr-title{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--paper);letter-spacing:-.02em;}
+  .scr-title em{font-style:italic;color:var(--lime);}
+  .icon-btn{
+    width:38px;height:38px;border-radius:12px;border:1px solid var(--line);
+    background:rgba(255,255,255,.02);display:flex;align-items:center;justify-content:center;
+    color:var(--cream-2);cursor:pointer;
+  }
+  .icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;}
+
+  /* 数字大字 */
+  .big-num{
+    font-family:var(--serif);font-weight:300;letter-spacing:-.04em;line-height:.95;
+  }
+  .mono{font-family:var(--mono);}
+
+  /* 卡片 */
+  .card{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:18px;padding:16px;
+  }
+  .card-cream{
+    background:var(--paper);color:var(--ink);border-radius:20px;padding:18px;
+  }
+
+  /* ============ SCREEN 1: DASHBOARD ============ */
+  .dash-greet{padding:6px 4px 14px;}
+  .dash-greet .hi{font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:.15em;text-transform:uppercase;}
+  .dash-greet .name{font-family:var(--serif);font-size:22px;color:var(--paper);font-weight:400;margin-top:4px;}
+  .dash-greet .name em{font-style:italic;color:var(--lime);}
+
+  .hero-asset{
+    background:
+      radial-gradient(120% 80% at 0% 0%, rgba(212,255,62,.12), transparent 60%),
+      radial-gradient(120% 80% at 100% 100%, rgba(255,92,57,.08), transparent 60%),
+      var(--ink-2);
+    border:1px solid var(--line);border-radius:24px;padding:22px;margin-bottom:16px;
+    position:relative;overflow:hidden;
+  }
+  .hero-asset::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--lime),transparent);opacity:.5;
+  }
+  .hero-asset .label{
+    font-family:var(--mono);font-size:10px;color:var(--muted-2);letter-spacing:.2em;text-transform:uppercase;
+    display:flex;align-items:center;gap:8px;
+  }
+  .hero-asset .label .pulse{
+    width:6px;height:6px;border-radius:50%;background:var(--lime);
+    box-shadow:0 0 8px var(--lime);animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .hero-asset .amount{
+    font-family:var(--serif);font-weight:300;font-size:48px;color:var(--paper);
+    letter-spacing:-.04em;line-height:1;margin:12px 0 6px;
+  }
+  .hero-asset .amount .cur{font-size:20px;color:var(--muted-2);vertical-align:top;margin-right:4px;font-weight:400;}
+  .hero-asset .amount .dec{color:var(--muted-2);font-size:32px;}
+  .hero-asset .sub{display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
+  .hero-asset .sub .change{font-family:var(--mono);font-size:12px;color:var(--lime);}
+  .hero-asset .sub .change .arrow{margin-right:4px;}
+  .hero-asset .sub .tokens{font-family:var(--mono);font-size:11px;color:var(--muted-2);}
+  .hero-asset .tokens-bar{
+    height:4px;background:var(--ink-3);border-radius:99px;margin-top:14px;overflow:hidden;
+    display:flex;
+  }
+  .hero-asset .tokens-bar span{display:block;height:100%;}
+  .tb1{background:var(--lime);width:32%;}
+  .tb2{background:var(--coral);width:24%;}
+  .tb3{background:var(--violet);width:18%;}
+  .tb4{background:var(--amber);width:14%;}
+  .tb5{background:var(--mint);width:12%;}
+
+  .quick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+  .qs{background:var(--ink-2);border:1px solid var(--line-soft);border-radius:14px;padding:12px 10px;}
+  .qs .k{font-family:var(--mono);font-size:9px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;}
+  .qs .v{font-family:var(--serif);font-size:20px;color:var(--paper);font-weight:400;margin-top:4px;letter-spacing:-.02em;}
+  .qs .v .u{font-size:11px;color:var(--muted-2);margin-left:2px;}
+
+  .section-head{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 12px;}
+  .section-head .t{font-family:var(--serif);font-size:16px;color:var(--paper);font-style:italic;font-weight:500;}
+  .section-head .more{font-family:var(--mono);font-size:10px;color:var(--lime);letter-spacing:.1em;text-transform:uppercase;}
+
+  .quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;}
+  .qa{
+    border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;
+    transition:transform .3s;position:relative;overflow:hidden;
+  }
+  .qa:hover{transform:translateY(-2px);}
+  .qa .ic{
+    width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  }
+  .qa .ic svg{width:18px;height:18px;}
+  .qa .tt{font-family:var(--serif);font-size:15px;font-weight:500;}
+  .qa .ds{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;}
+  .qa-1{background:var(--lime);color:var(--ink);}
+  .qa-2{background:var(--ink-2);color:var(--cream);border:1px solid var(--line);}
+  .qa-3{background:var(--ink-2);color:var(--cream);border:1px solid var(--line);}
+  .qa-4{background:var(--coral);color:var(--paper);}
+
+  .model-row{
+    display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;
+    background:var(--ink-2);border:1px solid var(--line-soft);margin-bottom:8px;
+  }
+  .model-logo{
+    width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-weight:600;font-size:16px;flex-shrink:0;
+  }
+  .ml-openai{background:#0d0d0d;color:#6ada6a;border:1px solid #2a3a2a;}
+  .ml-claude{background:#d97757;color:#fff;}
+  .ml-gemini{background:#1a73e8;color:#fff;}
+  .ml-baidu{background:#2932e1;color:#fff;}
+  .ml-alibaba{background:#ff6a00;color:#fff;}
+  .ml-zhipu{background:#0d0d0d;color:#7eb8ff;border:1px solid #1a2a3a;}
+  .ml-moon{background:#0d0d0d;color:#d4a3ff;border:1px solid #2a1a3a;}
+  .ml-deep{background:#4f46e5;color:#fff;}
+
+  .model-row .info{flex:1;min-width:0;}
+  .model-row .info .n{font-family:var(--sans);font-size:13px;color:var(--paper);font-weight:600;}
+  .model-row .info .p{font-family:var(--mono);font-size:10px;color:var(--muted-2);margin-top:2px;}
+  .model-row .bal{font-family:var(--mono);font-size:12px;color:var(--cream);text-align:right;}
+  .model-row .bal .u{font-size:9px;color:var(--muted-2);}
+
+  .activity-item{display:flex;gap:12px;padding:10px 4px;border-bottom:1px solid var(--line-soft);}
+  .activity-item:last-child{border-bottom:none;}
+  .activity-item .dot{
+    width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;
+  }
+  .activity-item .txt{flex:1;font-size:12px;color:var(--cream-2);line-height:1.4;}
+  .activity-item .txt .tag{font-family:var(--mono);font-size:9px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;}
+  .activity-item .time{font-family:var(--mono);font-size:10px;color:var(--muted);align-self:flex-start;}
+
+  /* ============ SCREEN 2: MODELS ============ */
+  .search-bar{
+    display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;
+    background:var(--ink-2);border:1px solid var(--line);margin-bottom:14px;
+  }
+  .search-bar svg{width:16px;height:16px;color:var(--muted-2);}
+  .search-bar input{
+    background:transparent;border:none;outline:none;color:var(--cream);font-family:var(--sans);font-size:13px;flex:1;
+  }
+  .search-bar input::placeholder{color:var(--muted);}
+
+  .filter-chips{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;}
+  .filter-chips::-webkit-scrollbar{display:none;}
+  .chip{
+    padding:7px 12px;border-radius:99px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;
+    text-transform:uppercase;border:1px solid var(--line);color:var(--muted-2);white-space:nowrap;cursor:pointer;
+  }
+  .chip.active{background:var(--cream);color:var(--ink);border-color:var(--cream);}
+
+  .model-card{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:18px;padding:14px;margin-bottom:10px;
+    position:relative;overflow:hidden;
+  }
+  .model-card .top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .model-card .top .info{flex:1;}
+  .model-card .top .info .n{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--paper);}
+  .model-card .top .info .c{font-family:var(--mono);font-size:10px;color:var(--muted-2);margin-top:2px;}
+  .model-card .badge{
+    font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:99px;letter-spacing:.05em;
+  }
+  .badge-active{background:rgba(212,255,62,.15);color:var(--lime);}
+  .badge-low{background:rgba(255,92,57,.15);color:var(--coral);}
+  .badge-trial{background:rgba(139,126,255,.15);color:var(--violet);}
+
+  .model-card .balance-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .model-card .balance-row .amt{font-family:var(--serif);font-size:22px;color:var(--paper);font-weight:400;letter-spacing:-.02em;}
+  .model-card .balance-row .amt .u{font-size:11px;color:var(--muted-2);font-family:var(--mono);margin-left:3px;}
+  .model-card .balance-row .exp{font-family:var(--mono);font-size:10px;color:var(--muted-2);}
+
+  .progress{height:5px;background:var(--ink-3);border-radius:99px;overflow:hidden;}
+  .progress span{display:block;height:100%;border-radius:99px;}
+  .pg-green{background:linear-gradient(90deg,var(--lime-deep),var(--lime));}
+  .pg-coral{background:linear-gradient(90deg,var(--coral),var(--amber));}
+  .pg-violet{background:linear-gradient(90deg,var(--violet),var(--mint));}
+
+  .model-card .meta{display:flex;justify-content:space-between;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--muted-2);}
+  .model-card .actions{display:flex;gap:8px;margin-top:12px;}
+  .model-card .actions button{
+    flex:1;padding:9px;border-radius:10px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;border:1px solid var(--line);background:transparent;color:var(--cream);cursor:pointer;
+  }
+  .model-card .actions .primary{background:var(--cream);color:var(--ink);border-color:var(--cream);}
+
+  /* ============ SCREEN 3: MARKET ============ */
+  .market-hero{
+    background:linear-gradient(135deg,#1a1a22,#0d0d12);
+    border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:16px;
+    position:relative;overflow:hidden;
+  }
+  .market-hero::before{
+    content:"";position:absolute;top:-30px;right:-30px;width:140px;height:140px;
+    background:radial-gradient(circle,rgba(212,255,62,.15),transparent 70%);
+  }
+  .market-hero .tag{font-family:var(--mono);font-size:10px;color:var(--coral);letter-spacing:.15em;text-transform:uppercase;}
+  .market-hero .title{font-family:var(--serif);font-size:24px;color:var(--paper);margin:8px 0 4px;font-weight:400;font-style:italic;letter-spacing:-.02em;}
+  .market-hero .desc{font-size:12px;color:var(--muted-2);line-height:1.5;}
+  .market-hero .stat-row{display:flex;gap:16px;margin-top:14px;}
+  .market-hero .stat .v{font-family:var(--serif);font-size:18px;color:var(--lime);font-weight:500;}
+  .market-hero .stat .k{font-family:var(--mono);font-size:9px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;}
+
+  .plan-card{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:18px;padding:14px;margin-bottom:10px;
+    display:flex;gap:12px;
+  }
+  .plan-card .plogo{
+    width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-weight:600;font-size:18px;flex-shrink:0;
+  }
+  .plan-card .pinfo{flex:1;min-width:0;}
+  .plan-card .pinfo .pn{font-family:var(--sans);font-size:13px;color:var(--paper);font-weight:600;}
+  .plan-card .pinfo .pp{font-family:var(--mono);font-size:10px;color:var(--muted-2);margin-top:2px;}
+  .plan-card .pinfo .row{display:flex;align-items:baseline;gap:8px;margin-top:8px;}
+  .plan-card .pinfo .price{font-family:var(--serif);font-size:18px;color:var(--lime);font-weight:500;}
+  .plan-card .pinfo .price .cur{font-size:11px;color:var(--muted-2);}
+  .plan-card .pinfo .old{font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:line-through;}
+  .plan-card .pinfo .save{font-family:var(--mono);font-size:9px;color:var(--coral);background:rgba(255,92,57,.12);padding:2px 6px;border-radius:6px;}
+  .plan-card .buy{
+    align-self:flex-end;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    padding:8px 14px;border-radius:10px;background:var(--cream);color:var(--ink);border:none;cursor:pointer;
+  }
+
+  /* ============ SCREEN 4: SERIAL ============ */
+  .serial-flow{padding:4px 2px;}
+  .serial-step{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:16px;padding:14px;margin-bottom:10px;
+  }
+  .serial-step .lbl{font-family:var(--mono);font-size:9px;color:var(--muted-2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+  .serial-step .lbl .num{
+    width:18px;height:18px;border-radius:50%;background:var(--lime);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;
+  }
+  .serial-step .sel{display:flex;align-items:center;justify-content:space-between;}
+  .serial-step .sel .v{font-family:var(--serif);font-size:16px;color:var(--paper);}
+  .serial-step .sel .v .sub{font-family:var(--mono);font-size:10px;color:var(--muted-2);display:block;margin-top:2px;}
+
+  .amount-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;}
+  .amount-grid .a{
+    padding:10px 6px;border-radius:10px;background:var(--ink-3);border:1px solid var(--line-soft);
+    text-align:center;font-family:var(--mono);font-size:11px;color:var(--cream-2);cursor:pointer;
+  }
+  .amount-grid .a.active{background:var(--lime);color:var(--ink);border-color:var(--lime);font-weight:600;}
+  .amount-grid .a .tok{display:block;font-size:9px;color:var(--muted-2);margin-top:2px;}
+  .amount-grid .a.active .tok{color:var(--ink);opacity:.7;}
+
+  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;}
+  .toggle-row .lab{font-size:12px;color:var(--cream);}
+  .toggle-row .lab .sub{font-family:var(--mono);font-size:9px;color:var(--muted-2);display:block;margin-top:2px;letter-spacing:.05em;}
+  .toggle{width:38px;height:22px;background:var(--ink-3);border-radius:99px;position:relative;cursor:pointer;border:1px solid var(--line);}
+  .toggle.on{background:var(--lime);}
+  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--cream);border-radius:50%;transition:.3s;}
+  .toggle.on::after{left:18px;background:var(--ink);}
+
+  .gen-btn{
+    width:100%;padding:15px;border-radius:14px;background:var(--lime);color:var(--ink);border:none;
+    font-family:var(--serif);font-size:16px;font-weight:600;cursor:pointer;margin-top:6px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    box-shadow:0 10px 30px -10px rgba(212,255,62,.4);
+  }
+
+  .serial-result{
+    background:linear-gradient(135deg,var(--paper),var(--cream-2));color:var(--ink);
+    border-radius:18px;padding:16px;margin-top:14px;position:relative;overflow:hidden;
+  }
+  .serial-result::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--lime),var(--coral),var(--violet));
+  }
+  .serial-result .lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;}
+  .serial-result .code{
+    font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);margin:10px 0;
+    word-break:break-all;line-height:1.5;letter-spacing:.02em;
+    padding:10px;background:rgba(0,0,0,.04);border-radius:8px;border:1px dashed rgba(0,0,0,.2);
+  }
+  .serial-result .code .seg{display:inline-block;}
+  .serial-result .code .sep{color:var(--coral);margin:0 2px;}
+  .serial-result .meta-row{display:flex;justify-content:space-between;margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--muted);}
+  .serial-result .copy-row{display:flex;gap:8px;margin-top:12px;}
+  .serial-result .copy-row button{
+    flex:1;padding:9px;border-radius:10px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;cursor:pointer;
+  }
+  .serial-result .copy-row .c{background:var(--ink);color:var(--cream);border:none;}
+  .serial-result .copy-row .q{background:transparent;color:var(--ink);border:1px solid var(--ink);}
+
+  /* ============ SCREEN 5: PHONE AUTH ============ */
+  .auth-hero{padding:10px 4px 20px;text-align:left;}
+  .auth-hero .ic{
+    width:54px;height:54px;border-radius:16px;background:var(--coral);
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+    box-shadow:0 10px 30px -10px rgba(255,92,57,.5);
+  }
+  .auth-hero .ic svg{width:26px;height:26px;color:var(--paper);}
+  .auth-hero .t{font-family:var(--serif);font-size:24px;color:var(--paper);font-weight:400;line-height:1.2;letter-spacing:-.02em;}
+  .auth-hero .t em{font-style:italic;color:var(--coral);}
+  .auth-hero .d{font-size:12px;color:var(--muted-2);margin-top:8px;line-height:1.5;}
+
+  .phone-input-wrap{margin-bottom:14px;}
+  .phone-input{
+    display:flex;align-items:center;gap:10px;background:var(--ink-2);border:1px solid var(--line);
+    border-radius:14px;padding:14px;
+  }
+  .phone-input .cc{font-family:var(--mono);font-size:14px;color:var(--cream);padding-right:10px;border-right:1px solid var(--line);}
+  .phone-input input{flex:1;background:transparent;border:none;outline:none;color:var(--cream);font-family:var(--mono);font-size:14px;}
+  .phone-input input::placeholder{color:var(--muted);}
+
+  .otp-grid{display:flex;gap:8px;margin-bottom:14px;}
+  .otp-grid .b{
+    flex:1;aspect-ratio:1;border-radius:12px;background:var(--ink-2);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:18px;color:var(--paper);font-weight:600;
+  }
+  .otp-grid .b.filled{border-color:var(--lime);background:rgba(212,255,62,.05);}
+  .otp-grid .b.next{border-color:var(--lime);animation:blink 1.2s infinite;}
+  @keyframes blink{0%,100%{border-color:var(--lime);}50%{border-color:var(--line);}}
+
+  .platform-push{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:16px;padding:14px;margin-bottom:10px;
+  }
+  .platform-push .phead{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .platform-push .plogo{
+    width:34px;height:34px;border-radius:10px;background:var(--ink-3);display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-weight:600;font-size:14px;color:var(--cream);
+  }
+  .platform-push .pn{font-family:var(--sans);font-size:13px;color:var(--paper);font-weight:600;}
+  .platform-push .ps{font-family:var(--mono);font-size:9px;color:var(--lime);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+  .platform-push .pmodels{display:flex;gap:6px;flex-wrap:wrap;}
+  .platform-push .pmodels .m{
+    font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:99px;
+    background:var(--ink-3);color:var(--cream-2);border:1px solid var(--line-soft);
+  }
+
+  .auth-list-head{display:flex;justify-content:space-between;align-items:center;padding:14px 4px 10px;}
+  .auth-list-head .t{font-family:var(--serif);font-size:15px;color:var(--paper);font-style:italic;font-weight:500;}
+  .auth-list-head .cnt{font-family:var(--mono);font-size:10px;color:var(--muted-2);}
+
+  /* ============ SCREEN 6: HISTORY ============ */
+  .hist-summary{
+    background:linear-gradient(135deg,var(--ink-2),var(--ink-3));border:1px solid var(--line);
+    border-radius:18px;padding:16px;margin-bottom:14px;
+  }
+  .hist-summary .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+  .hist-summary .top .lbl{font-family:var(--mono);font-size:10px;color:var(--muted-2);letter-spacing:.15em;text-transform:uppercase;}
+  .hist-summary .top .month{font-family:var(--serif);font-size:14px;color:var(--paper);font-style:italic;}
+  .hist-summary .spend{font-family:var(--serif);font-size:36px;color:var(--paper);font-weight:300;letter-spacing:-.03em;line-height:1;}
+  .hist-summary .spend .cur{font-size:16px;color:var(--muted-2);vertical-align:top;margin-right:3px;}
+  .hist-summary .spend .dec{font-size:24px;color:var(--muted-2);}
+  .hist-summary .chart{
+    display:flex;align-items:flex-end;gap:4px;height:60px;margin-top:14px;
+  }
+  .hist-summary .chart .bar{
+    flex:1;background:linear-gradient(180deg,var(--lime),var(--lime-deep));border-radius:3px 3px 0 0;
+    opacity:.4;
+  }
+  .hist-summary .chart .bar.peak{opacity:1;}
+
+  .hist-tabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid var(--line);}
+  .hist-tabs .t{
+    padding:8px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
+  }
+  .hist-tabs .t.active{color:var(--cream);border-color:var(--lime);}
+
+  .tx-item{
+    display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line-soft);
+  }
+  .tx-item .ic{
+    width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .tx-ic-buy{background:rgba(212,255,62,.12);color:var(--lime);}
+  .tx-ic-use{background:rgba(139,126,255,.12);color:var(--violet);}
+  .tx-ic-renew{background:rgba(255,181,71,.12);color:var(--amber);}
+  .tx-ic-serial{background:rgba(255,92,57,.12);color:var(--coral);}
+  .tx-item .ic svg{width:16px;height:16px;}
+  .tx-item .info{flex:1;min-width:0;}
+  .tx-item .info .tt{font-family:var(--sans);font-size:12px;color:var(--paper);font-weight:500;}
+  .tx-item .info .ts{font-family:var(--mono);font-size:10px;color:var(--muted-2);margin-top:2px;}
+  .tx-item .amt{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right;}
+  .tx-item .amt.in{color:var(--lime);}
+  .tx-item .amt.out{color:var(--coral);}
+  .tx-item .amt .sub{font-size:9px;color:var(--muted-2);font-weight:400;display:block;margin-top:2px;}
+
+  /* ============ SCREEN 7: PROFILE ============ */
+  .profile-card{
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(212,255,62,.1), transparent 60%),
+      var(--ink-2);
+    border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .profile-avatar{
+    width:60px;height:60px;border-radius:18px;
+    background:linear-gradient(135deg,var(--coral),var(--amber));
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:26px;font-weight:600;color:var(--paper);font-style:italic;
+    position:relative;
+  }
+  .profile-avatar::after{
+    content:"";position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;border-radius:50%;
+    background:var(--lime);border:3px solid var(--ink-2);
+  }
+  .profile-card .info .n{font-family:var(--serif);font-size:20px;color:var(--paper);font-weight:500;}
+  .profile-card .info .ph{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:2px;}
+  .profile-card .info .lvl{
+    display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+    font-family:var(--mono);font-size:9px;color:var(--lime);letter-spacing:.1em;text-transform:uppercase;
+    background:rgba(212,255,62,.1);padding:4px 8px;border-radius:99px;
+  }
+
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+  .stat-grid .s{
+    background:var(--ink-2);border:1px solid var(--line-soft);border-radius:14px;padding:14px 8px;text-align:center;
+  }
+  .stat-grid .s .v{font-family:var(--serif);font-size:22px;color:var(--paper);font-weight:400;letter-spacing:-.02em;}
+  .stat-grid .s .k{font-family:var(--mono);font-size:9px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;margin-top:4px;}
+
+  .menu-list{background:var(--ink-2);border:1px solid var(--line-soft);border-radius:16px;overflow:hidden;margin-bottom:10px;}
+  .menu-item{
+    display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid var(--line-soft);
+    cursor:pointer;
+  }
+  .menu-item:last-child{border-bottom:none;}
+  .menu-item .ic{
+    width:32px;height:32px;border-radius:9px;background:var(--ink-3);
+    display:flex;align-items:center;justify-content:center;color:var(--cream-2);
+  }
+  .menu-item .ic svg{width:16px;height:16px;}
+  .menu-item .tt{flex:1;font-size:13px;color:var(--paper);font-weight:500;}
+  .menu-item .ds{font-family:var(--mono);font-size:9px;color:var(--muted-2);margin-top:1px;}
+  .menu-item .arr{color:var(--muted);}
+  .menu-item .arr svg{width:14px;height:14px;}
+
+  /* ========== 滚动响应动画 ========== */
+  .phone-wrap{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.2,.7,.2,1);}
+  .phone-wrap.in{opacity:1;transform:none;}
+
+  /* ========== 页脚 ========== */
+  .footer{
+    max-width:1500px;margin:80px auto 0;padding-top:40px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;
+  }
+  .footer .left{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--cream-2);}
+  .footer .left em{color:var(--lime);font-style:italic;}
+  .footer .right{font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:.15em;text-transform:uppercase;}
+
+  @media (max-width:900px){
+    .masthead{grid-template-columns:1fr;}
+    .masthead h1{font-size:48px;}
+    .stage{padding:30px 16px 60px;}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ============ 顶部 ============ -->
+  <header class="masthead">
+    <div>
+      <div class="brand-row">
+        <div class="logo-mark">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4 L26 24 L6 24 Z" stroke="#0b0b0e" stroke-width="2.5" stroke-linejoin="round"/><path d="M16 12 L20 20 L12 20 Z" fill="#0b0b0e"/></svg>
+        </div>
+        <div class="brand-name">AURA<sup>v1.0</sup></div>
+      </div>
+      <h1>One <em>wallet.</em><br>Every <span class="stroke">model.</span></h1>
+    </div>
+    <div class="meta">
+      <div class="tagline">个人AI账户包，统一管理你名下所有大模型的Token</div>
+      <div class="meta-grid">
+        <div class="meta-card"><div class="k">产品类型</div><div class="v"><span class="dot"></span>Mobile App</div></div>
+        <div class="meta-card"><div class="k">设计阶段</div><div class="v">High-Fidelity</div></div>
+        <div class="meta-card"><div class="k">屏幕数量</div><div class="v">7 Screens</div></div>
+        <div class="meta-card"><div class="k">核心模块</div><div class="v">5 Modules</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ 屏幕导航 ============ -->
+  <nav class="screen-nav">
+    <a href="#s1"><span class="num">01</span>首页总览</a>
+    <a href="#s2"><span class="num">02</span>模型库</a>
+    <a href="#s3"><span class="num">03</span>Token超市</a>
+    <a href="#s4"><span class="num">04</span>序列号生成</a>
+    <a href="#s5"><span class="num">05</span>手机授权</a>
+    <a href="#s6"><span class="num">06</span>交易记录</a>
+    <a href="#s7"><span class="num">07</span>个人中心</a>
+  </nav>
+
+  <!-- ============ 屏幕画廊 ============ -->
+  <div class="gallery">
+
+    <!-- ========== SCREEN 1: DASHBOARD ========== -->
+    <div class="phone-wrap" id="s1">
+      <div class="phone-label">
+        <span class="idx">01 / 07</span>
+        <span class="name">首页总览</span>
+        <span class="desc">Dashboard</span>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="right">
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 7h2v4H1zM5 5h2v6H5zM9 3h2v8H9zM13 1h2v10h-2z"/></svg>
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M8 2C5 2 2.5 3 1 4.5l1 1C3.5 4 5.5 3 8 3s4.5 1 6 2.5l1-1C13.5 3 11 2 8 2zm0 3C6 5 4.5 5.8 3.5 6.8l1 1C5.3 7.1 6.5 6.5 8 6.5s2.7.6 3.5 1.3l1-1C11.5 5.8 10 5 8 5zm0 3c-1 0-1.8.4-2.3.9l1 1c.3-.3.7-.5 1.3-.5s1 .2 1.3.5l1-1C9.8 8.4 9 8 8 8z"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="20" height="8" rx="2"/><rect x="3" y="4" width="16" height="4" rx="1" fill="currentColor"/><rect x="22" y="4" width="1.5" height="4" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+          <div class="scr-body">
+            <div class="scr-scroll">
+              <div class="dash-greet">
+                <div class="hi">星期一 · 上午好</div>
+                <div class="name">陈<em>思远</em> 的账户包</div>
+              </div>
+
+              <div class="hero-asset">
+                <div class="label"><span class="pulse"></span>总资产估值 · CNY</div>
+                <div class="amount"><span class="cur">¥</span>8,427<span class="dec">.50</span></div>
+                <div class="sub">
+                  <span class="change"><span class="arrow">↑</span>+12.3% 本月</span>
+                  <span class="tokens">42.8M tokens</span>
+                </div>
+                <div class="tokens-bar"><span class="tb1"></span><span class="tb2"></span><span class="tb3"></span><span class="tb4"></span><span class="tb5"></span></div>
+              </div>
+
+              <div class="quick-stats">
+                <div class="qs"><div class="k">活跃模型</div><div class="v">8<span class="u">个</span></div></div>
+                <div class="qs"><div class="k">本月用量</div><div class="v">3.2<span class="u">M</span></div></div>
+                <div class="qs"><div class="k">节省</div><div class="v">¥412</div></div>
+              </div>
+
+              <div class="quick-actions">
+                <div class="qa qa-1">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div>
+                  <div><div class="tt">生成序列号</div><div class="ds">For Platform</div></div>
+                </div>
+                <div class="qa qa-2">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
+                  <div><div class="tt">购买Token</div><div class="ds">Market</div></div>
+                </div>
+                <div class="qa qa-3">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+                  <div><div class="tt">手机授权</div><div class="ds">SMS Push</div></div>
+                </div>
+                <div class="qa qa-4">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+                  <div><div class="tt">一键续费</div><div class="ds">Renew All</div></div>
+                </div>
+              </div>
+
+              <div class="section-head">
+                <span class="t">名下模型</span>
+                <span class="more">查看全部 →</span>
+              </div>
+
+              <div class="model-row">
+                <div class="model-logo ml-openai">G</div>
+                <div class="info"><div class="n">GPT-4o</div><div class="p">OpenAI · Plus Plan</div></div>
+                <div class="bal">2.8M<span class="u"> tok</span></div>
+              </div>
+              <div class="model-row">
+                <div class="model-logo ml-claude">C</div>
+                <div class="info"><div class="n">Claude 3.5</div><div class="p">Anthropic · Pro</div></div>
+                <div class="bal">1.4M<span class="u"> tok</span></div>
+              </div>
+              <div class="model-row">
+                <div class="model-logo ml-zhipu">智</div>
+                <div class="info"><div class="n">GLM-4</div><div class="p">智谱AI · 企业版</div></div>
+                <div class="bal">5.2M<span class="u"> tok</span></div>
+              </div>
+              <div class="model-row">
+                <div class="model-logo ml-deep">D</div>
+                <div class="info"><div class="n">DeepSeek-V3</div><div class="p">深度求索 · 标准</div></div>
+                <div class="bal">8.1M<span class="u"> tok</span></div>
+              </div>
+
+              <div class="section-head" style="margin-top:14px;">
+                <span class="t">最近活动</span>
+                <span class="more">More →</span>
+              </div>
+              <div class="activity-item">
+                <div class="dot" style="background:var(--lime);"></div>
+                <div class="txt"><span class="tag">序列号生成</span><br>为 Coze 平台生成 GPT-4o 序列号 #A8F2K9</div>
+                <div class="time">10:32</div>
+              </div>
+              <div class="activity-item">
+                <div class="dot" style="background:var(--violet);"></div>
+                <div class="txt"><span class="tag">Token使用</span><br>Claude 3.5 消耗 12,400 tokens</div>
+                <div class="time">09:15</div>
+              </div>
+              <div class="activity-item">
+                <div class="dot" style="background:var(--coral);"></div>
+                <div class="txt"><span class="tag">购买</span><br>购入 DeepSeek-V3 ¥200 套餐</div>
+                <div class="time">昨日</div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab active"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>首页</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>模型</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>超市</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 1l3 6 6 1-4.5 4.5L18 19l-6-3-6 3 1.5-6.5L3 8l6-1z"/></svg>授权</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 2: MODELS ========== -->
+    <div class="phone-wrap" id="s2">
+      <div class="phone-label">
+        <span class="idx">02 / 07</span>
+        <span class="name">模型库</span>
+        <span class="desc">My Models</span>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="right">
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 7h2v4H1zM5 5h2v6H5zM9 3h2v8H9zM13 1h2v10h-2z"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="20" height="8" rx="2"/><rect x="3" y="4" width="16" height="4" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+          <div class="scr-body">
+            <div class="scr-header">
+              <div class="scr-title">我的<em>模型</em></div>
+              <div class="icon-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+            </div>
+            <div class="scr-scroll">
+              <div class="search-bar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input placeholder="搜索模型 / 厂商 / 类型..." value="">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--lime);">8</span>
+              </div>
+
+              <div class="filter-chips">
+                <div class="chip active">全部 · 8</div>
+                <div class="chip">对话</div>
+                <div class="chip">代码</div>
+                <div class="chip">图像</div>
+                <div class="chip">语音</div>
+                <div class="chip">即将到期</div>
+              </div>
+
+              <!-- GPT-4o -->
+              <div class="model-card">
+                <div class="top">
+                  <div class="model-logo ml-openai">G</div>
+                  <div class="info"><div class="n">GPT-4o</div><div class="c">OpenAI · 多模态 · 128K</div></div>
+                  <div class="badge badge-active">活跃</div>
+                </div>
+                <div class="balance-row">
+                  <div class="amt">2.8M<span class="u">tokens</span></div>
+                  <div class="exp">2026.08.15 到期</div>
+                </div>
+                <div class="progress"><span class="pg-green" style="width:65%"></span></div>
+                <div class="meta"><span>已用 35%</span><span>¥1,240 余额</span></div>
+                <div class="actions">
+                  <button>续费</button>
+                  <button class="primary">生成序列号</button>
+                </div>
+              </div>
+
+              <!-- Claude -->
+              <div class="model-card">
+                <div class="top">
+                  <div class="model-logo ml-claude">C</div>
+                  <div class="info"><div class="n">Claude 3.5 Sonnet</div><div class="c">Anthropic · 对话 · 200K</div></div>
+                  <div class="badge badge-low">低余额</div>
+                </div>
+                <div class="balance-row">
+                  <div class="amt">142K<span class="u">tokens</span></div>
+                  <div class="exp">2026.07.20 到期</div>
+                </div>
+                <div class="progress"><span class="pg-coral" style="width:88%"></span></div>
+                <div class="meta"><span>已用 88%</span><span>¥98 余额</span></div>
+                <div class="actions">
+                  <button>续费</button>
+                  <button class="primary">生成序列号</button>
+                </div>
+              </div>
+
+              <!-- Gemini -->
+              <div class="model-card">
+                <div class="top">
+                  <div class="model-logo ml-gemini">◇</div>
+                  <div class="info"><div class="n">Gemini 1.5 Pro</div><div class="c">Google · 多模态 · 1M</div></div>
+                  <div class="badge badge-active">活跃</div>
+                </div>
+                <div class="balance-row">
+                  <div class="amt">5.6M<span class="u">tokens</span></div>
+                  <div class="exp">2026.09.01 到期</div>
+                </div>
+                <div class="progress"><span class="pg-violet" style="width:42%"></span></div>
+                <div class="meta"><span>已用 42%</span><span>¥1,890 余额</span></div>
+                <div class="actions">
+                  <button>续费</button>
+                  <button class="primary">生成序列号</button>
+                </div>
+              </div>
+
+              <!-- 文心 -->
+              <div class="model-card">
+                <div class="top">
+                  <div class="model-logo ml-baidu">文</div>
+                  <div class="info"><div class="n">文心 4.0</div><div class="c">百度 · 对话 · 8K</div></div>
+                  <div class="badge badge-trial">试用</div>
+                </div>
+                <div class="balance-row">
+                  <div class="amt">500K<span class="u">tokens</span></div>
+                  <div class="exp">2026.07.12 到期</div>
+                </div>
+                <div class="progress"><span class="pg-coral" style="width:92%"></span></div>
+                <div class="meta"><span>已用 92%</span><span>¥0 余额</span></div>
+                <div class="actions">
+                  <button>升级</button>
+                  <button class="primary">购买套餐</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>首页</div>
+            <div class="tab active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>模型</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>超市</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 1l3 6 6 1-4.5 4.5L18 19l-6-3-6 3 1.5-6.5L3 8l6-1z"/></svg>授权</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 3: MARKET ========== -->
+    <div class="phone-wrap" id="s3">
+      <div class="phone-label">
+        <span class="idx">03 / 07</span>
+        <span class="name">Token超市</span>
+        <span class="desc">Market</span>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="right">
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 7h2v4H1zM5 5h2v6H5zM9 3h2v8H9zM13 1h2v10h-2z"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="20" height="8" rx="2"/><rect x="3" y="4" width="16" height="4" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+          <div class="scr-body">
+            <div class="scr-header">
+              <div class="scr-title">Token<em>超市</em></div>
+              <div class="icon-btn"><svg viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M10 18h4"/></svg></div>
+            </div>
+            <div class="scr-scroll">
+              <div class="market-hero">
+                <div class="tag">限时促销 · 7月特惠</div>
+                <div class="title">精选模型，<br>低至 <em style="color:var(--lime);">5 折</em></div>
+                <div class="desc">多厂商Token套餐直购，比官方价更省</div>
+                <div class="stat-row">
+                  <div class="stat"><div class="v">23</div><div class="k">在售套餐</div></div>
+                  <div class="stat"><div class="v">8</div><div class="k">合作厂商</div></div>
+                  <div class="stat"><div class="v">42%</div><div class="k">平均节省</div></div>
+                </div>
+              </div>
+
+              <div class="filter-chips">
+                <div class="chip active">推荐</div>
+                <div class="chip">对话</div>
+                <div class="chip">代码</div>
+                <div class="chip">图像</div>
+                <div class="chip">语音</div>
+                <div class="chip">特惠</div>
+              </div>
+
+              <div class="section-head"><span class="t">热门套餐</span><span class="more">排序 ↓</span></div>
+
+              <div class="plan-card">
+                <div class="plogo ml-deep">D</div>
+                <div class="pinfo">
+                  <div class="pn">DeepSeek-V3 · 标准包</div>
+                  <div class="pp">深度求索 · 100万 tokens · 90天</div>
+                  <div class="row">
+                    <span class="price"><span class="cur">¥</span>200</span>
+                    <span class="old">¥380</span>
+                    <span class="save">省47%</span>
+                  </div>
+                </div>
+                <button class="buy">购入</button>
+              </div>
+
+              <div class="plan-card">
+                <div class="plogo ml-claude">C</div>
+                <div class="pinfo">
+                  <div class="pn">Claude 3.5 · 专业包</div>
+                  <div class="pp">Anthropic · 50万 tokens · 30天</div>
+                  <div class="row">
+                    <span class="price"><span class="cur">¥</span>459</span>
+                    <span class="old">¥520</span>
+                    <span class="save">省12%</span>
+                  </div>
+                </div>
+                <button class="buy">购入</button>
+              </div>
+
+              <div class="plan-card">
+                <div class="plogo ml-openai">G</div>
+                <div class="pinfo">
+                  <div class="pn">GPT-4o · 大额包</div>
+                  <div class="pp">OpenAI · 300万 tokens · 180天</div>
+                  <div class="row">
+                    <span class="price"><span class="cur">¥</span>1,899</span>
+                    <span class="old">¥2,400</span>
+                    <span class="save">省21%</span>
+                  </div>
+                </div>
+                <button class="buy">购入</button>
+              </div>
+
+              <div class="plan-card">
+                <div class="plogo ml-zhipu">智</div>
+                <div class="pinfo">
+                  <div class="pn">GLM-4 · 企业版</div>
+                  <div class="pp">智谱AI · 500万 tokens · 365天</div>
+                  <div class="row">
+                    <span class="price"><span class="cur">¥</span>1,200</span>
+                    <span class="save">最划算</span>
+                  </div>
+                </div>
+                <button class="buy">购入</button>
+              </div>
+
+              <div class="plan-card">
+                <div class="plogo ml-alibaba">通</div>
+                <div class="pinfo">
+                  <div class="pn">通义千问 · Max</div>
+                  <div class="pp">阿里云 · 200万 tokens · 90天</div>
+                  <div class="row">
+                    <span class="price"><span class="cur">¥</span>380</span>
+                    <span class="old">¥480</span>
+                    <span class="save">省21%</span>
+                  </div>
+                </div>
+                <button class="buy">购入</button>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>首页</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>模型</div>
+            <div class="tab active"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>超市</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 1l3 6 6 1-4.5 4.5L18 19l-6-3-6 3 1.5-6.5L3 8l6-1z"/></svg>授权</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 4: SERIAL ========== -->
+    <div class="phone-wrap" id="s4">
+      <div class="phone-label">
+        <span class="idx">04 / 07</span>
+        <span class="name">序列号生成</span>
+        <span class="desc">Serial Code</span>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="right">
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 7h2v4H1zM5 5h2v6H5zM9 3h2v8H9zM13 1h2v10h-2z"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="20" height="8" rx="2"/><rect x="3" y="4" width="16" height="4" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+          <div class="scr-body">
+            <div class="scr-header">
+              <div class="scr-title">序列号<em>生成</em></div>
+              <div class="icon-btn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg></div>
+            </div>
+            <div class="scr-scroll">
+              <div class="serial-flow">
+                <div class="serial-step">
+                  <div class="lbl"><span class="num">1</span>选择模型</div>
+                  <div class="sel">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div class="model-logo ml-openai" style="width:32px;height:32px;font-size:14px;">G</div>
+                      <div class="v">GPT-4o<span class="sub">余额 2.8M tokens</span></div>
+                    </div>
+                    <span style="color:var(--lime);font-family:var(--mono);font-size:11px;">更换</span>
+                  </div>
+                </div>
+
+                <div class="serial-step">
+                  <div class="lbl"><span class="num">2</span>分配额度</div>
+                  <div class="amount-grid">
+                    <div class="a">10K<span class="tok">¥31</span></div>
+                    <div class="a active">50K<span class="tok">¥155</span></div>
+                    <div class="a">100K<span class="tok">¥310</span></div>
+                    <div class="a">200K<span class="tok">¥620</span></div>
+                    <div class="a">500K<span class="tok">¥1,550</span></div>
+                    <div class="a">自定义<span class="tok">输入</span></div>
+                  </div>
+                </div>
+
+                <div class="serial-step">
+                  <div class="lbl"><span class="num">3</span>有效期</div>
+                  <div class="amount-grid">
+                    <div class="a">1小时<span class="tok">临时</span></div>
+                    <div class="a">24小时<span class="tok">单日</span></div>
+                    <div class="a active">7天<span class="tok">推荐</span></div>
+                    <div class="a">30天<span class="tok">月度</span></div>
+                    <div class="a">90天<span class="tok">季度</span></div>
+                    <div class="a">永久<span class="tok">不限</span></div>
+                  </div>
+                </div>
+
+                <div class="serial-step">
+                  <div class="lbl"><span class="num">4</span>使用规则</div>
+                  <div class="toggle-row">
+                    <div class="lab">单次使用<span class="sub">使用后立即失效</span></div>
+                    <div class="toggle"></div>
+                  </div>
+                  <div class="toggle-row">
+                    <div class="lab">限定平台<span class="sub">仅指定平台可用</span></div>
+                    <div class="toggle on"></div>
+                  </div>
+                  <div class="toggle-row">
+                    <div class="lab">用量预警<span class="sub">80%时短信提醒</span></div>
+                    <div class="toggle on"></div>
+                  </div>
+                </div>
+
+                <button class="gen-btn">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                  生成唯一序列号
+                </button>
+
+                <div class="serial-result">
+                  <div class="lbl">✓ 序列号已生成 · GPT-4o · 50K tokens</div>
+                  <div class="code">
+                    <span class="seg">AURA</span><span class="sep">·</span><span class="seg">GPT4</span><span class="sep">·</span><span class="seg">A8F2K9</span><span class="sep">·</span><span class="seg">7D3M</span><span class="sep">·</span><span class="seg">XZ29</span>
+                  </div>
+                  <div class="meta-row">
+                    <span>有效期: 7天</span>
+                    <span>剩余: 50,000 tok</span>
+                  </div>
+                  <div class="copy-row">
+                    <button class="c">复制序列号</button>
+                    <button class="q">查看二维码</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>首页</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>模型</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>超市</div>
+            <div class="tab active"><svg viewBox="0 0 24 24"><path d="M12 1l3 6 6 1-4.5 4.5L18 19l-6-3-6 3 1.5-6.5L3 8l6-1z"/></svg>授权</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 5: PHONE AUTH ========== -->
+    <div class="phone-wrap" id="s5">
+      <div class="phone-label">
+        <span class="idx">05 / 07</span>
+        <span class="name">手机授权</span>
+        <span class="desc">SMS Auth</span>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="right">
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 7h2v4H1zM5 5h2v6H5zM9 3h2v8H9zM13 1h2v10h-2z"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="20" height="8" rx="2"/><rect x="3" y="4" width="16" height="4" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+          <div class="scr-body">
+            <div class="scr-header">
+              <div class="scr-title">手机<em>授权</em></div>
+              <div class="icon-btn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+            </div>
+            <div class="scr-scroll">
+              <div class="auth-hero">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+                <div class="t">输入手机号<br>一键<em>推送</em>所有模型</div>
+                <div class="d">在任意智能体或平台输入手机号，短信验证后即可使用你名下所有大模型的Token</div>
+              </div>
+
+              <div class="phone-input-wrap">
+                <div class="phone-input">
+                  <span class="cc">+86</span>
+                  <input value="138 8826 4921">
+                </div>
+              </div>
+
+              <div class="phone-input-wrap">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                  <span style="font-family:var(--mono);font-size:10px;color:var(--muted-2);letter-spacing:.1em;text-transform:uppercase;">验证码</span>
+                  <span style="font-family:var(--mono);font-size:10px;color:var(--lime);">59s 重新发送</span>
+                </div>
+                <div class="otp-grid">
+                  <div class="b filled">4</div>
+                  <div class="b filled">8</div>
+                  <div class="b filled">2</div>
+                  <div class="b next">|</div>
+                  <div class="b">_</div>
+                  <div class="b">_</div>
+                </div>
+              </div>
+
+              <div class="gen-btn" style="background:var(--coral);color:var(--paper);box-shadow:0 10px 30px -10px rgba(255,92,57,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                推送模型至平台
+              </div>
+
+              <div class="auth-list-head">
+                <span class="t">已授权平台</span>
+                <span class="cnt">3 个活跃</span>
+              </div>
+
+              <div class="platform-push">
+                <div class="phead">
+                  <div class="plogo">C</div>
+                  <div style="flex:1;">
+                    <div class="pn">Coze 智能体平台</div>
+                    <div class="ps">● 在线 · 已同步 4 个模型</div>
+                  </div>
+                  <span style="font-family:var(--mono);font-size:9px;color:var(--muted-2);">2分钟前</span>
+                </div>
+                <div class="pmodels">
+                  <span class="m">GPT-4o</span>
+                  <span class="m">Claude 3.5</span>
+                  <span class="m">GLM-4</span>
+                  <span class="m">DeepSeek</span>
+                </div>
+              </div>
+
+              <div class="platform-push">
+                <div class="phead">
+                  <div class="plogo">D</div>
+                  <div style="flex:1;">
+                    <div class="pn">Dify 工作流</div>
+                    <div class="ps">● 在线 · 已同步 2 个模型</div>
+                  </div>
+                  <span style="font-family:var(--mono);font-size:9px;color:var(--muted-2);">1小时前</span>
+                </div>
+                <div class="pmodels">
+                  <span class="m">GPT-4o</span>
+                  <span class="m">Gemini 1.5</span>
+                </div>
+              </div>
+
+              <div class="platform-push">
+                <div class="phead">
+                  <div class="plogo">F</div>
+                  <div style="flex:1;">
+                    <div class="pn">FastGPT 知识库</div>
+                    <div class="ps" style="color:var(--muted-2);">○ 离线 · 上次活跃 3天前</div>
+                  </div>
+                  <span style="font-family:var(--mono);font-size:9px;color:var(--muted-2);">3天前</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>首页</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>模型</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>超市</div>
+            <div class="tab active"><svg viewBox="0 0 24 24"><path d="M12 1l3 6 6 1-4.5 4.5L18 19l-6-3-6 3 1.5-6.5L3 8l6-1z"/></svg>授权</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 6: HISTORY ========== -->
+    <div class="phone-wrap" id="s6">
+      <div class="phone-label">
+        <span class="idx">06 / 07</span>
+        <span class="name">交易记录</span>
+        <span class="desc">History</span>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="right">
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 7h2v4H1zM5 5h2v6H5zM9 3h2v8H9zM13 1h2v10h-2z"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="20" height="8" rx="2"/><rect x="3" y="4" width="16" height="4" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+          <div class="scr-body">
+            <div class="scr-header">
+              <div class="scr-title">交易<em>记录</em></div>
+              <div class="icon-btn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
+            </div>
+            <div class="scr-scroll">
+              <div class="hist-summary">
+                <div class="top">
+                  <span class="lbl">本月支出</span>
+                  <span class="month">2026 · 七月</span>
+                </div>
+                <div class="spend"><span class="cur">¥</span>1,847<span class="dec">.20</span></div>
+                <div class="chart">
+                  <div class="bar" style="height:30%"></div>
+                  <div class="bar" style="height:50%"></div>
+                  <div class="bar" style="height:42%"></div>
+                  <div class="bar" style="height:65%"></div>
+                  <div class="bar peak" style="height:95%"></div>
+                  <div class="bar" style="height:55%"></div>
+                  <div class="bar" style="height:70%"></div>
+                  <div class="bar" style="height:40%"></div>
+                  <div class="bar" style="height:60%"></div>
+                  <div class="bar" style="height:35%"></div>
+                  <div class="bar" style="height:48%"></div>
+                  <div class="bar" style="height:25%"></div>
+                </div>
+              </div>
+
+              <div class="hist-tabs">
+                <div class="t active">全部</div>
+                <div class="t">购买</div>
+                <div class="t">使用</div>
+                <div class="t">续费</div>
+                <div class="t">序列号</div>
+              </div>
+
+              <div class="tx-item">
+                <div class="ic tx-ic-serial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+                <div class="info"><div class="tt">生成序列号 · GPT-4o</div><div class="ts">AURA·GPT4·A8F2K9 · 今日 10:32</div></div>
+                <div class="amt out">-50K<span class="sub">tokens</span></div>
+              </div>
+
+              <div class="tx-item">
+                <div class="ic tx-ic-use"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M2 12h20"/></svg></div>
+                <div class="info"><div class="tt">Claude 3.5 · 智能体调用</div><div class="ts">Coze 平台 · 今日 09:15</div></div>
+                <div class="amt out">-12.4K<span class="sub">tokens</span></div>
+              </div>
+
+              <div class="tx-item">
+                <div class="ic tx-ic-buy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+                <div class="info"><div class="tt">购买 DeepSeek-V3 标准包</div><div class="ts">100万 tokens · 昨日 16:48</div></div>
+                <div class="amt out">-¥200<span class="sub">CNY</span></div>
+              </div>
+
+              <div class="tx-item">
+                <div class="ic tx-ic-use"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M2 12h20"/></svg></div>
+                <div class="info"><div class="tt">GPT-4o · API 调用</div><div class="ts">Dify 工作流 · 昨日 14:22</div></div>
+                <div class="amt out">-8.2K<span class="sub">tokens</span></div>
+              </div>
+
+              <div class="tx-item">
+                <div class="ic tx-ic-renew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+                <div class="info"><div class="tt">续费 Gemini 1.5 Pro</div><div class="ts">自动续费 · 07.05 00:00</div></div>
+                <div class="amt out">-¥520<span class="sub">CNY</span></div>
+              </div>
+
+              <div class="tx-item">
+                <div class="ic tx-ic-serial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+                <div class="info"><div class="tt">序列号核销 · GLM-4</div><div class="ts">FastGPT · 07.04 11:30</div></div>
+                <div class="amt in">+200K<span class="sub">已使用</span></div>
+              </div>
+
+              <div class="tx-item">
+                <div class="ic tx-ic-buy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+                <div class="info"><div class="tt">购买 GPT-4o 大额包</div><div class="ts">300万 tokens · 07.03</div></div>
+                <div class="amt out">-¥1,899<span class="sub">CNY</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>首页</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>模型</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>超市</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 1l3 6 6 1-4.5 4.5L18 19l-6-3-6 3 1.5-6.5L3 8l6-1z"/></svg>授权</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCREEN 7: PROFILE ========== -->
+    <div class="phone-wrap" id="s7">
+      <div class="phone-label">
+        <span class="idx">07 / 07</span>
+        <span class="name">个人中心</span>
+        <span class="desc">Profile</span>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="right">
+              <svg viewBox="0 0 16 12" fill="currentColor"><path d="M1 7h2v4H1zM5 5h2v6H5zM9 3h2v8H9zM13 1h2v10h-2z"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="2" width="20" height="8" rx="2"/><rect x="3" y="4" width="16" height="4" rx="1" fill="currentColor"/></svg>
+            </span>
+          </div>
+          <div class="scr-body">
+            <div class="scr-header">
+              <div class="scr-title">我的</div>
+              <div class="icon-btn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+            </div>
+            <div class="scr-scroll">
+              <div class="profile-card">
+                <div class="profile-avatar">陈</div>
+                <div class="info">
+                  <div class="n">陈思远</div>
+                  <div class="ph">+86 138 **** 4921</div>
+                  <div class="lvl">★ AURA Pro 会员</div>
+                </div>
+              </div>
+
+              <div class="stat-grid">
+                <div class="s"><div class="v">8</div><div class="k">模型</div></div>
+                <div class="s"><div class="v">¥8.4K</div><div class="k">总资产</div></div>
+                <div class="s"><div class="v">14</div><div class="k">序列号</div></div>
+              </div>
+
+              <div class="menu-list">
+                <div class="menu-item">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+                  <div style="flex:1;"><div class="tt">支付方式</div><div class="ds">3 张已绑定 · 微信/支付宝/银行卡</div></div>
+                  <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+                <div class="menu-item">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                  <div style="flex:1;"><div class="tt">安全中心</div><div class="ds">面容ID · 已开启</div></div>
+                  <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+                <div class="menu-item">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                  <div style="flex:1;"><div class="tt">自动续费</div><div class="ds">2 个模型已开启</div></div>
+                  <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+              </div>
+
+              <div class="menu-list">
+                <div class="menu-item">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                  <div style="flex:1;"><div class="tt">帮助与反馈</div><div class="ds">常见问题 · 联系客服</div></div>
+                  <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+                <div class="menu-item">
+                  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                  <div style="flex:1;"><div class="tt">关于 AURA</div><div class="ds">v1.0.0 · 隐私政策</div></div>
+                  <div class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+              </div>
+
+              <button style="width:100%;padding:14px;border-radius:14px;background:transparent;border:1px solid var(--line);color:var(--coral);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-top:14px;cursor:pointer;">退出登录</button>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>首页</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>模型</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>超市</div>
+            <div class="tab"><svg viewBox="0 0 24 24"><path d="M12 1l3 6 6 1-4.5 4.5L18 19l-6-3-6 3 1.5-6.5L3 8l6-1z"/></svg>授权</div>
+            <div class="tab active"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="footer">
+    <div class="left">AURA · <em>One wallet, every model.</em> — 个人AI账户包设计稿</div>
+    <div class="right">DESIGNED · 2026 · HIGH-FIDELITY PROTOTYPE</div>
+  </footer>
+
+</div>
+
+<script>
+  // 滚动揭示动画
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.phone-wrap').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.08) + 's';
+    io.observe(el);
+  });
+
+  // 平滑滚动
+  document.querySelectorAll('.screen-nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  // 交互演示：toggle切换
+  document.querySelectorAll('.toggle').forEach(t => {
+    t.addEventListener('click', () => t.classList.toggle('on'));
+  });
+  // chip切换
+  document.querySelectorAll('.filter-chips, .hist-tabs').forEach(group => {
+    group.querySelectorAll('.chip, .t').forEach(c => {
+      c.addEventListener('click', () => {
+        group.querySelectorAll('.chip, .t').forEach(x => x.classList.remove('active'));
+        c.classList.add('active');
+      });
+    });
+  });
+  // 金额选择
+  document.querySelectorAll('.amount-grid').forEach(g => {
+    g.querySelectorAll('.a').forEach(a => {
+      a.addEventListener('click', () => {
+        g.querySelectorAll('.a').forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+      });
+    });
+  });
+</script>
+</body>
+</html>
