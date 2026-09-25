@@ -50,6 +50,7 @@ export default function Market() {
   const [subcategory, setSubcategory] = useState<string>("all");
   const [condition, setCondition] = useState<Condition | "all">("all");
   const [brand, setBrand] = useState("全部品牌");
+  const [model, setModel] = useState("全部型号");
   const [isNewOnly, setIsNewOnly] = useState(false);
   const [isSelfRun, setIsSelfRun] = useState(false);
   const [priceRange, setPriceRange] = useState(0);
@@ -59,10 +60,43 @@ export default function Market() {
   const handleCategoryChange = (value: EquipmentCategory | "all") => {
     setCategory(value);
     setSubcategory("all");
+    setModel("全部型号");
+  };
+
+  const handleSubcategoryChange = (value: string) => {
+    setSubcategory(value);
+    setModel("全部型号");
+  };
+
+  const handleBrandChange = (value: string) => {
+    setBrand(value);
+    setModel("全部型号");
   };
 
   const subcategoryOptions =
     category !== "all" ? categoryTree[category] : [];
+
+  // 型号选项随 品类 / 细分品类 / 品牌 联动
+  const modelOptions = useMemo(
+    () => [
+      "全部型号",
+      ...Array.from(
+        new Set(
+          equipmentList
+            .filter((eq) => category === "all" || eq.category === category)
+            .filter(
+              (eq) =>
+                category === "all" ||
+                subcategory === "all" ||
+                eq.subcategory === subcategory,
+            )
+            .filter((eq) => brand === "全部品牌" || eq.brand === brand)
+            .map((eq) => eq.model),
+        ),
+      ),
+    ],
+    [category, subcategory, brand],
+  );
 
   const filtered = useMemo(() => {
     let list = equipmentList.filter((eq) => {
@@ -70,6 +104,7 @@ export default function Market() {
       if (category !== "all" && subcategory !== "all" && eq.subcategory !== subcategory) return false;
       if (condition !== "all" && eq.condition !== condition) return false;
       if (brand !== "全部品牌" && eq.brand !== brand) return false;
+      if (model !== "全部型号" && eq.model !== model) return false;
       if (isNewOnly && !eq.isNew) return false;
       if (isSelfRun && !eq.isSelfRun) return false;
       if (priceRange > 0 && eq.price > priceRange) return false;
@@ -80,7 +115,7 @@ export default function Market() {
     if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
 
     return list;
-  }, [category, subcategory, condition, brand, isNewOnly, isSelfRun, priceRange, sort]);
+  }, [category, subcategory, condition, brand, model, isNewOnly, isSelfRun, priceRange, sort]);
 
   const FilterPanel = (
     <div className="space-y-6">
@@ -128,7 +163,7 @@ export default function Market() {
             {subcategoryOptions.map((opt) => (
               <button
                 key={opt.value}
-                onClick={() => setSubcategory(opt.value)}
+                onClick={() => handleSubcategoryChange(opt.value)}
                 className={cn(
                   "text-left px-3 py-1.5 text-sm rounded-md transition-colors",
                   subcategory === opt.value
@@ -164,26 +199,7 @@ export default function Market() {
         </div>
       </div>
 
-      {/* Brand */}
-      <div>
-        <h3 className="text-xs font-semibold text-ink-900 uppercase tracking-wider mb-3">品牌</h3>
-        <div className="flex flex-col gap-1.5">
-          {brandOptions.map((b) => (
-            <button
-              key={b}
-              onClick={() => setBrand(b)}
-              className={cn(
-                "text-left px-3 py-1.5 text-sm rounded-md transition-colors",
-                brand === b
-                  ? "bg-brand-50 text-brand-700 font-medium"
-                  : "text-ink-600 hover:bg-ink-50"
-              )}
-            >
-              {b}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Brand & model moved to quick filter rows above the toolbar */}
 
       {/* Price range */}
       <div>
@@ -264,6 +280,54 @@ export default function Market() {
 
           {/* Main */}
           <div className="flex-1 min-w-0">
+            {/* Quick filters: brand & model */}
+            <div className="mb-5 space-y-2.5">
+              {/* Brand row */}
+              <div className="flex items-start gap-3">
+                <span className="mt-1 w-8 shrink-0 text-xs font-semibold text-ink-900 uppercase tracking-wider">
+                  品牌
+                </span>
+                <div className="flex-1 min-w-0 flex gap-1.5 overflow-x-auto">
+                  {brandOptions.map((b) => (
+                    <button
+                      key={b}
+                      onClick={() => handleBrandChange(b)}
+                      className={cn(
+                        "shrink-0 whitespace-nowrap px-2.5 py-1 text-xs rounded-md border transition-colors",
+                        brand === b
+                          ? "border-brand-300 bg-brand-50 text-brand-700 font-medium"
+                          : "border-ink-200 text-ink-600 hover:border-ink-300"
+                      )}
+                    >
+                      {b}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Model row */}
+              <div className="flex items-start gap-3">
+                <span className="mt-1 w-8 shrink-0 text-xs font-semibold text-ink-900 uppercase tracking-wider">
+                  型号
+                </span>
+                <div className="flex-1 min-w-0 flex gap-1.5 overflow-x-auto">
+                  {modelOptions.map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setModel(m)}
+                      className={cn(
+                        "shrink-0 whitespace-nowrap px-2.5 py-1 text-xs rounded-md border transition-colors font-mono",
+                        model === m
+                          ? "border-brand-300 bg-brand-50 text-brand-700 font-medium"
+                          : "border-ink-200 text-ink-600 hover:border-ink-300"
+                      )}
+                    >
+                      {m}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {/* Toolbar */}
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-3">
