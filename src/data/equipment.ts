@@ -69,22 +69,8 @@ export const categoryLabels: Record<EquipmentCategory, string> = {
   "cluster-software": "集群管理与调度软件",
 };
 
-export const categoryTree: Record<EquipmentCategory, { value: string; label: string }[]> = {
-  "gpu-server": [
-    { value: "nvidia", label: "NVIDIA" },
-    { value: "amd", label: "AMD" },
-    { value: "intel", label: "Intel" },
-    { value: "domestic", label: "国产芯片" },
-  ],
-  "cpu-server": [
-    { value: "x86", label: "x86（Xeon / EPYC）" },
-    { value: "arm", label: "ARM（鲲鹏 / 飞腾）" },
-    { value: "domestic", label: "国产 CPU" },
-  ],
-  "ai-server": [
-    { value: "domestic", label: "国产品牌" },
-    { value: "global", label: "国际品牌" },
-  ],
+// GPU 服务器 / CPU 服务器 / AI 服务器整机 不设细分品类（通过品牌、型号行筛选）
+export const categoryTree: Partial<Record<EquipmentCategory, { value: string; label: string }[]>> = {
   network: [
     { value: "ib-switch", label: "InfiniBand 交换机" },
     { value: "eth-switch", label: "高速以太网交换机" },
@@ -117,7 +103,7 @@ export const categoryTree: Record<EquipmentCategory, { value: string; label: str
 
 export function getSubcategoryLabel(category: EquipmentCategory, sub?: string): string {
   if (!sub) return "";
-  return categoryTree[category].find((s) => s.value === sub)?.label || "";
+  return categoryTree[category]?.find((s) => s.value === sub)?.label || "";
 }
 
 export const conditionLabels: Record<Condition, string> = {

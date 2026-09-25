@@ -71,7 +71,7 @@ export default function Market() {
   };
 
   const subcategoryOptions =
-    category !== "all" ? categoryTree[category] : [];
+    category !== "all" ? categoryTree[category] ?? [] : [];
 
   // 品牌选项随 品类 / 细分品类 联动
   const brandOptions = useMemo(
