@@ -59,8 +59,8 @@ export default function Solutions() {
               行业解决方案
             </h1>
             <p className="mt-4 text-base text-ink-500 leading-relaxed">
-              算力巢自营的综合解决方案，覆盖算力集群中心建设、绿色供电、算力租赁运营、
-              二手设备残值处置、融资租赁采购、全生命周期管理等场景。
+              算力巢自营的综合解决方案，覆盖算力集群中心建设、算力租赁运营、
+              二手设备残值处置及维修、融资租赁采购、全生命周期管理等场景。
               用户可根据自身需求查看与选择对应的解决方案，配套真实落地案例。
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -81,7 +81,7 @@ export default function Solutions() {
       <section className="container py-20">
         <SectionHeader
           eyebrow="SCENARIOS"
-          title="六大解决方案场景"
+          title="五大解决方案场景"
           description="针对算力产业链不同环节的痛点，提供端到端的综合解决方案。"
         />
 

@@ -11,17 +11,24 @@ import {
   HardDrive,
   Server,
   Zap,
-  Snowflake,
   Database,
   Newspaper,
   Code2,
   Building2,
   User,
   CheckCircle2,
+  Gpu,
+  Container,
+  Terminal,
 } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import EquipmentCard from "@/components/EquipmentCard";
-import { featuredEquipment } from "@/data/equipment";
+import {
+  featuredEquipment,
+  equipmentList,
+  categoryLabels,
+  type EquipmentCategory,
+} from "@/data/equipment";
 import { solutionScenarios, solutionCases } from "@/data/solutions";
 import { policyArticles } from "@/data/policy";
 
@@ -46,7 +53,7 @@ const fourBoards = [
     icon: RefreshCw,
     title: "二手设备交易",
     subtitle: "残值引擎",
-    description: "平台自营翻新 + C2B2C 撮合，以平台质检认证为核心信任机制，覆盖退役 GPU 服务器、二手矿机、拆机配件等。",
+    description: "平台自营翻新 + C2B2C 撮合，以平台质检认证为核心信任机制，覆盖退役 GPU 服务器、二手整机、拆机配件等。",
     features: ["平台质检认证", "A/B/C 级分级", "C2B2C 寄售", "残值评估"],
     color: "emerald",
     path: "/market",
@@ -78,14 +85,22 @@ const colorMap: Record<string, { bg: string; text: string; border: string; dot: 
   rose: { bg: "bg-rose-50", text: "text-rose-600", border: "border-rose-200", dot: "bg-rose-500" },
 };
 
-const categories = [
-  { icon: Zap, label: "电力基础设施", count: "126" },
-  { icon: Snowflake, label: "制冷散热", count: "98" },
-  { icon: Cpu, label: "IT 计算设备", count: "1,856" },
-  { icon: HardDrive, label: "存储设备", count: "742" },
-  { icon: Network, label: "网络设备", count: "423" },
-  { icon: Server, label: "机柜设施", count: "318" },
-];
+const categoryIcons: Record<EquipmentCategory, React.ComponentType<{ className?: string }>> = {
+  "gpu-server": Gpu,
+  "cpu-server": Cpu,
+  "ai-server": Server,
+  network: Network,
+  storage: HardDrive,
+  "power-cooling": Zap,
+  rack: Container,
+  "cluster-software": Terminal,
+};
+
+const categories = (Object.keys(categoryLabels) as EquipmentCategory[]).map((key) => ({
+  icon: categoryIcons[key],
+  label: categoryLabels[key],
+  count: String(equipmentList.filter((eq) => eq.category === key).length),
+}));
 
 export default function Home() {
   const featuredSolutions = solutionScenarios.slice(0, 3);
@@ -116,7 +131,7 @@ export default function Home() {
             </h1>
 
             <p className="mt-6 text-base md:text-lg text-ink-500 max-w-2xl leading-relaxed">
-              覆盖「电力基础设施-制冷散热-IT 计算设备-存储设备-网络设备-机柜设施」六大设备层级全品类交易，
+              覆盖 GPU 服务器、CPU 服务器、AI 服务器整机、网络设备、存储设备、供电与散热设备、机柜与基础设施、集群管理与调度软件八大品类交易，
               通过「自营直采+撮合交易」双轮驱动，叠加金融服务与增值服务，
               为算力产业链上下游企业提供全生命周期交易服务。
             </p>
@@ -152,10 +167,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Six categories */}
+      {/* Eight categories */}
       <section className="bg-ink-50/50 border-y border-ink-100">
         <div className="container py-10">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
             {categories.map((cat) => (
               <Link
                 key={cat.label}
@@ -339,7 +354,7 @@ export default function Home() {
           <SectionHeader
             eyebrow="SOLUTIONS"
             title="行业解决方案"
-            description="算力巢自营的综合解决方案，覆盖算力集群建设、绿色供电、算力运营、残值处置等场景。"
+            description="算力巢自营的综合解决方案，覆盖算力集群建设、算力运营、残值处置及维修、全生命周期管理等场景。"
             action={
               <Link
                 to="/solutions"

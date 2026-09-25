@@ -15,7 +15,7 @@ const footerLinks = [
     title: "解决方案",
     links: [
       { label: "智算集群建设", path: "/solutions" },
-      { label: "绿色供电方案", path: "/solutions" },
+      { label: "全生命周期管理", path: "/solutions" },
       { label: "算力租赁运营", path: "/solutions" },
       { label: "残值处置方案", path: "/solutions" },
     ],
@@ -57,7 +57,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm text-ink-500 leading-relaxed max-w-xs">
-              全国性算力设备 B2B 交易平台，覆盖六大设备层级全品类交易，提供从设备采购到资产处置的全生命周期交易服务。
+              全国性算力设备 B2B 交易平台，覆盖 GPU 服务器、网络设备、存储设备等八大品类交易，提供从设备采购到资产处置的全生命周期交易服务。
             </p>
             <div className="mt-5 space-y-2 text-xs text-ink-500">
               <div className="flex items-center gap-2">

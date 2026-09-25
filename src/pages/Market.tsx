@@ -8,6 +8,8 @@ import {
 import EquipmentCard from "@/components/EquipmentCard";
 import {
   equipmentList,
+  categoryLabels,
+  categoryTree,
   type EquipmentCategory,
   type Condition,
 } from "@/data/equipment";
@@ -16,14 +18,10 @@ import { cn } from "@/lib/utils";
 
 const categoryOptions: { value: EquipmentCategory | "all"; label: string }[] = [
   { value: "all", label: "全部分类" },
-  { value: "gpu-server", label: "GPU 服务器" },
-  { value: "cpu-server", label: "CPU 服务器" },
-  { value: "network", label: "网络设备" },
-  { value: "storage", label: "存储设备" },
-  { value: "mining", label: "矿机" },
-  { value: "power", label: "电力设备" },
-  { value: "cooling", label: "制冷散热" },
-  { value: "rack", label: "机柜设施" },
+  ...(Object.keys(categoryLabels) as EquipmentCategory[]).map((key) => ({
+    value: key,
+    label: categoryLabels[key],
+  })),
 ];
 
 const conditionOptions = [
@@ -35,7 +33,10 @@ const conditionOptions = [
   { value: "preferred", label: "优选" },
 ];
 
-const brandOptions = ["全部品牌", "NVIDIA", "Supermicro", "华为", "浪潮", "Samsung", "施耐德", "维谛", "神盾", "图灵"];
+const brandOptions = [
+  "全部品牌",
+  ...Array.from(new Set(equipmentList.map((e) => e.brand))),
+];
 
 const sortOptions = [
   { value: "default", label: "默认排序" },
@@ -46,6 +47,7 @@ const sortOptions = [
 
 export default function Market() {
   const [category, setCategory] = useState<EquipmentCategory | "all">("all");
+  const [subcategory, setSubcategory] = useState<string>("all");
   const [condition, setCondition] = useState<Condition | "all">("all");
   const [brand, setBrand] = useState("全部品牌");
   const [isNewOnly, setIsNewOnly] = useState(false);
@@ -54,9 +56,18 @@ export default function Market() {
   const [sort, setSort] = useState("default");
   const [showMobileFilter, setShowMobileFilter] = useState(false);
 
+  const handleCategoryChange = (value: EquipmentCategory | "all") => {
+    setCategory(value);
+    setSubcategory("all");
+  };
+
+  const subcategoryOptions =
+    category !== "all" ? categoryTree[category] : [];
+
   const filtered = useMemo(() => {
     let list = equipmentList.filter((eq) => {
       if (category !== "all" && eq.category !== category) return false;
+      if (category !== "all" && subcategory !== "all" && eq.subcategory !== subcategory) return false;
       if (condition !== "all" && eq.condition !== condition) return false;
       if (brand !== "全部品牌" && eq.brand !== brand) return false;
       if (isNewOnly && !eq.isNew) return false;
@@ -69,20 +80,20 @@ export default function Market() {
     if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
 
     return list;
-  }, [category, condition, brand, isNewOnly, isSelfRun, priceRange, sort]);
+  }, [category, subcategory, condition, brand, isNewOnly, isSelfRun, priceRange, sort]);
 
   const FilterPanel = (
     <div className="space-y-6">
       {/* Category */}
       <div>
         <h3 className="text-xs font-semibold text-ink-900 uppercase tracking-wider mb-3">
-          设备层级
+          设备品类
         </h3>
         <div className="flex flex-col gap-1.5">
           {categoryOptions.map((opt) => (
             <button
               key={opt.value}
-              onClick={() => setCategory(opt.value)}
+              onClick={() => handleCategoryChange(opt.value)}
               className={cn(
                 "text-left px-3 py-1.5 text-sm rounded-md transition-colors",
                 category === opt.value
@@ -95,6 +106,42 @@ export default function Market() {
           ))}
         </div>
       </div>
+
+      {/* Subcategory (contextual) */}
+      {subcategoryOptions.length > 0 && (
+        <div>
+          <h3 className="text-xs font-semibold text-ink-900 uppercase tracking-wider mb-3">
+            细分品类
+          </h3>
+          <div className="flex flex-col gap-1.5">
+            <button
+              onClick={() => setSubcategory("all")}
+              className={cn(
+                "text-left px-3 py-1.5 text-sm rounded-md transition-colors",
+                subcategory === "all"
+                  ? "bg-brand-50 text-brand-700 font-medium"
+                  : "text-ink-600 hover:bg-ink-50"
+              )}
+            >
+              全部
+            </button>
+            {subcategoryOptions.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setSubcategory(opt.value)}
+                className={cn(
+                  "text-left px-3 py-1.5 text-sm rounded-md transition-colors",
+                  subcategory === opt.value
+                    ? "bg-brand-50 text-brand-700 font-medium"
+                    : "text-ink-600 hover:bg-ink-50"
+                )}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Condition */}
       <div>
@@ -197,7 +244,7 @@ export default function Market() {
           </div>
           <h1 className="text-3xl font-bold text-ink-900">设备交易</h1>
           <p className="mt-2 text-sm text-ink-500">
-            一手自营 + 二手认证设备，覆盖六大设备层级全品类交易
+            一手自营 + 二手认证设备，覆盖 GPU 服务器、CPU 服务器、AI 服务器整机、网络设备、存储设备、供电与散热、机柜与基础设施、集群软件八大品类
           </p>
         </div>
       </div>

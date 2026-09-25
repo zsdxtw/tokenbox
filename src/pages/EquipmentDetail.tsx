@@ -18,7 +18,11 @@ import {
   Repeat,
   MessageSquare,
 } from "lucide-react";
-import { getEquipmentById } from "@/data/equipment";
+import {
+  categoryLabels,
+  getSubcategoryLabel,
+  getEquipmentById,
+} from "@/data/equipment";
 import { cn } from "@/lib/utils";
 
 const conditionStyles: Record<string, string> = {
@@ -67,6 +71,9 @@ export default function EquipmentDetail() {
     ? Math.round((1 - equipment.price / equipment.originalPrice) * 100)
     : 0;
 
+  const subcategoryLabel = getSubcategoryLabel(equipment.category, equipment.subcategory);
+  const categoryLabel = categoryLabels[equipment.category];
+
   // Finance calculation
   const loanAmount = equipment.price * (1 - downPayment / 100);
   const monthlyRate = 0.0065;
@@ -91,6 +98,8 @@ export default function EquipmentDetail() {
             <Link to="/" className="hover:text-brand-600">首页</Link>
             <ChevronRight className="h-3 w-3" />
             <Link to="/market" className="hover:text-brand-600">设备市场</Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="text-ink-900">{categoryLabel}</span>
             <ChevronRight className="h-3 w-3" />
             <span className="text-ink-900 truncate">{equipment.name}</span>
           </div>
@@ -393,6 +402,16 @@ export default function EquipmentDetail() {
             <div className="sticky top-24 space-y-4">
               {/* Price card */}
               <div className="bg-white rounded-xl border border-ink-200 p-6 shadow-soft">
+                <div className="flex flex-wrap items-center gap-1.5 mb-3">
+                  <span className="px-2 py-0.5 text-[10px] font-medium text-brand-700 bg-brand-50 border border-brand-100 rounded">
+                    {categoryLabel}
+                  </span>
+                  {subcategoryLabel && (
+                    <span className="px-2 py-0.5 text-[10px] font-medium text-ink-600 bg-ink-50 border border-ink-100 rounded">
+                      {subcategoryLabel}
+                    </span>
+                  )}
+                </div>
                 <h1 className="text-xl font-bold text-ink-900 leading-snug">
                   {equipment.name}
                 </h1>

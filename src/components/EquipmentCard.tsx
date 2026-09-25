@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { ShieldCheck, MapPin, Star } from "lucide-react";
-import type { Equipment } from "@/data/equipment";
+import {
+  categoryLabels,
+  getSubcategoryLabel,
+  type Equipment,
+} from "@/data/equipment";
 import { cn } from "@/lib/utils";
 
 const conditionStyles: Record<string, string> = {
@@ -19,6 +23,11 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
     ? Math.round((1 - equipment.price / equipment.originalPrice) * 100)
     : 0;
 
+  const subcategoryLabel = getSubcategoryLabel(equipment.category, equipment.subcategory);
+  const fullCategoryLabel = subcategoryLabel
+    ? `${categoryLabels[equipment.category]} · ${subcategoryLabel}`
+    : categoryLabels[equipment.category];
+
   return (
     <Link
       to={`/equipment/${equipment.id}`}
@@ -33,7 +42,7 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
               {equipment.brand.slice(0, 3).toUpperCase()}
             </div>
             <div className="mt-1 text-[10px] text-ink-400 tracking-widest">
-              {equipment.categoryLabel}
+              {fullCategoryLabel}
             </div>
           </div>
         </div>
