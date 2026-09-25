@@ -287,13 +287,13 @@ export default function Market() {
                 <span className="mt-1 w-8 shrink-0 text-xs font-semibold text-ink-900 uppercase tracking-wider">
                   品牌
                 </span>
-                <div className="flex-1 min-w-0 flex gap-1.5 overflow-x-auto">
+                <div className="flex-1 min-w-0 flex flex-wrap gap-1.5">
                   {brandOptions.map((b) => (
                     <button
                       key={b}
                       onClick={() => handleBrandChange(b)}
                       className={cn(
-                        "shrink-0 whitespace-nowrap px-2.5 py-1 text-xs rounded-md border transition-colors",
+                        "whitespace-nowrap px-2.5 py-1 text-xs rounded-md border transition-colors",
                         brand === b
                           ? "border-brand-300 bg-brand-50 text-brand-700 font-medium"
                           : "border-ink-200 text-ink-600 hover:border-ink-300"
@@ -309,13 +309,13 @@ export default function Market() {
                 <span className="mt-1 w-8 shrink-0 text-xs font-semibold text-ink-900 uppercase tracking-wider">
                   型号
                 </span>
-                <div className="flex-1 min-w-0 flex gap-1.5 overflow-x-auto">
+                <div className="flex-1 min-w-0 flex flex-wrap gap-1.5">
                   {modelOptions.map((m) => (
                     <button
                       key={m}
                       onClick={() => setModel(m)}
                       className={cn(
-                        "shrink-0 whitespace-nowrap px-2.5 py-1 text-xs rounded-md border transition-colors font-mono",
+                        "whitespace-nowrap px-2.5 py-1 text-xs rounded-md border transition-colors font-mono",
                         model === m
                           ? "border-brand-300 bg-brand-50 text-brand-700 font-medium"
                           : "border-ink-200 text-ink-600 hover:border-ink-300"
