@@ -33,11 +33,6 @@ const conditionOptions = [
   { value: "preferred", label: "优选" },
 ];
 
-const brandOptions = [
-  "全部品牌",
-  ...Array.from(new Set(equipmentList.map((e) => e.brand))),
-];
-
 const sortOptions = [
   { value: "default", label: "默认排序" },
   { value: "price-asc", label: "价格从低到高" },
@@ -60,11 +55,13 @@ export default function Market() {
   const handleCategoryChange = (value: EquipmentCategory | "all") => {
     setCategory(value);
     setSubcategory("all");
+    setBrand("全部品牌");
     setModel("全部型号");
   };
 
   const handleSubcategoryChange = (value: string) => {
     setSubcategory(value);
+    setBrand("全部品牌");
     setModel("全部型号");
   };
 
@@ -75,6 +72,27 @@ export default function Market() {
 
   const subcategoryOptions =
     category !== "all" ? categoryTree[category] : [];
+
+  // 品牌选项随 品类 / 细分品类 联动
+  const brandOptions = useMemo(
+    () => [
+      "全部品牌",
+      ...Array.from(
+        new Set(
+          equipmentList
+            .filter((eq) => category === "all" || eq.category === category)
+            .filter(
+              (eq) =>
+                category === "all" ||
+                subcategory === "all" ||
+                eq.subcategory === subcategory,
+            )
+            .map((eq) => eq.brand),
+        ),
+      ),
+    ],
+    [category, subcategory],
+  );
 
   // 型号选项随 品类 / 细分品类 / 品牌 联动
   const modelOptions = useMemo(
