@@ -113,17 +113,12 @@ export default function EquipmentDetail() {
             {/* Image gallery */}
             <div className="bg-white rounded-xl border border-ink-200 overflow-hidden shadow-soft">
               <div className="relative aspect-[16/10] bg-gradient-to-br from-brand-50 to-ink-50">
-                <div className="absolute inset-0 bg-grid opacity-60" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="font-mono text-6xl font-bold text-brand-300 tracking-tightest">
-                      {equipment.brand.slice(0, 3).toUpperCase()}
-                    </div>
-                    <div className="mt-2 text-xs text-ink-400 tracking-widest">
-                      {equipment.model}
-                    </div>
-                  </div>
-                </div>
+                <img
+                  src={equipment.image}
+                  alt={equipment.name}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-900/20 via-transparent to-transparent" />
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                   <span
                     className={cn(

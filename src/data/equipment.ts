@@ -30,6 +30,8 @@ export interface Equipment {
   subcategory?: string;
   brand: string;
   model: string;
+  // 设备主图（AI 生成产品图）
+  image: string;
   condition: Condition;
   conditionLabel: string;
   isNew: boolean;
@@ -117,7 +119,110 @@ export const conditionLabels: Record<Condition, string> = {
   economy: "经济",
 };
 
-export const equipmentList: Equipment[] = [
+// 设备主图：平台文生图服务生成 4:3 横版产品图
+function img(prompt: string): string {
+  return `https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=${encodeURIComponent(
+    prompt,
+  )}&image_size=landscape_4_3`;
+}
+
+// 各设备主图生成 prompt（按设备 id 对应）
+const imagePrompts: Record<string, string> = {
+  // 一、GPU 服务器
+  "eq-001":
+    "Modern AI training server, black 8U rack chassis with glowing green status LEDs, dense GPU compute node with front handles, three-quarter view, clean light gray studio background, professional data center equipment product photography",
+  "eq-002":
+    "High-end AI training server, sleek black rack chassis with green LED light strip, large memory GPU compute node, front three-quarter view, light gray studio background, professional product photography",
+  "eq-003":
+    "Rack-scale AI supercomputer, tall black data center rack filled with vertical GPU compute blades and side liquid cooling manifold, glowing green accents, modern data center environment, professional tech photography",
+  "eq-004":
+    "Refurbished AI training server, black rack chassis with subtle wear and green LEDs lit, placed on inspection workbench with testing equipment, clean warehouse environment, professional product photography",
+  "eq-005":
+    "AI inference server, dark gray 4U rack chassis with teal green LED accents and mesh front panel, three-quarter front view, light studio background, professional product photography",
+  "eq-006":
+    "AMD Instinct MI300X 8-GPU server, black rack chassis with red LED accent lighting, front view with drive bays, clean studio background, professional data center hardware photography",
+  "eq-007":
+    "Intel Gaudi3 AI accelerator server, 5U black chassis with blue LED accents and front status display, three-quarter view, light gray studio background, professional product photography",
+  "eq-008":
+    "Huawei Atlas 800T A2 AI training server, black and silver 5U rack chassis with red accent line, front view, clean white studio background, professional enterprise hardware photography",
+  "eq-009":
+    "Cambricon MLU590 AI training server, dark navy 5U rack chassis with cyan LED accents, front three-quarter view, light studio background, professional product photography",
+  // 二、CPU 服务器
+  "eq-010":
+    "Enterprise 2U rack server, silver-gray chassis with black front panel and drive bays, pull-out handles, front three-quarter view, white studio background, professional product photography",
+  "eq-011":
+    "Dell PowerEdge 2U rack server, black front bezel with gray drive bays and small LCD status panel, three-quarter view, clean white studio background, professional enterprise server photography",
+  "eq-012":
+    "ARM architecture rack server, 2U silver chassis with black mesh front door and drive bays, three-quarter front view, white studio background, professional product photography",
+  "eq-013":
+    "Domestic x86 rack server, 2U dark gray chassis with front drive bays and metal handles, three-quarter view, white studio background, professional product photography",
+  // 三、AI 服务器整机
+  "eq-014":
+    "Inspur NF5688M6 AI training server, 6U black chassis with orange accent stripe and front baffle panel, front view, light gray studio background, professional data center hardware photography",
+  "eq-015":
+    "FusionServer AI training server, black 5U chassis with subtle blue LED accents, front three-quarter view, clean studio background, professional product photography",
+  "eq-016":
+    "Dell PowerEdge XE9680 AI server, large 6U black chassis with hexagonal front grille pattern, three-quarter view, light studio background, professional data center equipment photography",
+  "eq-017":
+    "Supermicro 4U GPU server, black chassis with dual front handles and open drive bays, three-quarter front view, white studio background, professional product photography",
+  "eq-018":
+    "Liquid-cooled AI server, 5U dark chassis with quick-disconnect coolant ports and front status LEDs, three-quarter view, clean studio background, professional hardware photography",
+  // 四、网络设备
+  "eq-019":
+    "NVIDIA Quantum-2 InfiniBand switch, 1U rack switch with 64 OSFP ports in neat rows and blue LED indicators, front view, light gray studio background, professional network equipment photography",
+  "eq-020":
+    "42-port 200G Ethernet switch, 1U rack unit with rows of QSFP ports and green link LEDs, front view, white studio background, professional network equipment photography",
+  "eq-021":
+    "Huawei CloudEngine data center core switch, tall 13U chassis with dense 400G QSFP112 port panel, front view, data center aisle background, professional network equipment photography",
+  "eq-022":
+    "NVIDIA BlueField-3 DPU card, full-height PCIe accelerator card with black shroud and dual 400G OSFP cages, green PCB visible, angled view on white background, professional component photography",
+  "eq-023":
+    "Domestic DPU smart NIC card, full-height PCIe card with silver heatsink and dual 100G QSFP28 ports, dark green PCB, angled view, white studio background, professional component photography",
+  "eq-024":
+    "NVIDIA ConnectX-7 network interface card, low-profile PCIe card with single 400G OSFP port and silver heatsink, green PCB, angled view on white background, professional component photography",
+  "eq-025":
+    "800G OSFP optical transceiver module, small rectangular metallic module with gold contact edge and black pull tab, macro close-up on white background, professional component photography",
+  "eq-026":
+    "800G direct attach copper cable, thick black rounded cable with two large OSFP connectors on both ends, coiled elegantly, white studio background, professional product photography",
+  // 五、存储设备
+  "eq-027":
+    "Enterprise NVMe SSD in U.2 2.5-inch form factor, silver metal enclosure with green PCB edge visible, angled view on white background, professional component photography",
+  "eq-028":
+    "Used enterprise NVMe SSD 2.5-inch drive, silver enclosure with slight wear marks, lying on inspection tray with paper label, clean white background, professional product photography",
+  "eq-029":
+    "Huawei OceanStor Pacific distributed storage node, 5U white-gray chassis with dense front drive bays and status LEDs, three-quarter view, clean studio background, professional storage equipment photography",
+  "eq-030":
+    "All-flash parallel storage server, 4U chassis with front drive drawer handles and blue LED indicators, three-quarter view, white studio background, professional storage equipment photography",
+  // 六、供电与散热设备
+  "eq-031":
+    "Schneider Electric Galaxy VS 200kW UPS, tall white floor-standing power cabinet with front status display panel, three-quarter view, clean data center background, professional power equipment photography",
+  "eq-032":
+    "Vertiv Liebert precision air conditioning unit, tall white industrial cabinet with top air grille and front control panel, three-quarter view, clean data center room, professional equipment photography",
+  "eq-033":
+    "Liquid cooling distribution unit CDU, industrial gray cabinet with visible coolant pipes, pumps and manifolds, digital control panel, three-quarter view, clean equipment room background, professional industrial photography",
+  "eq-034":
+    "Cold plate liquid cooling manifold kit, rack-mounted cooling rails with blue quick-disconnect fittings and transparent coolant tubes, close-up view, clean studio background, professional industrial photography",
+  "eq-035":
+    "Vertical rack PDU power strip, long black aluminum housing with rows of C13 outlets, small digital ammeter display and network port, angled view, white background, professional component photography",
+  // 七、机柜与基础设施
+  "eq-036":
+    "42U server rack cabinet, black steel frame with mesh front door and lock handle, side panel visible, three-quarter view, clean showroom background, professional product photography",
+  "eq-037":
+    "Hot aisle containment system in modern data center, enclosed aisle with transparent roof panels and sliding glass doors between server racks, wide angle view, professional data center photography",
+  "eq-038":
+    "Overhead busway power distribution system, aluminum busbar trunking suspended above server racks with tap-off boxes and cables, low angle view, data center background, professional industrial photography",
+  // 八、集群管理与调度软件
+  "eq-039":
+    "Kubernetes cluster management dashboard, dark themed monitoring screen showing GPU node utilization charts and job queue panels, modern control room display, professional software product shot",
+  "eq-040":
+    "HPC job scheduler terminal interface on large monitor, dark screen with green command line job queue listing and cluster status, server room background, professional software product shot",
+  "eq-041":
+    "AI software stack visualization, layered translucent glass cards showing neural network pipeline over glowing GPU circuit board, green and black color scheme, futuristic tech product render, professional digital artwork",
+  "eq-042":
+    "Huawei CANN heterogeneous computing architecture, abstract visualization of AI chip and software framework layers in red and dark gray, futuristic enterprise software render, professional digital artwork",
+};
+
+const baseEquipmentList: Omit<Equipment, "image">[] = [
   // ============ 一、GPU 服务器 ============
   {
     id: "eq-001",
@@ -1322,6 +1427,12 @@ export const equipmentList: Equipment[] = [
     tags: ["国产", "订阅服务", "昇腾配套"],
   },
 ];
+
+// 注入主图后导出
+export const equipmentList: Equipment[] = baseEquipmentList.map((eq) => ({
+  ...eq,
+  image: img(imagePrompts[eq.id]),
+}));
 
 export const featuredEquipment = equipmentList.filter((e) =>
   ["eq-001", "eq-004", "eq-006", "eq-008", "eq-019", "eq-029"].includes(e.id)

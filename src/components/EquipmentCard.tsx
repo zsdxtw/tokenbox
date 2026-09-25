@@ -1,10 +1,6 @@
 import { Link } from "react-router-dom";
 import { ShieldCheck, MapPin, Star } from "lucide-react";
-import {
-  categoryLabels,
-  getSubcategoryLabel,
-  type Equipment,
-} from "@/data/equipment";
+import { type Equipment } from "@/data/equipment";
 import { cn } from "@/lib/utils";
 
 const conditionStyles: Record<string, string> = {
@@ -23,11 +19,6 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
     ? Math.round((1 - equipment.price / equipment.originalPrice) * 100)
     : 0;
 
-  const subcategoryLabel = getSubcategoryLabel(equipment.category, equipment.subcategory);
-  const fullCategoryLabel = subcategoryLabel
-    ? `${categoryLabels[equipment.category]} · ${subcategoryLabel}`
-    : categoryLabels[equipment.category];
-
   return (
     <Link
       to={`/equipment/${equipment.id}`}
@@ -35,17 +26,13 @@ export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
     >
       {/* Image area */}
       <div className="relative aspect-[4/3] bg-gradient-to-br from-brand-50 to-ink-50 overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-60" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <div className="font-mono text-3xl font-bold text-brand-300 tracking-tightest">
-              {equipment.brand.slice(0, 3).toUpperCase()}
-            </div>
-            <div className="mt-1 text-[10px] text-ink-400 tracking-widest">
-              {fullCategoryLabel}
-            </div>
-          </div>
-        </div>
+        <img
+          src={equipment.image}
+          alt={equipment.name}
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink-900/20 via-transparent to-transparent" />
 
         {/* Top badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
