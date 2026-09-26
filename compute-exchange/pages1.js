@@ -12,9 +12,9 @@ html:`
     <div>
       <div class="kicker">Compute Asset Exchange · 2026</div>
       <h1>让每一块 GPU<br/>成为<span class="grad">可定价、可融资</span>的资产</h1>
-      <div class="hero-sub">量衡是面向<b>「设备—算力—金融」全生命周期</b>的算力资产交易所：双市场撮合发现价格，价格指数与残值曲线建立信任，押品处置闭环提升融资能力。</div>
+      <div class="hero-sub">算力巢是面向<b>「设备—算力—金融」全生命周期</b>的算力资产交易所：双市场撮合发现价格，价格指数与残值曲线建立信任，押品处置闭环提升融资能力。</div>
       <div class="hero-cta">
-        <a class="btn btn-primary btn-lg" href="#/m1/used">进入设备交易 <span style="opacity:.7">→</span></a>
+        <a class="btn btn-primary btn-lg" href="#/m1/new">进入设备交易 <span style="opacity:.7">→</span></a>
         <a class="btn btn-ghost btn-lg" href="#/m2/spot">闲散算力现货</a>
         <a class="btn btn-gold btn-lg" href="#/m4/auctions">银行押品专场</a>
       </div>
@@ -28,7 +28,7 @@ html:`
     <div class="panel corner hi index-hero">
       <div class="ih-top">
         <div>
-          <div class="ih-name">量衡综合指数 · SH-COMPOSITE</div>
+          <div class="ih-name">算力巢综合指数 · SC-COMPOSITE</div>
           <div class="ih-value">${fmt(D.composite.value,1)}</div>
           <div class="ih-chg">${chgTxt(D.composite.change)}<span style="color:var(--txt3);margin-left:10px;font-size:12px">日度 · 2026-09-26</span></div>
         </div>
@@ -53,7 +53,7 @@ html:`
 
   <div class="g32 mt24">
     <div>
-      ${secHead('二手市场热榜','挂牌价 vs 成交中位 · 双轨价差','#/m1/used')}
+      ${secHead('二手市场热榜','挂牌价 vs 成交中位 · 双轨价差','#/m1/new?cond=used')}
       ${panel('设备价格 TOP 热门 SKU','',{
         sub:'成交价中位数 · 近30日趋势',
         body:`<div class="table-wrap"><table class="tbl">
@@ -155,25 +155,45 @@ after(){
 }
 });
 
-/* ================= M1 一手商城 ================= */
-PAGES['m1/new']=()=>({
-html:`
-<div class="page">
-${pageHead({crumb:[['首页','#/'],['设备交易','#/m1/new'],['一手商城']],title:'一手商城 · 品牌馆',mod:'M1-01',desc:'OEM/总代/代理入驻挂牌，集采拼单、预售锁价；内建国产化合规校验引擎，按买方主体类型自动校验国产化率与采购限制。',actions:`<a class="btn btn-primary" href="#/onboarding">品牌入驻</a><a class="btn btn-ghost" href="#/m1/used">逛二手市场</a>`})}
-<div class="filter-bar">
-  <span class="f-label">品牌馆</span>
-  ${D.brands.map((b,i)=>`<button class="chip ${i===0?'active':''}">${b}</button>`).join('')}
-  <span class="f-label" style="margin-left:14px">合规</span>
-  <button class="chip active">全部</button><button class="chip">国产化100%</button><button class="chip">进口件</button>
-</div>
-<div class="panel corner gold-c mb16" style="border-color:rgba(240,181,66,.45)">
-  <div class="panel-h"><div class="p-title"><i>◈</i>集采拼单</div><div class="p-sub">${D.groupBuy.name} · ${D.groupBuy.joined}/${D.groupBuy.total}${D.groupBuy.unit}已参团</div><div class="p-right"><span class="countdown" data-cd="${D.groupBuy.deadline}"></span></div></div>
-  <div class="panel-b"><div class="bar-label"><span>成团进度</span><b>${Math.round(D.groupBuy.joined/D.groupBuy.total*100)}%</b></div>
-  <div class="progress blue"><div class="pf" style="width:${Math.round(D.groupBuy.joined/D.groupBuy.total*100)}%"></div></div>
-  <div class="flex between mt16" style="flex-wrap:wrap"><span class="dim small">拼单价 ${yuan(D.groupBuy.price)} · 较单台采购低约 4.2%</span><button class="btn btn-gold" onclick="UI.toast('已加入集采拼单（演示）')">＋ 加入拼单</button></div></div>
-</div>
-<div class="g3">
-${D.newProducts.map(p=>`
+/* ================= M1 设备交易市场（一手×二手 统一入口） ================= */
+PAGES['m1/new']=(q)=>{
+q=q||{};
+const cat=q.cat||'all';
+const sub=q.sub||'';
+const cond=q.cond||'all';
+const brand=q.brand||'';
+const nat=q.nat||'';
+const cats=D.deviceCats;
+const catObj=cats.find(c=>c.key===cat);
+const subObj=catObj&&catObj.subs.find(s=>s.key===sub);
+
+const qs=(over={})=>{
+  const m=Object.assign({cat:cat,sub:sub,cond:cond,brand:brand,nat:nat},over);
+  if(over.cat!==undefined&&over.cat!==cat)m.sub='';
+  if(m.cat==='all')m.sub='';
+  const p=[];
+  if(m.cat&&m.cat!=='all')p.push('cat='+m.cat);
+  if(m.sub)p.push('sub='+m.sub);
+  if(m.cond&&m.cond!=='all')p.push('cond='+m.cond);
+  if(m.brand)p.push('brand='+encodeURIComponent(m.brand));
+  if(m.nat)p.push('nat='+m.nat);
+  return '#/m1/new'+(p.length?'?'+p.join('&'):'');
+};
+
+const inScope=p=>(cat==='all'||p.cat===cat)&&(!sub||p.sub===sub);
+let newItems=D.newProducts.filter(p=>inScope(p)&&(!brand||p.brand===brand));
+if(nat==='nat')newItems=newItems.filter(p=>p.national);
+if(nat==='imp')newItems=newItems.filter(p=>!p.national);
+const usedItems=D.usedDevices.filter(p=>inScope(p));
+
+const catCount=k=>D.newProducts.filter(p=>p.cat===k).length+D.usedDevices.filter(p=>p.cat===k).length;
+const subCount=(k,sk)=>D.newProducts.filter(p=>p.cat===k&&p.sub===sk).length+D.usedDevices.filter(p=>p.cat===k&&p.sub===sk).length;
+const allCount=D.newProducts.length+D.usedDevices.length;
+const usedCards=usedItems.reduce((s,r)=>s+r.count,0);
+const scopeBrands=[...new Set(D.newProducts.filter(p=>inScope(p)).map(p=>p.brand))];
+const where=[catObj?catObj.name:'全部设备',subObj?subObj.name:'',brand?brand+' 品牌馆':''].filter(Boolean).join(' / ');
+
+const newCards=newItems.map(p=>`
   <div class="product-card">
     <div class="pc-head">
       <div><div class="pc-title">${p.name}</div><div class="pc-sub">${p.brand} · 交付周期 ${p.lead}</div></div>
@@ -182,39 +202,17 @@ ${D.newProducts.map(p=>`
     <div class="pc-sub" style="line-height:1.7">${p.spec}</div>
     <div class="pc-specs">${p.tag.map(t=>`<span class="spec-pill" style="${t.includes('国产化')?'color:var(--mint);border-color:rgba(0,224,154,.4)':''}">${t}</span>`).join('')}</div>
     <div class="flex between" style="margin-top:auto">
-      <div class="pc-price">${yuan(p.price)}<span class="u">/台</span></div>
+      <div class="pc-price">${yuan(p.price)}<span class="u">${p.type==='订阅'?'/年':'/台'}</span></div>
       <button class="btn btn-primary btn-sm" onclick="UI.toast('已发起询价（演示）')">询价锁价</button>
     </div>
-  </div>`).join('')}
-</div>
-${panel('国产化合规引擎说明','<div class="flex" style="gap:22px;flex-wrap:wrap"><div class="small dim" style="max-width:420px;line-height:1.9">下单时按<b style="color:var(--txt)">买方主体类型</b>（党政机关/国企/民企/外资）自动校验国产化率与采购限制，不合规订单将被拦截并提示替代方案（M5-02 国产化选型工具）。</div><div class="g4" style="flex:1;min-width:300px"><div class="stat-card"><div class="s-label">已校验订单</div><div class="s-value">12,847</div></div><div class="stat-card"><div class="s-label">拦截不合规</div><div class="s-value">316</div></div></div></div>',{cls:''})}
-</div>`
-});
+  </div>`).join('');
 
-/* ================= M1 二手市场 ================= */
-PAGES['m1/used']=()=>({
-html:`
-<div class="page">
-${pageHead({crumb:[['首页','#/'],['设备交易','#/m1/new'],['二手市场']],title:'二手市场 · SKU级检索',mod:'M1-02',desc:'单卡/整件挂牌 · 同质批组挂牌（批组溢价规则）· 大宗暗盘撮合（OTC）。下单即触发第三方检测，成交价实时回流价格指数。',actions:`<a class="btn btn-primary" href="#/m1/hall">发布货源</a><a class="btn btn-ghost" href="#/m1/otc">大宗 OTC 撮合</a>`})}
-<div class="g4 mb16">
-  ${statCard({label:'今日在架标的',value:'1,286',foot:'较昨日',trend:2.4})}
-  ${statCard({label:'挂牌总卡数',value:'18,412',foot:'含批组',trend:1.1})}
-  ${statCard({label:'昨日成交',value:'¥2,140万',foot:'32笔',trend:0.8})}
-  ${statCard({label:'挂价 vs 成交中位价差',value:'-3.2%',foot:'双轨对比',trend:-0.4})}
-</div>
-<div class="filter-bar">
-  <span class="f-label">型号</span><button class="chip active">全部</button><button class="chip">H100/H200</button><button class="chip">A100</button><button class="chip">昇腾910B</button><button class="chip">4090</button>
-  <span class="f-label" style="margin-left:14px">成色</span><button class="chip active">全部</button><button class="chip">A</button><button class="chip">B+</button>
-  <span class="f-label" style="margin-left:14px">来源</span><button class="chip active">全部</button><button class="chip">云厂商退役</button><button class="chip">批组</button>
-  <select class="sel" style="margin-left:auto"><option>区域：全部</option><option>华北</option><option>华东</option><option>西部</option></select>
-</div>
-${panel('挂牌列表 · 挂牌价 vs 平台成交中位',`
-<div class="table-wrap"><table class="tbl">
+const usedTable=`<div class="table-wrap"><table class="tbl">
 <thead><tr><th>标的</th><th>类型</th><th>成色</th><th>来源/区域</th><th>挂牌单价</th><th>成交中位</th><th>价差</th><th>ECC</th><th>通电时长</th><th>检测</th><th>操作</th></tr></thead>
-<tbody>${D.usedDevices.map(r=>{
+<tbody>${usedItems.map(r=>{
   const gap=((r.list-r.deal)/r.deal*100);
   return `<tr>
-    <td><div class="cell-main">${r.sku} <b class="mono" style="color:var(--gold)">×${r.count}</b></div><div class="cell-sub">${r.id} · ${r.seller}</div></td>
+    <td><div class="cell-main">${r.sku} <b class="mono" style="color:var(--gold)">×${fmt(r.count)}</b></div><div class="cell-sub">${r.id} · ${r.seller}</div></td>
     <td>${badge(r.type,r.type==='批组挂牌'?'purple':'gray')}</td>
     <td>${badge(r.cond+' '+r.condScore,r.condScore>=90?'mint':'gray')}</td>
     <td><div class="dim">${r.source}</div><div class="cell-sub">${r.region}</div></td>
@@ -225,9 +223,97 @@ ${panel('挂牌列表 · 挂牌价 vs 平台成交中位',`
     <td class="num dim">${fmt(r.hours)}h</td>
     <td>${certBadge(r.cert)}</td>
     <td><div class="act"><a class="btn btn-primary btn-sm" href="#/m1/device?id=${r.id}">详情</a><button class="btn btn-ghost btn-sm" onclick="UI.toast('已冻结保证金，进入检测流程（演示）')">下单</button></div></td>
-  </tr>`}).join('')}</tbody></table></div>`,{sub:'排序：价格发现度 · 每笔成交实时回流 M0 指数',cls:'corner hi'})}
-</div>`
-});
+  </tr>`}).join('')}</tbody></table></div>`;
+
+const showNew=cond!=='used';
+const showUsed=cond!=='new';
+const showGroupBuy=(cat==='all'||cat==='gpu')&&cond!=='used';
+
+return {html:`
+<div class="page">
+${pageHead({crumb:[['首页','#/'],['设备交易市场','#/m1/new']],title:'设备交易市场 · 一手×二手',mod:'M1-01/02',desc:'GPU/CPU服务器、网络、存储、供电散热、机柜基础设施与集群软件全品类覆盖：一手品牌馆集采拼单、二手SKU级检索同场可比；下单即触发第三方检测，成交价实时回流价格指数。',actions:`<a class="btn btn-primary" href="#/m1/hall">发布求购</a><a class="btn btn-gold" href="#/m1/hall">发布货源</a><a class="btn btn-ghost" href="#/m1/otc">大宗 OTC 撮合</a>`})}
+
+<div class="market-top">
+  <a class="mt-entry" href="#/onboarding">
+    <div class="mt-icon">${iconSvg('building',20)}</div>
+    <div class="grow"><div class="mt-tit">品牌入驻 <span class="mt-tag">M0-04</span></div><div class="mt-sub">OEM / 总代 / 代理入驻挂牌 · 集采拼单 · 预售锁价</div></div>
+    <span class="mt-arrow">→</span>
+  </a>
+  <a class="mt-entry gold" href="#/m1/new?cond=new">
+    <div class="mt-icon">${iconSvg('gpu',20)}</div>
+    <div class="grow"><div class="mt-tit">品牌馆 <span class="mt-tag">${scopeBrands.length}+ 品牌</span></div><div class="mt-sub">NVIDIA · 昇腾 · 寒武纪 等 按品牌逛一手整机与网络互连</div></div>
+    <span class="mt-arrow">→</span>
+  </a>
+  <a class="mt-entry blue" href="#/m1/hall">
+    <div class="mt-icon">${iconSvg('radar',20)}</div>
+    <div class="grow"><div class="mt-tit">供需大厅 <span class="mt-tag">M1-03</span></div><div class="mt-sub">求购 / 货源双向发布 · 智能撮合推送 ≤5 分钟</div></div>
+    <span class="mt-arrow">→</span>
+  </a>
+</div>
+
+<div class="market-layout">
+  <aside class="cat-side">
+    <div class="cat-head"><b>品类导航</b><span>${cats.length} 大类</span></div>
+    <a class="cat-row ${cat==='all'?'active':''}" href="${qs({cat:'all',sub:''})}"><span class="cat-ic">${iconSvg('chart',14)}</span>全部设备<span class="cat-n">${allCount}</span></a>
+    ${cats.map(c=>`
+    <div class="cat-grp ${cat===c.key?'open':''}">
+      <a class="cat-row ${cat===c.key&&!sub?'active':''}" href="${qs({cat:c.key})}"><span class="cat-ic">${iconSvg(c.icon,14)}</span>${c.name}<span class="cat-n">${catCount(c.key)}</span></a>
+      <div class="cat-subs">
+        ${c.subs.map(s=>`<a class="cat-sub ${cat===c.key&&sub===s.key?'active':''}" href="${qs({cat:c.key,sub:s.key})}">${s.name}<span>${subCount(c.key,s.key)}</span></a>`).join('')}
+      </div>
+    </div>`).join('')}
+  </aside>
+
+  <div class="market-main">
+    <div class="g4 mb16">
+      ${statCard({label:'一手挂牌',value:fmt(newItems.length),unit:'款',foot:'品牌馆 · 集采/预售'})}
+      ${statCard({label:'二手在架标的',value:fmt(usedItems.length),unit:'标的',foot:'单卡/整件/批组'})}
+      ${statCard({label:'二手在架总件数',value:fmt(usedCards),unit:'件',foot:'含批组挂牌'})}
+      ${statCard({label:'挂价 vs 成交中位价差',value:'-3.2%',foot:'双轨对比 · 回流指数',trend:-0.4})}
+    </div>
+
+    <div class="tabs mb16">
+      <a class="tab ${cond==='all'?'active':''}" href="${qs({cond:'all'})}">全部</a>
+      <a class="tab ${cond==='new'?'active':''}" href="${qs({cond:'new'})}">一手 · 品牌馆 <span class="cnt">${newItems.length}</span></a>
+      <a class="tab ${cond==='used'?'active':''}" href="${qs({cond:'used'})}">二手 · SKU检索 <span class="cnt">${usedItems.length}</span></a>
+      <span class="market-where">当前浏览：${where}</span>
+    </div>
+
+    ${showNew?`
+    <div class="filter-bar">
+      <span class="f-label">品牌馆</span>
+      <a class="chip ${!brand?'active':''}" href="${qs({brand:''})}">全部品牌</a>
+      ${scopeBrands.map(b=>`<a class="chip ${brand===b?'active':''}" href="${qs({brand:b})}">${b}</a>`).join('')}
+      <span class="f-label" style="margin-left:14px">合规</span>
+      <a class="chip ${!nat?'active':''}" href="${qs({nat:''})}">全部</a>
+      <a class="chip ${nat==='nat'?'active':''}" href="${qs({nat:'nat'})}">国产化100%</a>
+      <a class="chip ${nat==='imp'?'active':''}" href="${qs({nat:'imp'})}">进口件</a>
+    </div>`:''}
+
+    ${showGroupBuy?`
+    <div class="panel corner gold-c mb16" style="border-color:rgba(240,181,66,.45)">
+      <div class="panel-h"><div class="p-title"><i>◈</i>集采拼单</div><div class="p-sub">${D.groupBuy.name} · ${D.groupBuy.joined}/${D.groupBuy.total}${D.groupBuy.unit}已参团</div><div class="p-right"><span class="countdown" data-cd="${D.groupBuy.deadline}"></span></div></div>
+      <div class="panel-b"><div class="bar-label"><span>成团进度</span><b>${Math.round(D.groupBuy.joined/D.groupBuy.total*100)}%</b></div>
+      <div class="progress blue"><div class="pf" style="width:${Math.round(D.groupBuy.joined/D.groupBuy.total*100)}%"></div></div>
+      <div class="flex between mt16" style="flex-wrap:wrap"><span class="dim small">拼单价 ${yuan(D.groupBuy.price)} · 较单台采购低约 4.2%</span><button class="btn btn-gold" onclick="UI.toast('已加入集采拼单（演示）')">＋ 加入拼单</button></div></div>
+    </div>`:''}
+
+    ${showNew?(newItems.length?`
+    ${panel('一手 · 品牌馆挂牌',`<div class="g3">${newCards}</div>`,{sub:'OEM/总代直供 · 国产化合规引擎自动校验',cls:'corner hi'})}`
+    :`<div class="empty-hint">该筛选下暂无一手挂牌 · 可前往 <a href="#/m1/hall">供需大厅</a> 发布求购，或 <a href="#/onboarding">邀请品牌入驻</a></div>`):''}
+
+    ${showUsed?(usedItems.length?`
+    ${panel('二手 · SKU级检索（挂牌价 vs 平台成交中位）',usedTable,{sub:'排序：价格发现度 · 每笔成交实时回流 M0 指数',cls:'corner hi'})}`
+    :`<div class="empty-hint">该品类暂无二手在架 · 可前往 <a href="#/m1/hall">供需大厅</a> 发布求购</div>`):''}
+
+    ${panel('国产化合规引擎说明','<div class="flex" style="gap:22px;flex-wrap:wrap"><div class="small dim" style="max-width:420px;line-height:1.9">下单时按<b style="color:var(--txt)">买方主体类型</b>（党政机关/国企/民企/外资）自动校验国产化率与采购限制，不合规订单将被拦截并提示替代方案（M5-02 国产化选型工具）。</div><div class="g4" style="flex:1;min-width:300px"><div class="stat-card"><div class="s-label">已校验订单</div><div class="s-value">12,847</div></div><div class="stat-card"><div class="s-label">拦截不合规</div><div class="s-value">316</div></div></div></div>',{cls:''})}
+  </div>
+</div>
+</div>`};
+};
+
+/* 旧路由兼容：#/m1/used → 二手Tab */
+PAGES['m1/used']=(q)=>PAGES['m1/new'](Object.assign({},q,{cond:'used'}));
 
 /* ================= M1 设备详情 ================= */
 PAGES['m1/device']=(q)=>{
@@ -240,7 +326,7 @@ const health=[
 ];
 return {html:`
 <div class="page">
-${pageHead({crumb:[['首页','#/'],['二手市场','#/m1/used'],[r.sku+' ×'+r.count]],title:r.sku+' × '+r.count,mod:'M1-09',desc:r.id+' · '+r.seller+' · '+r.type,actions:`<button class="btn btn-primary" onclick="UI.toast('保证金已冻结 · 进入第三方检测（演示）')">立即下单 · 冻结保证金</button><button class="btn btn-ghost" onclick="UI.toast('已加入比价清单（演示）')">加入比价</button><button class="btn btn-gold" onclick="UI.toast('已向卖家发起还价（演示）')">议价</button>`})}
+${pageHead({crumb:[['首页','#/'],['设备交易市场','#/m1/new'],[r.sku+' ×'+r.count]],title:r.sku+' × '+r.count,mod:'M1-09',desc:r.id+' · '+r.seller+' · '+r.type,actions:`<button class="btn btn-primary" onclick="UI.toast('保证金已冻结 · 进入第三方检测（演示）')">立即下单 · 冻结保证金</button><button class="btn btn-ghost" onclick="UI.toast('已加入比价清单（演示）')">加入比价</button><button class="btn btn-gold" onclick="UI.toast('已向卖家发起还价（演示）')">议价</button>`})}
 <div class="g32">
   <div>
     <div class="g3 mb16">

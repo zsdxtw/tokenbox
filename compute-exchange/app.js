@@ -1,11 +1,11 @@
-/* ============ 量衡 · 路由 / 导航 / 行情跑马灯 ============ */
+/* ============ 算力巢 · 路由 / 导航 / 行情跑马灯 ============ */
 (function(){
 const D=DATA;
 
 /* ---------- 导航结构 ---------- */
 const NAV=[
   {t:'首页',h:'#/'},
-  {t:'设备交易',h:'#/m1/new',kids:[['一手商城 · 品牌馆','#/m1/new'],['二手市场 · SKU检索','#/m1/used'],['供需大厅 · 求购/货源','#/m1/hall'],['竞价拍卖厅','#/m1/auction'],['大宗撮合 · OTC','#/m1/otc'],['交易订单管理','#/m1/orders']]},
+  {t:'设备交易',h:'#/m1/new',kids:[['设备交易市场 · 一手×二手','#/m1/new'],['供需大厅 · 求购/货源','#/m1/hall'],['竞价拍卖厅','#/m1/auction'],['大宗撮合 · OTC','#/m1/otc'],['交易订单管理','#/m1/orders']]},
   {t:'算力交易',h:'#/m2/pro',kids:[['专业算力商城 · 集群','#/m2/pro'],['闲散算力市场 · 现货','#/m2/spot'],['TOKEN 商城 · 模型馆','#/m2/token'],['推理竞价场','#/m2/bid'],['计量计费中心','#/m2/billing'],['SLA 监控看板','#/m2/sla']]},
   {t:'金融服务',h:'#/m3',kids:[['金融超市','#/m3'],['融资申请 · 一键授权','#/m3/apply'],['贷后监控台','#/m3/monitor']]},
   {t:'处置中心',h:'#/m4/collaterals',kids:[['押品库总览','#/m4/collaterals'],['违约预警中心','#/m4/alerts'],['处置工作台 T1/T2/T3','#/m4/workbench'],['银行押品拍卖专场','#/m4/auctions'],['银行端门户','#/m4/bank']]},
@@ -21,7 +21,7 @@ function buildHeader(){
   document.getElementById('siteHeader').innerHTML=`
   <div class="hd-in">
     <div class="logo" onclick="location.hash='#/'">${LOGO}
-      <div class="logo-txt"><b>量<i>衡</i></b><span class="logo-sub">Suanheng · Compute Asset Exchange</span></div>
+      <div class="logo-txt"><b>算力<i>巢</i></b><span class="logo-sub">ComputeNest · AI Asset Exchange</span></div>
     </div>
     <nav class="nav" id="nav">
       ${NAV.map(n=>`<div class="nav-item" data-nav="${n.h}"><a href="${n.h}">${n.t}${n.kids?'<span class="nav-caret">▼</span>':''}</a>
@@ -45,17 +45,17 @@ function buildFooter(){
   <div class="ft-in">
     <div class="ft-grid">
       <div>
-        <div class="ft-brand">量<i>衡</i> · 算力资产交易所</div>
+        <div class="ft-brand">算力<i>巢</i> · 算力资产交易所</div>
         <div class="ft-desc">面向「设备—算力—金融」全生命周期的算力资产交易与金融化基础设施平台。价格即服务 · 闭环优先 · 合规内建。</div>
         <div class="mt16">${UI.badge('原型演示 · 模拟数据','gold')}</div>
       </div>
-      <div class="ft-col"><h4>设备交易 M1</h4><a href="#/m1/new">一手商城</a><a href="#/m1/used">二手市场</a><a href="#/m1/hall">供需大厅</a><a href="#/m1/auction">竞价拍卖</a><a href="#/m1/otc">大宗撮合</a></div>
+      <div class="ft-col"><h4>设备交易 M1</h4><a href="#/m1/new">设备交易市场</a><a href="#/m1/new?cond=new">一手 · 品牌馆</a><a href="#/m1/new?cond=used">二手 · SKU检索</a><a href="#/m1/hall">供需大厅</a><a href="#/m1/auction">竞价拍卖</a><a href="#/m1/otc">大宗撮合</a></div>
       <div class="ft-col"><h4>算力交易 M2</h4><a href="#/m2/pro">专业算力</a><a href="#/m2/spot">闲散算力</a><a href="#/m2/token">TOKEN 商城</a><a href="#/m2/bid">推理竞价</a><a href="#/m2/sla">SLA 监控</a></div>
       <div class="ft-col"><h4>金融与处置 M3/M4</h4><a href="#/m3">金融超市</a><a href="#/m3/apply">融资申请</a><a href="#/m4/collaterals">押品库</a><a href="#/m4/workbench">处置工作台</a><a href="#/m4/auctions">押品拍卖专场</a></div>
       <div class="ft-col"><h4>平台服务</h4><a href="#/indices">价格指数</a><a href="#/m5">解决方案</a><a href="#/onboarding">机构入驻</a><a href="#/ops">运营后台</a><a href="#/help">帮助中心</a></div>
     </div>
     <div class="ft-bottom">
-      <span>© 2026 量衡科技（演示原型） · 依据《算力交易平台需求设计文档 V1.0》构建</span>
+      <span>© 2026 算力巢科技（演示原型） · 依据《算力交易平台需求设计文档 V1.0》构建</span>
       <span>资金监管账户模式 · 平台不碰资金池 ｜ 检测/清除录像留存 ≥3年 ｜ RWA 功能仅在合规沙箱内开放</span>
     </div>
   </div>`;

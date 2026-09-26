@@ -1,4 +1,4 @@
-/* ============ 量衡 · 通用组件库 ============ */
+/* ============ 算力巢 · 通用组件库 ============ */
 window.UI=(function(){
 const C={mint:'#00e09a',gold:'#f0b542',blue:'#5aa2ff',down:'#ff5d6c',purple:'#b48cff',cyan:'#3fd8e8',orange:'#ff8a4d',grid:'#17233c',txt3:'#57678a'};
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   量衡 · 算力资产交易所 — 设计系统
+   算力巢 · 算力资产交易所 — 设计系统
    机构级交易终端美学 / 深墨蓝 + 薄荷绿 + 鎏金
    ============================================================ */
 :root{
@@ -398,6 +398,58 @@ select.sel option{background:var(--panel2)}
 .flow-node.cur{border-color:var(--mint);color:var(--txt);box-shadow:0 0 12px rgba(0,224,154,.3)}
 .flow-arrow{color:var(--txt4);padding:0 7px;font-size:10px}
 
+/* ---------- 设备交易市场 · 顶部三入口 ---------- */
+.market-top{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.mt-entry{position:relative;display:flex;align-items:center;gap:14px;padding:18px 20px;border:1px solid var(--line);border-radius:6px;background:linear-gradient(180deg,var(--panel2),var(--panel));transition:.2s;overflow:hidden}
+.mt-entry::after{content:'';position:absolute;inset:0;background:radial-gradient(260px 120px at 20% -40%,rgba(0,224,154,.12),transparent 70%);opacity:0;transition:.25s;pointer-events:none}
+.mt-entry:hover{transform:translateY(-2px);border-color:rgba(0,224,154,.45)}
+.mt-entry:hover::after{opacity:1}
+.mt-entry .mt-icon{width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:5px;border:1px solid rgba(0,224,154,.35);color:var(--mint);background:rgba(0,224,154,.07)}
+.mt-entry .mt-tit{font-size:15.5px;font-weight:700;display:flex;align-items:center;gap:9px}
+.mt-entry .mt-tag{font-family:var(--f-mono);font-size:9.5px;font-weight:500;color:var(--mint);border:1px solid rgba(0,224,154,.35);padding:1px 7px;border-radius:9px;background:var(--up-dim);letter-spacing:.08em}
+.mt-entry .mt-sub{font-size:11.5px;color:var(--txt3);margin-top:5px;line-height:1.6}
+.mt-entry .mt-arrow{color:var(--txt4);transition:.2s;font-size:16px;flex-shrink:0}
+.mt-entry:hover .mt-arrow{color:var(--mint);transform:translateX(3px)}
+.mt-entry.gold .mt-icon{color:var(--gold);border-color:rgba(240,181,66,.35);background:rgba(240,181,66,.07)}
+.mt-entry.gold .mt-tag{color:var(--gold);border-color:rgba(240,181,66,.35);background:rgba(240,181,66,.08)}
+.mt-entry.gold::after{background:radial-gradient(260px 120px at 20% -40%,rgba(240,181,66,.12),transparent 70%)}
+.mt-entry.gold:hover{border-color:rgba(240,181,66,.5)}
+.mt-entry.gold:hover .mt-arrow{color:var(--gold)}
+.mt-entry.blue .mt-icon{color:var(--blue);border-color:rgba(90,162,255,.35);background:rgba(90,162,255,.07)}
+.mt-entry.blue .mt-tag{color:var(--blue);border-color:rgba(90,162,255,.35);background:rgba(90,162,255,.08)}
+.mt-entry.blue::after{background:radial-gradient(260px 120px at 20% -40%,rgba(90,162,255,.12),transparent 70%)}
+.mt-entry.blue:hover{border-color:rgba(90,162,255,.5)}
+.mt-entry.blue:hover .mt-arrow{color:var(--blue)}
+
+/* ---------- 设备交易市场 · 左侧品类树 ---------- */
+.market-layout{display:grid;grid-template-columns:236px minmax(0,1fr);gap:18px;align-items:start}
+.cat-side{position:sticky;top:calc(var(--hdr) + 46px);background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:6px;padding:10px 8px;max-height:calc(100vh - 130px);overflow-y:auto}
+.cat-head{display:flex;justify-content:space-between;align-items:baseline;padding:6px 10px 10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.cat-head b{font-family:var(--f-disp);font-size:12px;letter-spacing:.18em;color:var(--txt);text-transform:uppercase}
+.cat-head span{font-size:10px;color:var(--txt4);font-family:var(--f-mono)}
+.cat-row{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:4px;font-size:13px;font-weight:500;color:var(--txt2);transition:.15s}
+.cat-row .cat-ic{display:flex;align-items:center;color:var(--txt3);transition:.15s}
+.cat-row .cat-n{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:var(--txt4);background:var(--bg2);border:1px solid var(--line);padding:1px 6px;border-radius:9px}
+.cat-row:hover{color:var(--txt);background:rgba(255,255,255,.03)}
+.cat-row:hover .cat-ic{color:var(--txt2)}
+.cat-row.active{color:var(--mint);background:var(--up-dim)}
+.cat-row.active .cat-ic{color:var(--mint)}
+.cat-row.active .cat-n{color:var(--mint);border-color:rgba(0,224,154,.4)}
+.cat-grp+.cat-grp{margin-top:2px}
+.cat-subs{padding:2px 0 6px 8px;margin-left:14px;border-left:1px solid var(--line)}
+.cat-sub{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px 6px 10px;font-size:12px;color:var(--txt3);border-radius:3px;position:relative;line-height:1.5}
+.cat-sub span{font-family:var(--f-mono);font-size:9.5px;color:var(--txt4);flex-shrink:0}
+.cat-sub:hover{color:var(--txt);background:rgba(255,255,255,.03)}
+.cat-sub.active{color:var(--mint);background:var(--up-dim)}
+.cat-sub.active span{color:var(--mint)}
+.cat-sub.active::before{content:'';position:absolute;left:-1px;top:22%;bottom:22%;width:2px;background:var(--mint);border-radius:1px;box-shadow:0 0 6px rgba(0,224,154,.7)}
+.market-main{min-width:0}
+.market-where{margin-left:auto;font-size:11.5px;color:var(--txt3);font-family:var(--f-mono);letter-spacing:.05em;padding:9px 0 9px 14px}
+.market-where::before{content:'◈';color:var(--mint);margin-right:7px}
+.empty-hint{border:1px dashed var(--line2);border-radius:6px;padding:34px 20px;text-align:center;color:var(--txt3);font-size:13px;background:rgba(255,255,255,.015);margin-bottom:16px}
+.empty-hint a{color:var(--mint)}
+.empty-hint a:hover{text-decoration:underline}
+
 /* ---------- 响应式 ---------- */
 @media (max-width:1180px){
   .module-grid{grid-template-columns:repeat(3,1fr)}
@@ -409,6 +461,10 @@ select.sel option{background:var(--panel2)}
   .g4,.g5{grid-template-columns:repeat(2,1fr)}
   .g3{grid-template-columns:repeat(2,1fr)}
   .g23,.g32{grid-template-columns:1fr}
+  .market-top{grid-template-columns:1fr}
+  .market-layout{grid-template-columns:1fr}
+  .cat-side{position:static;max-height:none}
+  .market-where{display:none}
   .nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--panel2);border-bottom:1px solid var(--line2);flex-direction:column;padding:10px 18px 16px;height:auto;box-shadow:0 30px 60px rgba(0,0,0,.5)}
   .nav.open{display:flex}
   .nav-drop{position:static;opacity:1;visibility:visible;transform:none;min-width:0;grid-template-columns:1fr 1fr;box-shadow:none;border:1px solid var(--line);margin:4px 0 8px}
