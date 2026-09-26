@@ -450,6 +450,14 @@ select.sel option{background:var(--panel2)}
 .empty-hint a{color:var(--mint)}
 .empty-hint a:hover{text-decoration:underline}
 
+/* ---------- 品牌入驻墙 ---------- */
+.bw-card{border:1px solid var(--line);border-radius:6px;padding:16px 18px;background:linear-gradient(180deg,var(--panel2),var(--panel));transition:.2s;position:relative;overflow:hidden}
+.bw-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,224,154,.55),transparent);opacity:0;transition:.25s}
+.bw-card:hover{transform:translateY(-2px);border-color:var(--line2)}
+.bw-card:hover::after{opacity:1}
+.bw-name{font-family:var(--f-disp);font-size:15px;font-weight:700;letter-spacing:.03em;color:var(--txt)}
+.bw-cats{font-size:11px;color:var(--txt3);border:1px solid var(--line);border-radius:9px;padding:1px 8px;background:var(--bg2);line-height:1.7;white-space:nowrap;max-width:170px;overflow:hidden;text-overflow:ellipsis}
+
 /* ---------- 响应式 ---------- */
 @media (max-width:1180px){
   .module-grid{grid-template-columns:repeat(3,1fr)}

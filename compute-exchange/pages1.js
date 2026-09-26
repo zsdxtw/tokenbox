@@ -236,7 +236,7 @@ ${pageHead({crumb:[['首页','#/'],['设备交易市场','#/m1/new']],title:'设
 <div class="market-top">
   <a class="mt-entry" href="#/onboarding">
     <div class="mt-icon">${iconSvg('building',20)}</div>
-    <div class="grow"><div class="mt-tit">品牌入驻 <span class="mt-tag">M0-04</span></div><div class="mt-sub">OEM / 总代 / 代理入驻挂牌 · 集采拼单 · 预售锁价</div></div>
+    <div class="grow"><div class="mt-tit">品牌入驻 <span class="mt-tag">M0-04</span></div><div class="mt-sub">OEM / 总代 / 代理入驻挂牌 · 已入驻 ${D.onboardBrands.filter(b=>b.status==='已入驻').length} 家品牌 · 集采拼单 · 预售锁价</div></div>
     <span class="mt-arrow">→</span>
   </a>
   <a class="mt-entry gold" href="#/m1/new?cond=new">
@@ -246,7 +246,7 @@ ${pageHead({crumb:[['首页','#/'],['设备交易市场','#/m1/new']],title:'设
   </a>
   <a class="mt-entry blue" href="#/m1/hall">
     <div class="mt-icon">${iconSvg('radar',20)}</div>
-    <div class="grow"><div class="mt-tit">供需大厅 <span class="mt-tag">M1-03</span></div><div class="mt-sub">求购 / 货源双向发布 · 智能撮合推送 ≤5 分钟</div></div>
+    <div class="grow"><div class="mt-tit">供需大厅 <span class="mt-tag">M1-03</span></div><div class="mt-sub">求购 / 货源双向发布 · 在市求购 ${D.demandList.length} 单 · 货源 ${D.supplyList.length} 单</div></div>
     <span class="mt-arrow">→</span>
   </a>
 </div>
@@ -353,37 +353,42 @@ ${pageHead({crumb:[['首页','#/'],['设备交易市场','#/m1/new'],[r.sku+' ×
 PAGES['m1/hall']=()=>({
 html:`
 <div class="page">
-${pageHead({crumb:[['首页','#/'],['设备交易','#/m1/new'],['供需大厅']],title:'供需大厅',mod:'M1-03',desc:'求购/供货双向发布，智能匹配推送 ≤5 分钟；撮合成功率看板全程可视。',actions:`<button class="btn btn-primary" onclick="UI.toast('求购单已发布 · 匹配推送≤5分钟（演示）')">发布求购</button><button class="btn btn-gold" onclick="UI.toast('货源已发布 · 可先发布后补检测报告（演示）')">发布货源</button>`})}
+${pageHead({crumb:[['首页','#/'],['设备交易','#/m1/new'],['供需大厅']],title:'供需大厅',mod:'M1-03',desc:'求购/供货双向发布，覆盖 GPU/CPU服务器、网络、存储、供电散热、机柜与集群软件全品类；智能匹配推送 ≤5 分钟，撮合成功率看板全程可视。',actions:`<button class="btn btn-primary" onclick="UI.toast('求购单已发布 · 匹配推送≤5分钟（演示）')">发布求购</button><button class="btn btn-gold" onclick="UI.toast('货源已发布 · 可先发布后补检测报告（演示）')">发布货源</button>`})}
 <div class="g4 mb16">
-  ${statCard({label:'在市求购单',value:'47',foot:'匹配中 31',trend:6.2})}
-  ${statCard({label:'在市货源',value:'82',foot:'含待补报告 19',trend:2.8})}
+  ${statCard({label:'在市求购单',value:fmt(D.demandList.length),foot:'匹配中 '+D.demandList.filter(r=>r.status==='匹配中').length,trend:6.2})}
+  ${statCard({label:'在市货源',value:fmt(D.supplyList.length),foot:'含待补报告 '+D.supplyList.filter(r=>r.cert==='可后补报告').length,trend:2.8})}
   ${statCard({label:'撮合成功率',value:'68.4%',foot:'近30日',trend:1.9})}
   ${statCard({label:'平均撮合时长',value:'4.2分',foot:'SLA ≤5分钟',trend:-8.3})}
 </div>
 <div class="tabs mb16">
-  <div class="tab active" data-htab="d">求购大厅 <span class="cnt">47</span></div>
-  <div class="tab" data-htab="s">货源大厅 <span class="cnt">82</span></div>
+  <div class="tab active" data-htab="d">求购大厅 <span class="cnt">${D.demandList.length}</span></div>
+  <div class="tab" data-htab="s">货源大厅 <span class="cnt">${D.supplyList.length}</span></div>
 </div>
 <div id="hallBody"></div>
 </div>`,
 after(){
+  const catName=k=>{const c=D.deviceCats.find(x=>x.key===k);return c?c.name:k};
+  const subName=(k,sk)=>{const c=D.deviceCats.find(x=>x.key===k);const s=c&&c.subs.find(x=>x.key===sk);return s?s.name:''};
+  const catCell=r=>`<td>${badge(catName(r.cat),'blue')}<div class="cell-sub">${subName(r.cat,r.sub)}</div></td>`;
   const tabs={
-    d:panel('买方求购 · 需求大厅',`<div class="table-wrap"><table class="tbl"><thead><tr><th>求购单</th><th>买方</th><th>标的</th><th>数量</th><th>预算</th><th>时限</th><th>匹配状态</th><th>操作</th></tr></thead><tbody>${D.demandList.map(r=>`<tr>
-      <td class="num dim">${r.id}</td><td class="cell-main">${r.buyer}</td><td class="cell-main">${r.sku}</td>
-      <td class="num">×${r.count}</td><td class="num">${r.budget}</td><td class="dim">${r.deadline}</td>
+    d:panel('买方求购 · 需求大厅',`<div class="table-wrap"><table class="tbl"><thead><tr><th>求购单</th><th>买方</th><th>标的</th><th>品类</th><th>数量</th><th>预算</th><th>时限</th><th>匹配状态</th><th>操作</th></tr></thead><tbody>${D.demandList.map(r=>`<tr>
+      <td class="num dim">${r.id}<div class="cell-sub">${r.pub}</div></td><td class="cell-main">${r.buyer}</td><td class="cell-main">${r.sku}</td>
+      ${catCell(r)}
+      <td class="num">×${fmt(r.count)}</td><td class="num">${r.budget}</td><td class="dim">${r.deadline}</td>
       <td>${levelBadge(r.status)}<div class="cell-sub">${r.matched}家货源匹配</div></td>
       <td><button class="btn btn-primary btn-sm" onclick="UI.toast('已应单 · 等待撮合经纪人接入（演示）')">应单报价</button></td></tr>`).join('')}</tbody></table></div>`,{sub:'自动匹配推送 ≤5分钟'}),
-    s:panel('卖方货源 · 货源大厅',`<div class="table-wrap"><table class="tbl"><thead><tr><th>货源单</th><th>卖方</th><th>标的</th><th>数量</th><th>期望价</th><th>检测</th><th>状态</th><th>操作</th></tr></thead><tbody>${D.supplyList.map(r=>`<tr>
-      <td class="num dim">${r.id}</td><td class="cell-main">${r.seller}</td><td class="cell-main">${r.sku}</td>
-      <td class="num">×${r.count}</td><td class="num">${r.expect}</td><td>${certBadge(r.cert)}</td>
+    s:panel('卖方货源 · 货源大厅',`<div class="table-wrap"><table class="tbl"><thead><tr><th>货源单</th><th>卖方</th><th>标的</th><th>品类</th><th>数量</th><th>期望价</th><th>检测</th><th>状态</th><th>操作</th></tr></thead><tbody>${D.supplyList.map(r=>`<tr>
+      <td class="num dim">${r.id}<div class="cell-sub">${r.pub}</div></td><td class="cell-main">${r.seller}</td><td class="cell-main">${r.sku}</td>
+      ${catCell(r)}
+      <td class="num">×${fmt(r.count)}</td><td class="num">${r.expect}</td><td>${certBadge(r.cert)}</td>
       <td>${levelBadge(r.status)}<div class="cell-sub">${r.matched}家买方关注</div></td>
-      <td><button class="btn btn-gold btn-sm" onclick="UI.toast('已发起撮合请求（演示）')">请求撮合</button></td></tr>`).join('')}</tbody></table></div>`,{sub:'可先发布后补充检测报告'})
+      <td><button class="btn btn-gold btn-sm" onclick="UI.toast('已发起撮合请求（演示）')">请求撮合</button></td></tr>`).join('')}</tbody></table></div>`,{sub:'可先发布后补充检测报告 · 一手/二手货源均可挂'})
   };
   const body=document.getElementById('hallBody');
-  body.innerHTML=tabs.d();
+  body.innerHTML=tabs.d;
   document.querySelectorAll('[data-htab]').forEach(t=>t.onclick=()=>{
     document.querySelectorAll('[data-htab]').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');body.innerHTML=tabs[t.dataset.htab]();
+    t.classList.add('active');body.innerHTML=tabs[t.dataset.htab];
   });
 }
 });
@@ -496,14 +501,39 @@ ${panel('数据清除认证 · M1-09',`<div class="kv" style="grid-template-colu
 });
 
 /* ================= 机构入驻 ================= */
-PAGES.onboarding=()=>({
-html:`
+PAGES.onboarding=()=>{
+const ob=D.onboardBrands;
+const obIn=ob.filter(b=>b.status==='已入驻');
+const obItems=obIn.reduce((s,b)=>s+b.items,0);
+const obPending=ob.filter(b=>b.status!=='已入驻').length;
+const roleBadge=c=>c==='OEM'?'blue':c==='总代'?'purple':c==='代理'?'cyan':c==='回收商'?'gold':'gray';
+return {html:`
 <div class="page">
-${pageHead({crumb:[['首页','#/'],['机构入驻中心']],title:'机构入驻',mod:'M0-04/06',desc:'银行级 KYC 实名认证 · 多角色账户体系 · 子账号权限（银行资产保全部/交易部/风控部分级）。'})}
+${pageHead({crumb:[['首页','#/'],['机构入驻中心']],title:'机构入驻',mod:'M0-04/06',desc:'银行级 KYC 实名认证 · 多角色账户体系 · 子账号权限（银行资产保全部/交易部/风控部分级）。',actions:`<a class="btn btn-ghost" href="#/m1/new">返回设备交易市场</a>`})}
+<div class="g4 mb16">
+  ${statCard({label:'已入驻品牌',value:fmt(obIn.length),unit:'家',foot:'OEM/总代/代理/回收商'})}
+  ${statCard({label:'品牌在架 SKU',value:fmt(obItems),unit:'款',foot:'一手挂牌 · 集采/预售'})}
+  ${statCard({label:'覆盖品类',value:'7 大类',foot:'服务器到集群软件全品类'})}
+  ${statCard({label:'本月申请',value:fmt(9+obPending),unit:'件',foot:'在审 '+obPending+' · 平均5个工作日'})}
+</div>
 <div class="panel corner hi mb24">
-  <div class="panel-h"><div class="p-title"><i>▸</i>入驻流程</div></div>
+  <div class="panel-h"><div class="p-title"><i>▸</i>入驻流程</div><div class="p-sub">银行级KYC · 资质核验 · 品牌挂牌权限自动开通</div></div>
   <div class="panel-b">${stepper(D.onboardSteps.map(s=>s),0)}</div>
 </div>
+<div class="sec-head"><div class="sec-tit gold">品牌入驻墙</div><div class="sec-sub">Manufacturer Pavilion · ${obIn.length} 家已入驻 · ${obPending} 家审核中</div></div>
+<div class="g4 mb24">
+${ob.map(b=>`
+  <div class="bw-card">
+    <div class="flex between mb8"><span class="bw-name">${b.name}</span>${b.status==='已入驻'?badge('已入驻','mint'):badge(b.status,'gold')}</div>
+    <div class="small dim2" style="line-height:1.7;min-height:34px">${b.note}</div>
+    <div class="flex" style="gap:8px;margin-top:8px">${badge(b.role,roleBadge(b.role))}<span class="bw-cats">${b.cats}</span></div>
+    <div class="flex between mt12" style="border-top:1px solid var(--line);padding-top:10px">
+      <span class="small dim2">入驻 ${b.since}</span>
+      <span class="small dim2">在架 <b class="mono" style="color:var(--mint)">${fmt(b.items)}</b> SKU</span>
+    </div>
+  </div>`).join('')}
+</div>
+<div class="sec-head"><div class="sec-tit">角色入驻</div><div class="sec-sub">多角色账户体系 · 子账号权限分级</div></div>
 <div class="role-grid">
 ${D.onboardRoles.map(r=>`<div class="role-card">
   <div class="r-name">${r.name}</div><div class="r-desc">${r.desc}</div>
@@ -511,8 +541,8 @@ ${D.onboardRoles.map(r=>`<div class="role-card">
   <button class="btn btn-primary btn-sm mt16" style="width:100%;justify-content:center" onclick="UI.toast('入驻申请已提交 · 进入KYC审核（演示）')">申请入驻</button>
 </div>`).join('')}
 </div>
-</div>`
-});
+</div>`};
+};
 
 /* ================= 帮助中心 ================= */
 PAGES.help=()=>({
